@@ -341,7 +341,7 @@
         }
 
         function checkDebugMode(callback) {
-            const url = `https://script.google.com/macros/s/AKfycbxb-Noj5zeTFFKWrIXMqIAXrN6hgUf9h1NXJFz3YPVWF6XeL5fVUV0Koc7g3ANFoD3p-w/exec?action=checkDebugMode`;
+            const url = `https://script.google.com/macros/s/AKfycbxb-Noj5zeTFFKWrIXMqIAXrN6hgUf9h1NXJFz3YPVWF6XeL5fVUV0Koc7g3ANFoD3p-w/exec?action=checkDebugMode&token=${SECRET_TOKEN}`;
             fetch(url)
                 .then(response => response.text())
                 .then(text => {
