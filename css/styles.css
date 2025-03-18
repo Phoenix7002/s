@@ -25,6 +25,15 @@
     left: 250px;
 }
 
+.nav-toggle::before {
+    content: ">";
+    transition: transform 0.3s ease;
+}
+
+.nav-toggle.moved::before {
+    transform: rotate(180deg);
+}
+
 /* Стили для навигационной панели */
 .nav-panel {
     position: fixed;
@@ -37,15 +46,6 @@
     transition: left 0.3s ease;
     z-index: 999;
     padding: 20px 0; /* Добавили отступы */
-}
-
-.nav-toggle::before {
-    content: ">";
-    transition: transform 0.3s ease; /* Анимация только для стрелки */
-}
-
-.nav-toggle.moved::before {
-    transform: rotate(180deg); /* Поворот стрелки */
 }
 
 /* Стили для списка ссылок */
