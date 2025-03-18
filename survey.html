@@ -416,18 +416,17 @@
             document.getElementById('debug-options').style.display = 'none';
         }
 
-        // Функции для отправки данных
-function sendRequest(data) {
-    const url = `https://script.google.com/macros/s/AKfycbxb-Noj5zeTFFKWrIXMqIAXrN6hgUf9h1NXJFz3YPVWF6XeL5fVUV0Koc7g3ANFoD3p-w/exec?${new URLSearchParams(data).toString()}`;
-    const script = document.createElement('script');
-    script.src = url;
-    document.body.appendChild(script);
-    script.onload = () => document.body.removeChild(script);
-    script.onerror = () => {
-        console.error('Ошибка при загрузке скрипта');
-        document.body.removeChild(script);
-    };
-}
+        function sendRequest(data) {
+            const url = `https://script.google.com/macros/s/AKfycbxb-Noj5zeTFFKWrIXMqIAXrN6hgUf9h1NXJFz3YPVWF6XeL5fVUV0Koc7g3ANFoD3p-w/exec?${new URLSearchParams(data).toString()}`;
+            const script = document.createElement('script');
+            script.src = url;
+            document.body.appendChild(script);
+            script.onload = () => document.body.removeChild(script);
+            script.onerror = () => {
+                console.error('Ошибка при загрузке скрипта');
+                document.body.removeChild(script);
+        };
+    }
 
         function sendResultsToGoogleSheet(resultsForSheet, resultMessage) {
             const data = {
