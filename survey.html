@@ -379,37 +379,37 @@
         }
 
         // Функции для тестирования
-        function sendDDoSTest() {
-            for (let i = 0; i < 101; i++) {
-                sendRequest({ results: JSON.stringify(["test", "1", "2"]), callback: "handleResponse", result: "test", debug: "true" });
-            }
-        }
-
-        function sendEmptyTest() {
-            const answers = [];
-            for (let i = 1; i <= 10; i++) {
-                answers.push("1");
-        }
-        const data = {
-            results: JSON.stringify(["Null", ...answers]), // Имя пользователя "Null"
-            callback: "handleResponse",
-            result: "test",
-            debug: "true"
-        };
-        sendRequest(data);
+function sendDDoSTest() {
+    for (let i = 0; i < 101; i++) {
+        sendRequest({ results: JSON.stringify(["test", "1", "2"]), callback: "handleResponse", result: "test", debug: "true" });
     }
-        
-        function sendInvalidInputTest() {
-            sendRequest({ results: null, callback: null, result: null, debug: "true" });
-        }
+}
 
-        function sendInvalidJSONTest() {
-            sendRequest({ results: "invalid-json", callback: "handleResponse", result: "test", debug: "true" });
-        }
+function sendEmptyTest() {
+    const answers = [];
+    for (let i = 1; i <= 10; i++) {
+        answers.push("1");
+    }
+    const data = {
+        results: JSON.stringify(["Null", ...answers]), // Имя пользователя "Null"
+        callback: "handleResponse",
+        result: "test",
+        debug: "true"
+    };
+    sendRequest(data);
+}
 
-        function sendNonArrayTest() {
-            sendRequest({ results: JSON.stringify({ key: "value" }), callback: "handleResponse", result: "test", debug: "true" });
-        }
+function sendInvalidInputTest() {
+    sendRequest({ results: null, callback: null, result: null, debug: "true" });
+}
+
+function sendInvalidJSONTest() {
+    sendRequest({ results: "invalid-json", callback: "handleResponse", result: "test", debug: "true" });
+}
+
+function sendNonArrayTest() {
+    sendRequest({ results: JSON.stringify({ key: "value" }), callback: "handleResponse", result: "test", debug: "true" });
+}
 
         function closeDebugWindow() {
             document.getElementById('debug-window').style.display = 'none';
@@ -417,6 +417,8 @@
         }
 
         function sendRequest(data) {
+            data.token = SECRET_TOKEN;
+
             const url = `https://script.google.com/macros/s/AKfycbxb-Noj5zeTFFKWrIXMqIAXrN6hgUf9h1NXJFz3YPVWF6XeL5fVUV0Koc7g3ANFoD3p-w/exec?${new URLSearchParams(data).toString()}`;
             const script = document.createElement('script');
             script.src = url;
@@ -428,15 +430,15 @@
         };
     }
 
-        function sendResultsToGoogleSheet(resultsForSheet, resultMessage) {
-            const data = {
-                results: JSON.stringify(resultsForSheet),
-                callback: "handleResponse",
-                result: resultMessage,
-                debug: debugModeActive ? "true" : "false"
-            };
-            sendRequest(data);
-        }
+function sendResultsToGoogleSheet(resultsForSheet, resultMessage) {
+    const data = {
+        results: JSON.stringify(resultsForSheet),
+        callback: "handleResponse",
+        result: resultMessage,
+        debug: debugModeActive ? "true" : "false"
+    };
+    sendRequest(data);
+}
 
         function handleResponse(response) {
             console.log("Ответ от сервера:", response);
