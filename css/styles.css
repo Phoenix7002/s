@@ -1,0 +1,60 @@
+/* Стили для кнопки */
+.nav-toggle {
+    position: fixed;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #4c4c4c;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 1000;
+    transition: left 0.3s ease;
+}
+
+/* Стили для навигационной панели */
+.nav-panel {
+    position: fixed;
+    left: -250px; /* Панель скрыта за пределами экрана */
+    top: 0;
+    width: 250px;
+    height: 100%;
+    background-color: #3c3c3c;
+    color: #fff;
+    transition: left 0.3s ease;
+    z-index: 999;
+}
+
+/* Стили для списка ссылок */
+.nav-panel ul {
+    list-style: none;
+    padding: 20px;
+    margin: 0;
+}
+
+.nav-panel ul li {
+    margin: 15px 0;
+}
+
+.nav-panel ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    transition: color 0.3s ease;
+}
+
+.nav-panel ul li a:hover {
+    color: #007BFF;
+}
+
+/* Класс для открытой панели */
+.nav-panel.open {
+    left: 0;
+}
+
+/* Класс для перемещённой кнопки */
+.nav-toggle.moved {
+    left: 250px;
+}
