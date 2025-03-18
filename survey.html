@@ -417,8 +417,6 @@ function sendNonArrayTest() {
         }
 
         function sendRequest(data) {
-            data.token = SECRET_TOKEN;
-
             const url = `https://script.google.com/macros/s/AKfycbxb-Noj5zeTFFKWrIXMqIAXrN6hgUf9h1NXJFz3YPVWF6XeL5fVUV0Koc7g3ANFoD3p-w/exec?${new URLSearchParams(data).toString()}`;
             const script = document.createElement('script');
             script.src = url;
