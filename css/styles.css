@@ -11,7 +11,12 @@
     font-size: 20px;
     cursor: pointer;
     z-index: 1000;
-    transition: left 0.3s ease;
+    transition: left 0.3s ease, transform 0.3s ease; /* Добавили анимацию transform */
+}
+
+.nav-toggle.moved {
+    left: 250px;
+    transform: translateY(-50%) rotate(180deg); /* Поворот на 180 градусов */
 }
 
 /* Стили для навигационной панели */
@@ -25,36 +30,38 @@
     color: #fff;
     transition: left 0.3s ease;
     z-index: 999;
+    padding: 20px 0; /* Добавили отступы */
 }
 
 /* Стили для списка ссылок */
 .nav-panel ul {
     list-style: none;
-    padding: 20px;
+    padding: 0;
     margin: 0;
 }
 
 .nav-panel ul li {
-    margin: 15px 0;
+    margin: 10px 0; /* Уменьшили отступы между элементами */
 }
 
 .nav-panel ul li a {
+    display: block;
+    padding: 15px 20px;
+    background-color: #4c4c4c;
     color: #fff;
     text-decoration: none;
     font-size: 18px;
-    transition: color 0.3s ease;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .nav-panel ul li a:hover {
-    color: #007BFF;
+    background-color: #555;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 /* Класс для открытой панели */
 .nav-panel.open {
     left: 0;
-}
-
-/* Класс для перемещённой кнопки */
-.nav-toggle.moved {
-    left: 250px;
 }
