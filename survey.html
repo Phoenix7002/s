@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Опрос о райтерах</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #2c2c2c;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .question {
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #reset-button {
+            background-color: #6c757d;
+        }
+
+        #reset-button:hover {
+            background-color: #5a6268;
+        }
+
+        .debug-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            color: #007BFF;
+            background-color: transparent; /* Прозрачный фон */
+            border: none; /* Убрали обводку */
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s;
+        }
+
+        .debug-button:hover {
+            color: #0056b3;
+        }
+
+        .debug-window {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #e0e0e0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            color: #2c2c2c;
+            width: 300px;
+        }
+
+        .debug-message {
+            color: red;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        .debug-options {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #e0e0e0;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .debug-options button {
+            margin: 8px;
+        }
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            color: #2c2c2c;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .close-button:hover {
+            color: #ff4d4d;
+        }
+    </style>
+</head>
+<body>
+<div class="debug-button" onclick="openDebugWindow()">*</div>
+<div class="debug-window" id="debug-window">
+    <button class="close-button" onclick="closeDebugWindow()">×</button>
+    <label for="debug-code">Введите код активации:</label>
+    <input type="text" id="debug-code">
+    <button onclick="activateDebugMode()">Подтвердить</button>
+    <div class="debug-message" id="debug-message"></div>
+</div>
+
+<div class="debug-options" id="debug-options">
+    <button class="close-button" onclick="closeDebugWindow()">×</button> <!-- Крестик -->
+    <h2>Дебаг-режим</h2>
+    <button onclick="sendEmptyTest()">1. Пустое прохождение теста</button>
+    <button onclick="sendDDoSTest()">2. Послать >100 запросов</button>
+    <button onclick="sendInvalidInputTest()">3. Послать плохие входные данные</button>
+    <button onclick="sendInvalidJSONTest()">4. Послать не JSON</button>
+    <button onclick="sendNonArrayTest()">5. Послать не массив</button>
+</div>
+
+    <!-- Основной контейнер опроса -->
+    <div class="container">
+        <h1>Опрос о райтерах</h1>
+        <div id="nickname-input">
+            <label for="nickname">Введите ваш никнейм:</label>
+            <input type="text" id="nickname" name="nickname">
+            <p style="font-size: 12px; color: #666;">Не обязательно</p>
+            <button onclick="startQuiz()">Начать опрос</button>
+        </div>
+        <div id="quiz" style="display:none;">
+            <!-- Вопросы опроса -->
+            <div class="question" id="question-1">
+                <p>1. Что такое: "#райтероввлюди"?</p>
+                <label><input type="radio" name="q1" value="1"> Хз не играл</label><br>
+                <label><input type="radio" name="q1" value="2"> Битва за срач в войс</label><br>
+                <label><input type="radio" name="q1" value="3"> Просьба выдать райтерам права админа на WL</label><br>
+                <button onclick="nextQuestion(1)">Далее</button>
+            </div>
+            <div class="question" id="question-2" style="display:none;">
+                <p>2. Что такое "Яичные страницы"?</p>
+                <label><input type="radio" name="q2" value="1"> Eggs</label><br>
+                <label><input type="radio" name="q2" value="2"> Что-то с буквой S в названии</label><br>
+                <label><input type="radio" name="q2" value="3"> Старая вики 2019 года</label><br>
+                <button onclick="nextQuestion(2)">Далее</button>
+            </div>
+            <div class="question" id="question-3" style="display:none;">
+                <p>3. Готовы ли вы написать лор ИС?</p>
+                <label><input type="radio" name="q3" value="1"> Да</label><br>
+                <label><input type="radio" name="q3" value="2"> Нет</label><br>
+                <button onclick="nextQuestion(3)">Далее</button>
+            </div>
+            <div class="question" id="question-4" style="display:none;">
+                <p>4. Ваш любимый райтер?</p>
+                <label><input type="radio" name="q4" value="1"> яша петренко</label><br>
+                <label><input type="radio" name="q4" value="2"> Imperial Support</label><br>
+                <label><input type="radio" name="q4" value="3"> Здравствуйте</label><br>
+                <button onclick="nextQuestion(4)">Далее</button>
+            </div>
+            <div class="question" id="question-5" style="display:none;">
+                <p>5. Что самое сложное в работе викирайтера?</p>
+                <label><input type="radio" name="q5" value="1"> Искать актуальную информацию</label><br>
+                <label><input type="radio" name="q5" value="2"> Писать тексты и заниматься вёрсткой</label><br>
+                <label><input type="radio" name="q5" value="3"> Ставить букву "Ё" за место "Е" и "—" за место "-"</label><br>
+                <button onclick="nextQuestion(5)">Далее</button>
+            </div>
+            <div class="question" id="question-6" style="display:none;">
+                <p>6. Главная причина, по которой джун эдиторы чаще всего снимаются?</p>
+                <label><input type="radio" name="q6" value="1"> Плохое знание русского языка</label><br>
+                <label><input type="radio" name="q6" value="2"> Imperial Pass</label><br>
+                <label><input type="radio" name="q6" value="3"> Неумение работать с HTML и CSS</label><br>
+                <button onclick="nextQuestion(6)">Далее</button>
+            </div>
+            <div class="question" id="question-7" style="display:none;">
+                <p>7. Кто придумал "Тугосеринский" язык?</p>
+                <label><input type="radio" name="q7" value="1"> hsf (Вениамин Керриган)</label><br>
+                <label><input type="radio" name="q7" value="2"> Phoenix</label><br>
+                <label><input type="radio" name="q7" value="3"> Xepplethecatapult</label><br>
+                <button onclick="nextQuestion(7)">Далее</button>
+            </div>
+            <div class="question" id="question-8" style="display:none;">
+                <p>8. Что райтеры делают в войс чате?</p>
+                <label><input type="radio" name="q8" value="1"> Думают над новыми страницами</label><br>
+                <label><input type="radio" name="q8" value="2"> Молчат</label><br>
+                <label><input type="radio" name="q8" value="3"> Играют в garticphone</label><br>
+                <button onclick="nextQuestion(8)">Далее</button>
+            </div>
+            <div class="question" id="question-9" style="display:none;">
+                <p>9. Главный страх каждого райтера:</p>
+                <label><input type="radio" name="q9" value="1"> Страничка с животными</label><br>
+                <label><input type="radio" name="q9" value="2"> Химия</label><br>
+                <label><input type="radio" name="q9" value="3"> Напитки</label><br>
+                <label><input type="radio" name="q9" value="4"> Готовка</label><br>
+                <label><input type="radio" name="q9" value="5"> Все ответы верны</label><br>
+                <button onclick="nextQuestion(9)">Далее</button>
+            </div>
+            <div class="question" id="question-10" style="display:none;">
+                <p>10. Куда срать?</p>
+                <label><input type="radio" name="q10" value="1"> В чат</label><br>
+                <label><input type="radio" name="q10" value="2"> В чай</label><br>
+                <label><input type="radio" name="q10" value="3"> На Вики</label><br>
+                <label><input type="radio" name="q10" value="4"> В трусы</label><br>
+                <button onclick="showResult()">Завершить</button>
+            </div>
+        </div>
+        <div id="result" style="display:none;">
+            <h2>Ваш результат:</h2>
+            <p id="result-text"></p>
+            <p id="correct-answers-text"></p>
+            <button id="reset-button" onclick="resetQuiz()">Сбросить тест</button>
+        </div>
+    </div>
+
+    <script>
+        // Глобальные переменные
+        let currentQuestion = 1;
+        let debugModeActive = false;
+
+        // Функции для работы с опросом
+        function startQuiz() {
+            document.getElementById('nickname-input').style.display = 'none';
+            document.getElementById('quiz').style.display = 'block';
+            document.getElementById(`question-${currentQuestion}`).style.display = 'block';
+        }
+
+        function nextQuestion(questionNumber) {
+            if (!document.querySelector(`input[name="q${questionNumber}"]:checked`)) {
+                alert('Пожалуйста, выберите ответ!');
+                return;
+            }
+
+            document.getElementById(`question-${questionNumber}`).style.display = 'none';
+            currentQuestion++;
+
+            if (currentQuestion <= 10) {
+                document.getElementById(`question-${currentQuestion}`).style.display = 'block';
+            } else {
+                showResult();
+            }
+        }
+
+        function resetQuiz() {
+            const inputs = document.querySelectorAll('input[type="radio"]');
+            inputs.forEach(input => input.checked = false);
+
+            for (let i = 1; i <= 10; i++) {
+                document.getElementById(`question-${i}`).style.display = i === 1 ? 'block' : 'none';
+            }
+
+            document.getElementById('quiz').style.display = 'block';
+            document.getElementById('result').style.display = 'none';
+            currentQuestion = 1;
+        }
+
+        function showResult() {
+            const nickname = document.getElementById('nickname').value || "Отсутствует";
+            const correctAnswers = ['2', '2', '2', '1', '3', '2', '1', '2', '5', '2'];
+            let userAnswers = [];
+            let correctCount = 0;
+            let resultsForSheet = [];
+
+            for (let i = 1; i <= 10; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                if (selected) {
+                    userAnswers.push(selected.value);
+                    if (selected.value === correctAnswers[i - 1]) {
+                        correctCount++;
+                        resultsForSheet.push(`${selected.value} - правильный`);
+                    } else {
+                        resultsForSheet.push(`${selected.value} - неправильный`);
+                    }
+                } else {
+                    resultsForSheet.push(`Нет ответа - неправильный`);
+                }
+            }
+
+            const resultText = document.getElementById('result-text');
+            const correctAnswersText = document.getElementById('correct-answers-text');
+
+            let resultMessage = "";
+            if (correctCount >= 0 && correctCount <= 1) {
+                resultMessage = "Вы не райтер";
+            } else if (correctCount >= 2 && correctCount <= 3) {
+                resultMessage = "Джун райтер";
+            } else if (correctCount >= 4 && correctCount <= 5) {
+                resultMessage = "Миддл райтер";
+            } else if (correctCount >= 6 && correctCount <= 7) {
+                resultMessage = "Сеньор райтер";
+            } else if (correctCount >= 8 && correctCount <= 9) {
+                resultMessage = "Вики лид";
+            } else if (correctCount === 10) {
+                resultMessage = "Истинный тугосеря";
+            }
+
+            resultText.textContent = resultMessage;
+            correctAnswersText.textContent = `Количество правильных ответов: ${correctCount} из 10`;
+
+            document.getElementById('quiz').style.display = 'none';
+            document.getElementById('result').style.display = 'block';
+
+            resultsForSheet.unshift(nickname);
+            sendResultsToGoogleSheet(resultsForSheet, resultMessage);
+        }
+
+        // Функции для работы с дебаг-режимом
+        function openDebugWindow() {
+            document.getElementById('debug-window').style.display = 'block';
+        }
+
+        function checkDebugMode(callback) {
+            const url = `https://script.google.com/macros/s/AKfycbxb-Noj5zeTFFKWrIXMqIAXrN6hgUf9h1NXJFz3YPVWF6XeL5fVUV0Koc7g3ANFoD3p-w/exec?action=checkDebugMode`;
+            fetch(url)
+                .then(response => response.text())
+                .then(text => {
+                    const debugModeEnabled = text === "true";
+                    callback(debugModeEnabled);
+                })
+                .catch(error => {
+                    console.error("Ошибка при проверке дебаг-режима:", error);
+                    callback(false);
+                });
+        }
+
+    function activateDebugMode() {
+        const debugCode = document.getElementById('debug-code').value;
+        if (debugCode === "DEBUG*ON@7002*PASS") {
+            checkDebugMode((debugModeEnabled) => {
+                if (debugModeEnabled) {
+                    debugModeActive = true;
+                    document.getElementById('debug-window').style.display = 'none';
+                    document.getElementById('debug-options').style.display = 'block'; // Показываем новое окно с кнопками
+                    showMessage("Дебаг-режим включен", "green");
+                } else {
+                    showMessage("Дебаг-режим отключен на сервере", "red");
+                }
+            });
+        } else {
+            showMessage("Неверный код активации", "red");
+        }
+    }
+
+        function showMessage(message, color) {
+            const messageElement = document.getElementById('debug-message');
+            messageElement.textContent = message;
+            messageElement.style.color = color;
+        }
+
+        // Функции для тестирования
+        function sendDDoSTest() {
+            for (let i = 0; i < 101; i++) {
+                sendRequest({ results: JSON.stringify(["test", "1", "2"]), callback: "handleResponse", result: "test", debug: "true" });
+            }
+        }
+
+        function sendEmptyTest() {
+            const answers = [];
+            for (let i = 1; i <= 10; i++) {
+                answers.push("1");
+        }
+        const data = {
+            results: JSON.stringify(["Null", ...answers]), // Имя пользователя "Null"
+            callback: "handleResponse",
+            result: "test",
+            debug: "true"
+        };
+        sendRequest(data);
+    }
+        
+        function sendInvalidInputTest() {
+            sendRequest({ results: null, callback: null, result: null, debug: "true" });
+        }
+
+        function sendInvalidJSONTest() {
+            sendRequest({ results: "invalid-json", callback: "handleResponse", result: "test", debug: "true" });
+        }
+
+        function sendNonArrayTest() {
+            sendRequest({ results: JSON.stringify({ key: "value" }), callback: "handleResponse", result: "test", debug: "true" });
+        }
+
+        function closeDebugWindow() {
+            document.getElementById('debug-window').style.display = 'none';
+            document.getElementById('debug-options').style.display = 'none';
+        }
+
+        // Функции для отправки данных
+        function sendRequest(data) {
+            const url = `https://script.google.com/macros/s/AKfycbxb-Noj5zeTFFKWrIXMqIAXrN6hgUf9h1NXJFz3YPVWF6XeL5fVUV0Koc7g3ANFoD3p-w/exec?${new URLSearchParams(data).toString()}`;
+            const script = document.createElement('script');
+            script.src = url;
+            document.body.appendChild(script);
+            script.onload = () => document.body.removeChild(script);
+            script.onerror = () => {
+                console.error('Ошибка при загрузке скрипта');
+                document.body.removeChild(script);
+            };
+        }
+
+        function sendResultsToGoogleSheet(resultsForSheet, resultMessage) {
+            const data = {
+                results: JSON.stringify(resultsForSheet),
+                callback: "handleResponse",
+                result: resultMessage,
+                debug: debugModeActive ? "true" : "false"
+            };
+            sendRequest(data);
+        }
+
+        function handleResponse(response) {
+            console.log("Ответ от сервера:", response);
+            if (response.status === "success") {
+                console.log("Успешный ответ от сервера!");
+            } else {
+                console.log("Ошибка или другой статус ответа:", response.status);
+            }
+        }
+    </script>
+</body>
+</html>

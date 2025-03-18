@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phoenix</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #2c2c2c;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            width: 800px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+            overflow: hidden;
+            background-color: #3c3c3c;
+        }
+        .header {
+            padding: 25px;
+            cursor: pointer;
+            text-align: center;
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: 700;
+            background-color: #4c4c4c;
+            transition: background-color 0.3s ease;
+        }
+        .header:hover {
+            background-color: #555;
+        }
+        .content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.8s ease-in-out;
+            background-color: #3c3c3c;
+            color: #f0f0f0;
+        }
+        .content ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .content li {
+            padding: 15px 20px;
+            border-bottom: 1px solid #555;
+            transition: background-color 0.3s ease;
+        }
+        .content li:last-child {
+            border-bottom: none;
+        }
+        .content li:hover {
+            background-color: #555;
+        }
+        .content li a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #f0f0f0;
+            padding: 15px;
+            border: 3px solid black;
+            border-radius: 8px;
+            justify-content: center;
+            height: 60px;
+            font-size: 18px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .content li a:hover {
+            background-color: #666;
+            border-color: #777;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header" id="toggleHeader">Phoenix</div>
+        <div class="content" id="toggleContent">
+            <ul>
+                <li><b><a href="https://sites.google.com/view/phoenix-is/translator">Переводчик</a></b></li>
+                <li><b><a href="https://sites.google.com/view/phoenix-is/survey">Опрос</a></b></li>
+            </ul>
+        </div>
+    </div>
+    <script>
+        document.getElementById('toggleHeader').addEventListener('click', () => {
+            const content = document.getElementById('toggleContent');
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+            } else {
+                content.style.maxHeight = content.scrollHeight + 'px';
+            }
+        });
+    </script>
+</body>
+</html>
