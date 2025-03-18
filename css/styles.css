@@ -11,12 +11,18 @@
     font-size: 20px;
     cursor: pointer;
     z-index: 1000;
-    transition: left 0.3s ease, transform 0.3s ease; /* Добавили анимацию transform */
+    transition: left 0.3s ease;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #333;
 }
 
 .nav-toggle.moved {
     left: 250px;
-    transform: translateY(-50%) rotate(180deg); /* Поворот на 180 градусов */
 }
 
 /* Стили для навигационной панели */
@@ -33,6 +39,15 @@
     padding: 20px 0; /* Добавили отступы */
 }
 
+.nav-toggle::before {
+    content: ">";
+    transition: transform 0.3s ease; /* Анимация только для стрелки */
+}
+
+.nav-toggle.moved::before {
+    transform: rotate(180deg); /* Поворот стрелки */
+}
+
 /* Стили для списка ссылок */
 .nav-panel ul {
     list-style: none;
@@ -41,7 +56,7 @@
 }
 
 .nav-panel ul li {
-    margin: 10px 0; /* Уменьшили отступы между элементами */
+    margin: 10px 0;
 }
 
 .nav-panel ul li a {
@@ -52,13 +67,17 @@
     text-decoration: none;
     font-size: 18px;
     border-radius: 8px;
-    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    border: 2px solid #333;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    width: calc(100% - 40px);
+    margin: 0 auto;
 }
 
 .nav-panel ul li a:hover {
     background-color: #555;
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    border-color: #444;
 }
 
 /* Класс для открытой панели */
