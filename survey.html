@@ -260,7 +260,7 @@ button:hover {
 
 .close-button:hover {
     color: #ff4d4d;
-    background-color: rgba(255, 255, 255, 0.1); /* Лёгкий фон при наведении */
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .close-button:focus {
@@ -497,16 +497,24 @@ button:hover {
         }
 
 function activateDebugMode() {
+    function decodePassword(encodedPassword) {
+        let decoded = encodedPassword;
+        for (let i = 0; i < 3; i++) {
+            decoded = atob(decoded);
+        }
+        return decoded;
+    }
+
     const debugCode = document.getElementById('debug-code').value;
 
-    const decodedPassword = atob(encodedDebugPassword);
+    const decodedPassword = decodePassword(encodedPass);
 
     if (debugCode === decodedPassword) {
         checkDebugMode((debugModeEnabled) => {
             if (debugModeEnabled) {
                 debugModeActive = true;
                 document.getElementById('debug-window').style.display = 'none';
-                document.getElementById('debug-options').style.display = 'block'; // Показываем новое окно с кнопками
+                document.getElementById('debug-options').style.display = 'block';
                 showMessage("Дебаг-режим включен", "green");
             } else {
                 showMessage("Дебаг-режим отключен на сервере", "red");
