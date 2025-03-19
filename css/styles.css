@@ -21,6 +21,10 @@
     border: 2px solid #333;
 }
 
+.nav-toggle:hover {
+    background-color: #0056b3;
+}
+
 .nav-toggle.moved {
     left: 250px;
 }
