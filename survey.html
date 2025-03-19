@@ -496,23 +496,26 @@ button:hover {
                 });
         }
 
-    function activateDebugMode() {
-        const debugCode = document.getElementById('debug-code').value;
-        if (debugCode === "DEBUG*ON@7002*PASS") {
-            checkDebugMode((debugModeEnabled) => {
-                if (debugModeEnabled) {
-                    debugModeActive = true;
-                    document.getElementById('debug-window').style.display = 'none';
-                    document.getElementById('debug-options').style.display = 'block'; // Показываем новое окно с кнопками
-                    showMessage("Дебаг-режим включен", "green");
-                } else {
-                    showMessage("Дебаг-режим отключен на сервере", "red");
-                }
-            });
-        } else {
-            showMessage("Неверный код активации", "red");
-        }
+function activateDebugMode() {
+    const debugCode = document.getElementById('debug-code').value;
+
+    const decodedPassword = atob(encodedDebugPassword);
+
+    if (debugCode === decodedPassword) {
+        checkDebugMode((debugModeEnabled) => {
+            if (debugModeEnabled) {
+                debugModeActive = true;
+                document.getElementById('debug-window').style.display = 'none';
+                document.getElementById('debug-options').style.display = 'block'; // Показываем новое окно с кнопками
+                showMessage("Дебаг-режим включен", "green");
+            } else {
+                showMessage("Дебаг-режим отключен на сервере", "red");
+            }
+        });
+    } else {
+        showMessage("Неверный код активации", "red");
     }
+}
 
         function showMessage(message, color) {
             const messageElement = document.getElementById('debug-message');
