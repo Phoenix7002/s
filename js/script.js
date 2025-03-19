@@ -8,4 +8,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-const encodedPass = "VmtWQ1FWSkNZVkpUTjFCVkdoZVBRT1Zia01Bd1FBMT0=";
+const encodedPass = "REVCVUcqT05ANzAwMipQQVNT";
