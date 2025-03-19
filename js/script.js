@@ -8,4 +8,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-const encodedDebugPassword = "REVCVUcqT05ANzAwMipQQVNT";
+const encodedPass = "VmtWQ1FWSkNZVkpUTjFCVkdoZVBRT1Zia01Bd1FBMT0=";
