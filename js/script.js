@@ -7,3 +7,5 @@ document.addEventListener('DOMContentLoaded', () => {
         navToggle.classList.toggle('moved');
     });
 });
+
+const encodedDebugPassword = "REVCVUcqT05ANzAwMipQQVNT";
