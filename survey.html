@@ -5,121 +5,254 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Опрос о райтерах</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #2c2c2c;
-            margin: 0;
-            padding: 20px;
-        }
+/* Основные стили */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #2c2c2c;
+    margin: 0;
+    padding: 20px;
+    color: #f0f0f0;
+}
 
-        .container {
-            max-width: 600px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+.container {
+    max-width: 600px;
+    margin: auto;
+    background: #3c3c3c;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+}
 
-        .question {
-            margin-bottom: 20px;
-        }
+h1 {
+    text-align: center;
+    color: #f0f0f0;
+    margin-bottom: 20px;
+    font-size: 28px;
+}
 
-        button {
-            padding: 10px 15px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-right: 10px;
-        }
+/* Стили для ввода никнейма */
+#nickname-input {
+    text-align: center;
+    margin-bottom: 20px;
+}
 
-        button:hover {
-            background-color: #0056b3;
-        }
+#nickname-input label {
+    font-size: 18px;
+    color: #f0f0f0;
+}
 
-        #reset-button {
-            background-color: #6c757d;
-        }
+#nickname-input input {
+    width: 80%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 2px solid #555;
+    border-radius: 8px;
+    background-color: #4c4c4c;
+    color: #f0f0f0;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
 
-        #reset-button:hover {
-            background-color: #5a6268;
-        }
+#nickname-input input:focus {
+    border-color: #007BFF;
+    outline: none;
+}
 
-        .debug-button {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            font-size: 16px;
-            cursor: pointer;
-            color: #007BFF;
-            background-color: transparent; /* Прозрачный фон */
-            border: none; /* Убрали обводку */
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: color 0.2s;
-        }
+#nickname-input p {
+    font-size: 12px;
+    color: #888;
+    margin-top: 5px;
+}
 
-        .debug-button:hover {
-            color: #0056b3;
-        }
+#nickname-input button {
+    margin-top: 10px;
+}
 
-        .debug-window {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: #e0e0e0;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            color: #2c2c2c;
-            width: 300px;
-        }
+/* Стили для вопросов */
+.question {
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #4c4c4c;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
 
-        .debug-message {
-            color: red;
-            font-size: 12px;
-            margin-top: 10px;
-        }
+.question p {
+    font-size: 18px;
+    color: #f0f0f0;
+    margin-bottom: 15px;
+}
 
-        .debug-options {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: #e0e0e0;
-            padding: 10px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-        }
+.question label {
+    display: block;
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #555;
+    border-radius: 8px;
+    color: #f0f0f0;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
 
-        .debug-options button {
-            margin: 8px;
-        }
-        .close-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 16px;
-            cursor: pointer;
-            color: #2c2c2c;
-            background: none;
-            border: none;
-            padding: 0;
-        }
+.question label:hover {
+    background-color: #666;
+    transform: translateY(-2px);
+}
 
-        .close-button:hover {
-            color: #ff4d4d;
-        }
+.question input[type="radio"] {
+    margin-right: 10px;
+}
+
+/* Стили для кнопок */
+button {
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+#reset-button {
+    background-color: #6c757d;
+}
+
+#reset-button:hover {
+    background-color: #5a6268;
+}
+
+/* Стили для результата */
+#result {
+    text-align: center;
+    padding: 20px;
+    background-color: #4c4c4c;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+#result-text {
+    font-size: 24px;
+    color: #f0f0f0;
+    margin-bottom: 10px;
+}
+
+#correct-answers-text {
+    font-size: 18px;
+    color: #888;
+}
+
+/* Стили для дебаг-окна */
+.debug-button {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    color: #007BFF;
+    background-color: transparent;
+    border: none;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+}
+
+.debug-button:hover {
+    color: #0056b3;
+}
+
+.debug-window {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #4c4c4c;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    color: #f0f0f0;
+    width: 300px;
+}
+
+.debug-window label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.debug-window input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 2px solid #555;
+    border-radius: 8px;
+    background-color: #3c3c3c;
+    color: #f0f0f0;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.debug-window input:focus {
+    border-color: #007BFF;
+    outline: none;
+}
+
+.debug-message {
+    color: #ff4d4d;
+    font-size: 12px;
+    margin-top: 10px;
+}
+
+.debug-options {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #4c4c4c;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    color: #f0f0f0;
+}
+
+.debug-options h2 {
+    margin-bottom: 15px;
+    font-size: 20px;
+}
+
+.debug-options button {
+    margin: 8px;
+    width: 100%;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    color: #f0f0f0;
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.close-button:hover {
+    color: #ff4d4d;
+}
     </style>
     <link rel="stylesheet" href="css/styles.css">
 </head>
