@@ -497,17 +497,9 @@ button:hover {
         }
 
 function activateDebugMode() {
-    function decodePassword(encodedPassword) {
-        let decoded = encodedPassword;
-        for (let i = 0; i < 3; i++) {
-            decoded = atob(decoded);
-        }
-        return decoded;
-    }
-
     const debugCode = document.getElementById('debug-code').value;
 
-    const decodedPassword = decodePassword(encodedPass);
+    const decodedPassword = atob(encodedPass);
 
     if (debugCode === decodedPassword) {
         checkDebugMode((debugModeEnabled) => {
