@@ -1,5 +1,5 @@
 /* Стили для кнопки */
-.nav-toggle {
+.main-nav-toggle {
     position: fixed;
     left: 0;
     top: 50%;
@@ -21,21 +21,21 @@
     border: 2px solid #333;
 }
 
-.nav-toggle.moved {
+.main-nav-toggle.moved {
     left: 250px;
 }
 
-.nav-toggle::before {
+.main-nav-toggle::before {
     content: ">";
     transition: transform 0.3s ease;
 }
 
-.nav-toggle.moved::before {
+.main-nav-toggle.moved::before {
     transform: rotate(180deg);
 }
 
 /* Стили для навигационной панели */
-.nav-panel {
+.main-nav-panel {
     position: fixed;
     left: -250px; /* Панель скрыта за пределами экрана */
     top: 0;
@@ -49,17 +49,17 @@
 }
 
 /* Стили для списка ссылок */
-.nav-panel ul {
+.main-nav-panel ul {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-.nav-panel ul li {
+.main-nav-panel ul li {
     margin: 10px 0;
 }
 
-.nav-panel ul li a {
+.main-nav-panel ul li a {
     display: block;
     padding: 15px 20px;
     background-color: #4c4c4c;
@@ -73,7 +73,7 @@
     margin: 0 auto;
 }
 
-.nav-panel ul li a:hover {
+.main-nav-panel ul li a:hover {
     background-color: #555;
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
@@ -81,6 +81,6 @@
 }
 
 /* Класс для открытой панели */
-.nav-panel.open {
+.main-nav-panel.open {
     left: 0;
 }
