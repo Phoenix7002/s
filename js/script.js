@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const navToggle = document.querySelector('.main-nav-toggle');
-    const navPanel = document.querySelector('.main-nav-panel');
+    const navToggle = document.getElementById('navToggle');
+    const navPanel = document.getElementById('navPanel');
 
     navToggle.addEventListener('click', () => {
         navPanel.classList.toggle('open');
