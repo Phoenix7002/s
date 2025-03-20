@@ -141,10 +141,37 @@
             opacity: 0.5;
         }
     </style>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" type="image/x-icon" href="images/icon.png">
 </head>
 
 <body>
 
+<button id="navToggle" class="nav-toggle"></button>
+
+<nav id="navPanel" class="nav-panel">
+    <ul>
+        <li>
+            <a href="https://phoenix7002.github.io/tbs">
+                <img src="images/home_icon.png" alt="Главная">
+                <span>Главная</span>
+            </a>
+        </li>
+        <li>
+            <a href="https://phoenix7002.github.io/tbs/survey">
+                <img src="images/survey_icon.png" alt="Опрос">
+                <span>Опрос</span>
+            </a>
+        </li>
+        <li>
+            <a href="https://phoenix7002.github.io/tbs/translator">
+                <img src="images/survey_icon.png" alt="Переводчик">
+                <span>Переводчик</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+    
     <div class="container">
         <div class="title">Переводчик</div>
         <div class="language-switch">
@@ -932,7 +959,7 @@ translateButton.addEventListener('click', function () {
     resultText.textContent = translatedWords.join(' ');
 });
 </script>
-
+<script src="js/script.js"></script>
 </body>
 
 </html>
