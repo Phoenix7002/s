@@ -148,10 +148,10 @@
     <div class="container">
         <div class="title">Переводчик</div>
         <div class="language-switch">
-            <span class="language-switch-label">Переводить на:</span>
-            <span class="language-switch-text" id="russianText">Русский</span>
+            <span class="language-switch-label">Переводить с:</span>
+            <span class="language-switch-text" id="russianText">Русского</span>
             <div class="language-switch-button active" id="languageSwitch"></div>
-            <span class="language-switch-text" id="tugoserinText">Тугосеринский</span>
+            <span class="language-switch-text" id="tugoserinText">Тугосеринского</span>
         </div>
         <textarea class="input-text" placeholder="Введите текст..."></textarea>
         <button class="translate-button">Перевести</button>
@@ -907,15 +907,15 @@ languageSwitch.addEventListener('click', function () {
 
 function updateLanguageText() {
     if (isRussianToTugoserin) {
-        tugoserinText.classList.add('inactive');
-        tugoserinText.classList.remove('active');
         russianText.classList.add('active');
         russianText.classList.remove('inactive');
+        tugoserinText.classList.add('inactive');
+        tugoserinText.classList.remove('active');
     } else {
-        russianText.classList.add('inactive');
-        russianText.classList.remove('active');
         tugoserinText.classList.add('active');
         tugoserinText.classList.remove('inactive');
+        russianText.classList.add('inactive');
+        russianText.classList.remove('active');
     }
 }
 
