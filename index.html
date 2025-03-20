@@ -77,20 +77,32 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
+        .content li a img {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+        }
+        .content li a span {
+            vertical-align: middle;
+        }
     </style>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="icon" type="image/x-icon" href="images/icon.png">
 </head>
 <body>
 <div class="container">
-        <div class="header" id="toggleHeader">Phoenix</div>
-        <div class="content" id="toggleContent">
-            <ul>
-                <li><b><a href="https://phoenix7002.github.io/tbs/">Переводчик</a></b></li>
-                <li><b><a href="https://phoenix7002.github.io/tbs/survey">Опрос</a></b></li>
-            </ul>
-        </div>
+    <div class="header" id="toggleHeader">Phoenix</div>
+    <div class="content" id="toggleContent">
+        <ul>
+            <li>
+                <a href="https://phoenix7002.github.io/tbs/survey">
+                    <img src="images/survey_icon.png" alt="Опрос">
+                    <span>Опрос</span>
+                </a>
+            </li>
+        </ul>
     </div>
+</div>
     <script>
         document.getElementById('toggleHeader').addEventListener('click', () => {
             const content = document.getElementById('toggleContent');
