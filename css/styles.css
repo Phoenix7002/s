@@ -67,6 +67,7 @@
 
 .nav-panel ul li a {
     display: flex;
+    align-items: center;
     padding: 15px 10px;
     background-color: #4c4c4c;
     color: #fff;
@@ -79,6 +80,13 @@
     margin: 0 auto;
 }
 
+.nav-panel ul li a:hover {
+    background-color: #555;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    border-color: #444;
+}
+
 .nav-panel ul li img {
     width: 24px;
     height: 24px;
@@ -86,11 +94,14 @@
     margin-right: 10px;
 }
 
-.nav-panel ul li a:hover {
-    background-color: #555;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    border-color: #444;
+.nav-panel ul li a img {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+}
+
+.nav-panel ul li a span {
+    flex-grow: 1; /* Текст занимает оставшееся пространство */
 }
 
 /* Класс для открытой панели */
