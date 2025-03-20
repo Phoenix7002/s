@@ -66,7 +66,7 @@
 }
 
 .nav-panel ul li a {
-    display: block;
+    display: flex;
     padding: 15px 10px;
     background-color: #4c4c4c;
     color: #fff;
@@ -77,6 +77,13 @@
     transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
     width: calc(100% - 40px);
     margin: 0 auto;
+}
+
+.nav-panel ul li img {
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
+    margin-right: 10px;
 }
 
 .nav-panel ul li a:hover {
