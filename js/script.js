@@ -26,9 +26,22 @@ window.addEventListener('click', (event) => {
     }
 });
 
+function updateIconsForTheme(theme) {
+    const icons = document.querySelectorAll('.nav-panel ul li a img, .settings-button img');
+    icons.forEach(icon => {
+        const src = icon.getAttribute('src');
+        if (theme === 'light') {
+            icon.setAttribute('src', src.replace('.png', '_light.png'));
+        } else {
+            icon.setAttribute('src', src.replace('_light.png', '.png'));
+        }
+    });
+}
+
 function applyTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme); // Сохраняем тему в localStorage
+    localStorage.setItem('theme', theme);
+    updateIconsForTheme(theme);
 }
 
 function toggleTheme() {
