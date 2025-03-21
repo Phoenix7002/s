@@ -9,7 +9,6 @@
     --shadow-color: rgba(0, 0, 0, 0.6);
 }
 
-/* Стили для светлой темы */
 [data-theme="light"] {
     --background-color: #ffffff;
     --text-color: #000000;
@@ -60,10 +59,9 @@
     transform: rotate(180deg);
 }
 
-/* Стили для навигационной панели */
 .nav-panel {
     position: fixed;
-    left: -250px; /* Панель скрыта за пределами экрана */
+    left: -250px;
     top: 0;
     width: 250px;
     height: 100%;
@@ -71,12 +69,11 @@
     color: var(--text-color);
     transition: left 0.3s ease, background-color 0.3s ease;
     z-index: 999;
-    padding: 20px 0; /* Добавили отступы */
+    padding: 20px 0;
     border: 5px solid var(--border-color);
     border-radius: 10px; 
 }
 
-/* Стили для списка ссылок */
 .nav-panel ul {
     list-style: none;
     padding: 0;
@@ -135,8 +132,9 @@
     top: 20px;
     right: 20px;
     background-color: var(--container-bg);
-    border: none;
+    border: solid;
     border-radius: 50%;
+    border-color: var(--primary-color);
     width: 40px;
     height: 40px;
     cursor: pointer;
