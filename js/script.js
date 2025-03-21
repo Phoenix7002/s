@@ -8,17 +8,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Открытие окна настроек
 document.getElementById('settings-button').addEventListener('click', () => {
     document.getElementById('settings-window').style.display = 'block';
 });
 
-// Закрытие окна настроек
 function closeSettingsWindow() {
     document.getElementById('settings-window').style.display = 'none';
 }
 
-// Закрытие окна при клике вне его
 window.addEventListener('click', (event) => {
     const settingsWindow = document.getElementById('settings-window');
     const settingsButton = document.getElementById('settings-button');
@@ -27,6 +24,32 @@ window.addEventListener('click', (event) => {
             settingsWindow.style.display = 'none';
         }
     }
+});
+
+function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme); // Сохраняем тему в localStorage
+}
+
+function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    applyTheme(newTheme);
+}
+
+window.addEventListener('load', () => {
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    applyTheme(savedTheme);
+
+    const themeSelect = document.getElementById('theme-select');
+    if (themeSelect) {
+        themeSelect.value = savedTheme;
+    }
+});
+
+document.getElementById('theme-select')?.addEventListener('change', (event) => {
+    const selectedTheme = event.target.value;
+    applyTheme(selectedTheme);
 });
 
 const encodedPass = "REVCVUcqT05ANzAwMipQQVNT";
