@@ -1,319 +1,321 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Опрос о райтерах</title>
     <style>
-body {
-    font-family: 'Roboto', sans-serif;
-    background-color: #2c2c2c;
-    margin: 0;
-    padding: 20px;
-    color: #f0f0f0;
-}
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #2c2c2c;
+            margin: 0;
+            padding: 20px;
+            color: #f0f0f0;
+        }
 
-.container {
-    max-width: 600px;
-    margin: auto;
-    background: #3c3c3c;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
-}
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #3c3c3c;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+        }
 
-h1 {
-    text-align: center;
-    color: #f0f0f0;
-    margin-bottom: 20px;
-    font-size: 28px;
-}
+        h1 {
+            text-align: center;
+            color: #f0f0f0;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
 
-#nickname-input {
-    text-align: center;
-    margin-bottom: 20px;
-}
+        #nickname-input {
+            text-align: center;
+            margin-bottom: 20px;
+        }
 
-#nickname-input label {
-    font-size: 18px;
-    color: #f0f0f0;
-}
+        #nickname-input label {
+            font-size: 18px;
+            color: #f0f0f0;
+        }
 
-#nickname-input input {
-    width: 80%;
-    padding: 10px;
-    margin-top: 10px;
-    border: 2px solid #555;
-    border-radius: 8px;
-    background-color: #4c4c4c;
-    color: #f0f0f0;
-    font-size: 16px;
-    transition: border-color 0.3s ease;
-}
+        #nickname-input input {
+            width: 80%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 2px solid #555;
+            border-radius: 8px;
+            background-color: #4c4c4c;
+            color: #f0f0f0;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
 
-#nickname-input input:focus {
-    border-color: #007BFF;
-    outline: none;
-}
+        #nickname-input input:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
 
-#nickname-input p {
-    font-size: 12px;
-    color: #888;
-    margin-top: 5px;
-}
+        #nickname-input p {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
 
-#nickname-input button {
-    margin-top: 10px;
-}
+        #nickname-input button {
+            margin-top: 10px;
+        }
 
-.question {
-    margin-bottom: 20px;
-    padding: 20px;
-    background-color: #4c4c4c;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-}
+        .question {
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #4c4c4c;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
 
-.question p {
-    font-size: 18px;
-    color: #f0f0f0;
-    margin-bottom: 15px;
-}
+        .question p {
+            font-size: 18px;
+            color: #f0f0f0;
+            margin-bottom: 15px;
+        }
 
-.question label {
-    display: block;
-    margin: 10px 0;
-    padding: 10px;
-    background-color: #555;
-    border-radius: 8px;
-    color: #f0f0f0;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
+        .question label {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #555;
+            border-radius: 8px;
+            color: #f0f0f0;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
 
-.question label:hover {
-    background-color: #666;
-    transform: translateY(-2px);
-}
+        .question label:hover {
+            background-color: #666;
+            transform: translateY(-2px);
+        }
 
-.question input[type="radio"] {
-    margin-right: 10px;
-}
+        .question input[type="radio"] {
+            margin-right: 10px;
+        }
 
-button {
-    padding: 10px 20px;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
 
-button:hover {
-    background-color: #0056b3;
-}
+        button:hover {
+            background-color: #0056b3;
+        }
 
-#reset-button {
-    background-color: #6c757d;
-}
+        #reset-button {
+            background-color: #6c757d;
+        }
 
-#reset-button:hover {
-    background-color: #5a6268;
-}
+        #reset-button:hover {
+            background-color: #5a6268;
+        }
 
-#result {
-    text-align: center;
-    padding: 20px;
-    background-color: #4c4c4c;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-}
+        #result {
+            text-align: center;
+            padding: 20px;
+            background-color: #4c4c4c;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
 
-#result-text {
-    font-size: 24px;
-    color: #f0f0f0;
-    margin-bottom: 10px;
-}
+        #result-text {
+            font-size: 24px;
+            color: #f0f0f0;
+            margin-bottom: 10px;
+        }
 
-#correct-answers-text {
-    font-size: 18px;
-    color: #888;
-}
+        #correct-answers-text {
+            font-size: 18px;
+            color: #888;
+        }
 
-.debug-button {
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    font-size: 16px;
-    cursor: pointer;
-    color: #007BFF;
-    background-color: transparent;
-    border: none;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: color 0.2s;
-}
+        .debug-button {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            color: #007BFF;
+            background-color: transparent;
+            border: none;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s;
+        }
 
-.debug-button:hover {
-    color: #0056b3;
-}
+        .debug-button:hover {
+            color: #0056b3;
+        }
 
-.debug-window {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #4c4c4c;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
-    z-index: 1000;
-    color: #f0f0f0;
-    width: 300px;
-}
+        .debug-window {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #4c4c4c;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            color: #f0f0f0;
+            width: 300px;
+        }
 
-.debug-window label {
-    display: block;
-    margin-bottom: 10px;
-    font-size: 16px;
-}
+        .debug-window label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
 
-.debug-window input {
-    width: calc(100% - 20px);
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 2px solid #555;
-    border-radius: 8px;
-    background-color: #3c3c3c;
-    color: #f0f0f0;
-    font-size: 16px;
-    transition: border-color 0.3s ease;
-    box-sizing: border-box;
-}
+        .debug-window input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 2px solid #555;
+            border-radius: 8px;
+            background-color: #3c3c3c;
+            color: #f0f0f0;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+        }
 
-.debug-window input:focus {
-    border-color: #007BFF;
-    outline: none;
-}
+        .debug-window input:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
 
-.debug-message {
-    color: #ff4d4d;
-    font-size: 12px;
-    margin-top: 10px;
-}
+        .debug-message {
+            color: #ff4d4d;
+            font-size: 12px;
+            margin-top: 10px;
+        }
 
-.debug-options {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #4c4c4c;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
-    z-index: 1000;
-    color: #f0f0f0;
-}
+        .debug-options {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #4c4c4c;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            color: #f0f0f0;
+        }
 
-.debug-options h2 {
-    margin-bottom: 15px;
-    font-size: 20px;
-    text-align: center;
-}
+        .debug-options h2 {
+            margin-bottom: 15px;
+            font-size: 20px;
+            text-align: center;
+        }
 
-.debug-options button {
-    margin: 8px 0;
-    padding: 10px;
-    width: auto
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
+        .debug-options button {
+            margin: 8px 0;
+            padding: 10px;
+            width: auto;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
 
-.debug-options button:hover {
-    background-color: #0056b3;
-    transform: translateY(-2px);
-}
-        
-.close-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 16px;
-    cursor: pointer;
-    color: #f0f0f0;
-    background: none;
-    border: none;
-    padding: 0;
-}
+        .debug-options button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
 
-.close-button:hover {
-    color: #ff4d4d;
-    background-color: rgba(255, 255, 255, 0.1);
-}
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            color: #f0f0f0;
+            background: none;
+            border: none;
+            padding: 0;
+        }
 
-.close-button:focus {
-    outline: none;
-}
+        .close-button:hover {
+            color: #ff4d4d;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .close-button:focus {
+            outline: none;
+        }
     </style>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="icon" type="image/x-icon" href="images/icon.png">
 </head>
+
 <body>
-<button id="navToggle" class="nav-toggle"></button>
+    <button id="navToggle" class="nav-toggle"></button>
 
-<nav id="navPanel" class="nav-panel">
-    <ul>
-        <li>
-            <a href="https://phoenix7002.github.io/tbs">
-                <img src="images/home_icon.png" alt="Главная">
-                <span>Главная</span>
-            </a>
-        </li>
-        <li>
-            <a href="https://phoenix7002.github.io/tbs/survey">
-                <img src="images/survey_icon.png" alt="Опрос">
-                <span>Опрос</span>
-            </a>
-        </li>
-        <li>
-            <a href="https://phoenix7002.github.io/tbs/translator">
-                <img src="images/translate_icon.png" alt="Переводчик">
-                <span>Переводчик</span>
-            </a>
-        </li>    
-    </ul>
-</nav>
+    <nav id="navPanel" class="nav-panel">
+        <ul>
+            <li>
+                <a href="https://phoenix7002.github.io/tbs">
+                    <img src="images/home_icon.png" alt="Главная">
+                    <span>Главная</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://phoenix7002.github.io/tbs/survey">
+                    <img src="images/survey_icon.png" alt="Опрос">
+                    <span>Опрос</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://phoenix7002.github.io/tbs/translator">
+                    <img src="images/translate_icon.png" alt="Переводчик">
+                    <span>Переводчик</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 
-<div class="debug-button" onclick="openDebugWindow()">*</div>
-<div class="debug-window" id="debug-window">
-    <button class="close-button" onclick="closeDebugWindow()">×</button>
-    <label for="debug-code">Введите код активации:</label>
-    <input type="text" id="debug-code">
-    <button onclick="activateDebugMode()">Подтвердить</button>
-    <div class="debug-message" id="debug-message"></div>
-</div>
+    <div class="debug-button" onclick="openDebugWindow()">*</div>
+    <div class="debug-window" id="debug-window">
+        <button class="close-button" onclick="closeDebugWindow()">×</button>
+        <label for="debug-code">Введите код активации:</label>
+        <input type="text" id="debug-code">
+        <button onclick="activateDebugMode()">Подтвердить</button>
+        <div class="debug-message" id="debug-message"></div>
+    </div>
 
-<div class="debug-options" id="debug-options">
-    <button class="close-button" onclick="closeDebugWindow()">×</button> <!-- Крестик -->
-    <h2>Дебаг-режим</h2>
-    <button onclick="sendEmptyTest()">1. Пустое прохождение теста</button>
-    <button onclick="sendDDoSTest()">2. Послать >100 запросов</button>
-    <button onclick="sendInvalidInputTest()">3. Послать плохие входные данные</button>
-    <button onclick="sendInvalidJSONTest()">4. Послать не JSON</button>
-    <button onclick="sendNonArrayTest()">5. Послать не массив</button>
-</div>
+    <div class="debug-options" id="debug-options">
+        <button class="close-button" onclick="closeDebugWindow()">×</button>
+        <h2>Дебаг-режим</h2>
+        <button onclick="sendEmptyTest()">1. Пустое прохождение теста</button>
+        <button onclick="sendDDoSTest()">2. Послать >100 запросов</button>
+        <button onclick="sendInvalidInputTest()">3. Послать плохие входные данные</button>
+        <button onclick="sendInvalidJSONTest()">4. Послать не JSON</button>
+        <button onclick="sendNonArrayTest()">5. Послать не массив</button>
+    </div>
 
     <div class="container">
         <h1>Опрос о райтерах</h1>
@@ -324,7 +326,6 @@ button:hover {
             <button onclick="startQuiz()">Начать опрос</button>
         </div>
         <div id="quiz" style="display:none;">
-            <!-- Вопросы опроса -->
             <div class="question" id="question-1">
                 <p>1. Что такое: "#райтероввлюди"?</p>
                 <label><input type="radio" name="q1" value="1"> Хз не играл</label><br>
@@ -356,7 +357,8 @@ button:hover {
                 <p>5. Что самое сложное в работе викирайтера?</p>
                 <label><input type="radio" name="q5" value="1"> Искать актуальную информацию</label><br>
                 <label><input type="radio" name="q5" value="2"> Писать тексты и заниматься вёрсткой</label><br>
-                <label><input type="radio" name="q5" value="3"> Ставить букву "Ё" за место "Е" и "—" за место "-"</label><br>
+                <label><input type="radio" name="q5" value="3"> Ставить букву "Ё" за место "Е" и "—" за место
+                    "-"</label><br>
                 <button onclick="nextQuestion(5)">Далее</button>
             </div>
             <div class="question" id="question-6" style="display:none;">
@@ -513,26 +515,26 @@ button:hover {
                 });
         }
 
-function activateDebugMode() {
-    const debugCode = document.getElementById('debug-code').value;
+        function activateDebugMode() {
+            const debugCode = document.getElementById('debug-code').value;
 
-    const decodedPassword = atob(encodedPass);
+            const decodedPassword = atob(encodedPass);
 
-    if (debugCode === decodedPassword) {
-        checkDebugMode((debugModeEnabled) => {
-            if (debugModeEnabled) {
-                debugModeActive = true;
-                document.getElementById('debug-window').style.display = 'none';
-                document.getElementById('debug-options').style.display = 'block';
-                showMessage("Дебаг-режим включен", "green");
+            if (debugCode === decodedPassword) {
+                checkDebugMode((debugModeEnabled) => {
+                    if (debugModeEnabled) {
+                        debugModeActive = true;
+                        document.getElementById('debug-window').style.display = 'none';
+                        document.getElementById('debug-options').style.display = 'block';
+                        showMessage("Дебаг-режим включен", "green");
+                    } else {
+                        showMessage("Дебаг-режим отключен на сервере", "red");
+                    }
+                });
             } else {
-                showMessage("Дебаг-режим отключен на сервере", "red");
+                showMessage("Неверный код активации", "red");
             }
-        });
-    } else {
-        showMessage("Неверный код активации", "red");
-    }
-}
+        }
 
         function showMessage(message, color) {
             const messageElement = document.getElementById('debug-message');
@@ -540,37 +542,37 @@ function activateDebugMode() {
             messageElement.style.color = color;
         }
 
-function sendDDoSTest() {
-    for (let i = 0; i < 101; i++) {
-        sendRequest({ results: JSON.stringify(["test", "1", "2"]), callback: "handleResponse", result: "test", debug: "true" });
-    }
-}
+        function sendDDoSTest() {
+            for (let i = 0; i < 101; i++) {
+                sendRequest({ results: JSON.stringify(["test", "1", "2"]), callback: "handleResponse", result: "test", debug: "true" });
+            }
+        }
 
-function sendEmptyTest() {
-    const answers = [];
-    for (let i = 1; i <= 10; i++) {
-        answers.push("1");
-    }
-    const data = {
-        results: JSON.stringify(["Null", ...answers]), // Имя пользователя "Null"
-        callback: "handleResponse",
-        result: "test",
-        debug: "true"
-    };
-    sendRequest(data);
-}
+        function sendEmptyTest() {
+            const answers = [];
+            for (let i = 1; i <= 10; i++) {
+                answers.push("1");
+            }
+            const data = {
+                results: JSON.stringify(["Null", ...answers]), // Имя пользователя "Null"
+                callback: "handleResponse",
+                result: "test",
+                debug: "true"
+            };
+            sendRequest(data);
+        }
 
-function sendInvalidInputTest() {
-    sendRequest({ results: null, callback: null, result: null, debug: "true" });
-}
+        function sendInvalidInputTest() {
+            sendRequest({ results: null, callback: null, result: null, debug: "true" });
+        }
 
-function sendInvalidJSONTest() {
-    sendRequest({ results: "invalid-json", callback: "handleResponse", result: "test", debug: "true" });
-}
+        function sendInvalidJSONTest() {
+            sendRequest({ results: "invalid-json", callback: "handleResponse", result: "test", debug: "true" });
+        }
 
-function sendNonArrayTest() {
-    sendRequest({ results: JSON.stringify({ key: "value" }), callback: "handleResponse", result: "test", debug: "true" });
-}
+        function sendNonArrayTest() {
+            sendRequest({ results: JSON.stringify({ key: "value" }), callback: "handleResponse", result: "test", debug: "true" });
+        }
 
         function closeDebugWindow() {
             document.getElementById('debug-window').style.display = 'none';
@@ -586,18 +588,18 @@ function sendNonArrayTest() {
             script.onerror = () => {
                 console.error('Ошибка при загрузке скрипта');
                 document.body.removeChild(script);
-        };
-    }
+            };
+        }
 
-function sendResultsToGoogleSheet(resultsForSheet, resultMessage) {
-    const data = {
-        results: JSON.stringify(resultsForSheet),
-        callback: "handleResponse",
-        result: resultMessage,
-        debug: debugModeActive ? "true" : "false"
-    };
-    sendRequest(data);
-}
+        function sendResultsToGoogleSheet(resultsForSheet, resultMessage) {
+            const data = {
+                results: JSON.stringify(resultsForSheet),
+                callback: "handleResponse",
+                result: resultMessage,
+                debug: debugModeActive ? "true" : "false"
+            };
+            sendRequest(data);
+        }
 
         function handleResponse(response) {
             console.log("Ответ от сервера:", response);
@@ -610,4 +612,5 @@ function sendResultsToGoogleSheet(resultsForSheet, resultMessage) {
     </script>
     <script src="js/script.js"></script>
 </body>
+
 </html>
