@@ -21,6 +21,11 @@
     --shadow-color: rgba(0, 0, 0, 0.3);
 }
 
+[data-theme="light"] .nav-panel ul li a img,
+[data-theme="light"] .settings-button img {
+    filter: brightness(0) invert(1);
+}
+
 .nav-toggle {
     position: fixed;
     left: 0;
