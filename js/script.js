@@ -27,7 +27,7 @@ window.addEventListener('click', (event) => {
 });
 
 function updateIconsForTheme(theme) {
-    const icons = document.querySelectorAll('.nav-panel ul li a img, .settings-button img');
+    const icons = document.querySelectorAll('.nav-panel ul li a img, .settings-button img, .content li a img');
     icons.forEach(icon => {
         const src = icon.getAttribute('src');
         if (theme === 'light') {
