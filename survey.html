@@ -300,21 +300,21 @@
 
     <div class="debug-button" onclick="openDebugWindow()">*</div>
     <div class="debug-window" id="debug-window">
-        <button class="close-button" onclick="closeDebugWindow()">×</button>
+        <button class="standard-button" class="close-button" onclick="closeDebugWindow()">×</button>
         <label for="debug-code">Введите код активации:</label>
         <input type="text" id="debug-code">
-        <button onclick="activateDebugMode()">Подтвердить</button>
+        <button class="standard-button" onclick="activateDebugMode()">Подтвердить</button>
         <div class="debug-message" id="debug-message"></div>
     </div>
 
     <div class="debug-options" id="debug-options">
         <button class="close-button" onclick="closeDebugWindow()">×</button>
         <h2>Дебаг-режим</h2>
-        <button onclick="sendEmptyTest()">1. Пустое прохождение теста</button>
-        <button onclick="sendDDoSTest()">2. Послать >100 запросов</button>
-        <button onclick="sendInvalidInputTest()">3. Послать плохие входные данные</button>
-        <button onclick="sendInvalidJSONTest()">4. Послать не JSON</button>
-        <button onclick="sendNonArrayTest()">5. Послать не массив</button>
+        <button class="standard-button" onclick="sendEmptyTest()">1. Пустое прохождение теста</button>
+        <button class="standard-button" onclick="sendDDoSTest()">2. Послать >100 запросов</button>
+        <button class="standard-button" onclick="sendInvalidInputTest()">3. Послать плохие входные данные</button>
+        <button class="standard-button" onclick="sendInvalidJSONTest()">4. Послать не JSON</button>
+        <button class="standard-button" onclick="sendNonArrayTest()">5. Послать не массив</button>
     </div>
 
     <div class="container">
@@ -323,7 +323,7 @@
             <label for="nickname">Введите ваш никнейм:</label>
             <input type="text" id="nickname" name="nickname">
             <p style="font-size: 12px; color: #666;">Не обязательно</p>
-            <button onclick="startQuiz()">Начать опрос</button>
+            <button class="standard-button" onclick="startQuiz()">Начать опрос</button>
         </div>
         <div id="quiz" style="display:none;">
             <div class="question" id="question-1">
@@ -331,27 +331,27 @@
                 <label><input type="radio" name="q1" value="1"> Хз не играл</label><br>
                 <label><input type="radio" name="q1" value="2"> Битва за срач в войс</label><br>
                 <label><input type="radio" name="q1" value="3"> Просьба выдать райтерам права админа на WL</label><br>
-                <button onclick="nextQuestion(1)">Далее</button>
+                <button class="standard-button" onclick="nextQuestion(1)">Далее</button>
             </div>
             <div class="question" id="question-2" style="display:none;">
                 <p>2. Что такое "Яичные страницы"?</p>
                 <label><input type="radio" name="q2" value="1"> Eggs</label><br>
                 <label><input type="radio" name="q2" value="2"> Что-то с буквой S в названии</label><br>
                 <label><input type="radio" name="q2" value="3"> Старая вики 2019 года</label><br>
-                <button onclick="nextQuestion(2)">Далее</button>
+                <button class="standard-button" onclick="nextQuestion(2)">Далее</button>
             </div>
             <div class="question" id="question-3" style="display:none;">
                 <p>3. Готовы ли вы написать лор ИС?</p>
                 <label><input type="radio" name="q3" value="1"> Да</label><br>
                 <label><input type="radio" name="q3" value="2"> Нет</label><br>
-                <button onclick="nextQuestion(3)">Далее</button>
+                <button class="standard-button" onclick="nextQuestion(3)">Далее</button>
             </div>
             <div class="question" id="question-4" style="display:none;">
                 <p>4. Ваш любимый райтер?</p>
                 <label><input type="radio" name="q4" value="1"> яша петренко</label><br>
                 <label><input type="radio" name="q4" value="2"> Imperial Support</label><br>
                 <label><input type="radio" name="q4" value="3"> Здравствуйте</label><br>
-                <button onclick="nextQuestion(4)">Далее</button>
+                <button class="standard-button" onclick="nextQuestion(4)">Далее</button>
             </div>
             <div class="question" id="question-5" style="display:none;">
                 <p>5. Что самое сложное в работе викирайтера?</p>
@@ -359,28 +359,28 @@
                 <label><input type="radio" name="q5" value="2"> Писать тексты и заниматься вёрсткой</label><br>
                 <label><input type="radio" name="q5" value="3"> Ставить букву "Ё" за место "Е" и "—" за место
                     "-"</label><br>
-                <button onclick="nextQuestion(5)">Далее</button>
+                <button class="standard-button" onclick="nextQuestion(5)">Далее</button>
             </div>
             <div class="question" id="question-6" style="display:none;">
                 <p>6. Главная причина, по которой джун эдиторы чаще всего снимаются?</p>
                 <label><input type="radio" name="q6" value="1"> Плохое знание русского языка</label><br>
                 <label><input type="radio" name="q6" value="2"> Imperial Pass</label><br>
                 <label><input type="radio" name="q6" value="3"> Неумение работать с HTML и CSS</label><br>
-                <button onclick="nextQuestion(6)">Далее</button>
+                <button class="standard-button" onclick="nextQuestion(6)">Далее</button>
             </div>
             <div class="question" id="question-7" style="display:none;">
                 <p>7. Кто придумал "Тугосеринский" язык?</p>
                 <label><input type="radio" name="q7" value="1"> hsf (Вениамин Керриган)</label><br>
                 <label><input type="radio" name="q7" value="2"> Phoenix</label><br>
                 <label><input type="radio" name="q7" value="3"> Xepplethecatapult</label><br>
-                <button onclick="nextQuestion(7)">Далее</button>
+                <button class="standard-button" onclick="nextQuestion(7)">Далее</button>
             </div>
             <div class="question" id="question-8" style="display:none;">
                 <p>8. Что райтеры делают в войс чате?</p>
                 <label><input type="radio" name="q8" value="1"> Думают над новыми страницами</label><br>
                 <label><input type="radio" name="q8" value="2"> Молчат</label><br>
                 <label><input type="radio" name="q8" value="3"> Играют в garticphone</label><br>
-                <button onclick="nextQuestion(8)">Далее</button>
+                <button class="standard-button" onclick="nextQuestion(8)">Далее</button>
             </div>
             <div class="question" id="question-9" style="display:none;">
                 <p>9. Главный страх каждого райтера:</p>
@@ -389,7 +389,7 @@
                 <label><input type="radio" name="q9" value="3"> Напитки</label><br>
                 <label><input type="radio" name="q9" value="4"> Готовка</label><br>
                 <label><input type="radio" name="q9" value="5"> Все ответы верны</label><br>
-                <button onclick="nextQuestion(9)">Далее</button>
+                <button class="standard-button" onclick="nextQuestion(9)">Далее</button>
             </div>
             <div class="question" id="question-10" style="display:none;">
                 <p>10. Куда срать?</p>
@@ -397,14 +397,14 @@
                 <label><input type="radio" name="q10" value="2"> В чай</label><br>
                 <label><input type="radio" name="q10" value="3"> На Вики</label><br>
                 <label><input type="radio" name="q10" value="4"> В трусы</label><br>
-                <button onclick="showResult()">Завершить</button>
+                <button class="standard-button" onclick="showResult()">Завершить</button>
             </div>
         </div>
         <div id="result" style="display:none;">
             <h2>Ваш результат:</h2>
             <p id="result-text"></p>
             <p id="correct-answers-text"></p>
-            <button id="reset-button" onclick="resetQuiz()">Сбросить тест</button>
+            <button class="standard-button" id="reset-button" onclick="resetQuiz()">Сбросить тест</button>
         </div>
     </div>
 
