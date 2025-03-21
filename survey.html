@@ -298,6 +298,17 @@
         </ul>
     </nav>
 
+<button id="settingsButton" class="settings-button">
+    <img src="images/settings_icon.png" alt="Настройки"> <!-- Замените на вашу иконку -->
+</button>
+
+<div id="settingsWindow" class="settings-window">
+    <button class="close-button" onclick="closeSettingsWindow()">×</button>
+    <h3>Настройки</h3>
+    <label for="themeSwitch">Тема:</label>
+    <div class="theme-switch-button" id="themeSwitch"></div>
+</div>
+    
     <div class="debug-button" onclick="openDebugWindow()">*</div>
     <div class="debug-window" id="debug-window">
         <button class="close-button" onclick="closeDebugWindow()">×</button>
