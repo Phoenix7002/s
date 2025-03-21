@@ -177,7 +177,6 @@
             z-index: 1000;
             color: #f0f0f0;
             width: 300px;
-            position: relative; /* Добавлено */
         }
 
         .debug-window label {
@@ -211,7 +210,6 @@
         }
 
         .debug-options {
-            position: relative;
             display: none;
             position: fixed;
             top: 50%;
@@ -303,7 +301,7 @@
 
     <div class="debug-button" onclick="openDebugWindow()">*</div>
     <div class="debug-window" id="debug-window">
-        <button class="standard-button" class="close-button" onclick="closeDebugWindow()">×</button>
+        <button class="close-button" onclick="closeDebugWindow()">×</button>
         <label for="debug-code">Введите код активации:</label>
         <input type="text" id="debug-code">
         <button class="standard-button" onclick="activateDebugMode()">Подтвердить</button>
