@@ -1,31 +1,43 @@
---- Rus
+### **Лицензия (CC BY-NC-SA 4.0)**  
 
-Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+---  
+#### **Русская версия**  
+**Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)**  
+**Автор: Phoenix (Discord: phoenix_7002)**  
 
-Автор: Phoenix (Discord: phoenix_7002)
+**Разрешено:**  
+- **Делиться** — копировать и распространять материал в любом формате.  
+- **Адаптировать** — изменять, перерабатывать и создавать новые работы на основе этого материала.  
 
-Вы можете свободно:
-- Делиться — копировать и распространять материал на любом носителе или в любом формате.
-- Адаптировать — изменять, преобразовывать и создавать производные работы на основе этого материала.
+**Условия:**  
+1. **Указание авторства** — Вы должны:  
+   - Назвать автора (**Phoenix**).  
+   - Указать контакт (Discord: **phoenix_7002**).  
+   - Дать ссылку на лицензию ([CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)).  
+   - Отметить, если были внесены изменения.  
+2. **Некоммерческое использование** — Запрещено использовать материал в коммерческих целях (включая продажу, рекламу и платный доступ).  
+3. **Сохранение лицензии** — Если вы изменяете материал, распространяйте его **только** под этой же лицензией (CC BY-NC-SA 4.0).  
 
-При условии:
-- Указания авторства — Вы должны указать имя автора (Phoenix) и ссылку на профиль в Discord (phoenix_7002), а также предоставить ссылку на лицензию и указать, были ли внесены изменения.
-- Распространения на тех же условиях — Если вы изменяете, преобразовываете или создаёте производные работы на основе этого материала, вы должны распространять их под той же лицензией.
+Полный текст лицензии: [https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode)  
 
-Полный текст лицензии: https://creativecommons.org/licenses/by-sa/4.0/legalcode
+---  
+#### **English Version**  
+**Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)**  
+**Author: Phoenix (Discord: phoenix_7002)**  
 
---- Eng
+**You are free to:**  
+- **Share** — copy and redistribute the material in any medium or format.  
+- **Adapt** — remix, transform, and build upon the material.  
 
-Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+**Under the following terms:**  
+1. **Attribution** — You must:  
+   - Credit the author (**Phoenix**).  
+   - Provide contact (Discord: **phoenix_7002**).  
+   - Link to the license ([CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)).  
+   - Indicate if changes were made.  
+2. **NonCommercial** — You may not use the material for commercial purposes (including selling, advertising, or paid access).  
+3. **ShareAlike** — If you remix or modify the material, you must distribute it under the **same license** (CC BY-NC-SA 4.0).  
 
-Author: Phoenix (Discord: phoenix_7002)
+Full license text: [https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode)  
 
-You are free to:
-- Share — copy and redistribute the material in any medium or format.
-- Adapt — remix, transform, and build upon the material.
-
-Under the following terms:
-- Attribution — You must give appropriate credit to the author (Phoenix) and provide a link to the Discord profile (phoenix_7002), provide a link to the license, and indicate if changes were made.
-- ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license.
-
-The full text of the license is available at: https://creativecommons.org/licenses/by-sa/4.0/legalcode
+---  
