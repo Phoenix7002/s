@@ -1,9 +1,11 @@
-### **Лицензия (CC BY-NC-SA 4.0)**  
-
+### **license (CC BY-NC-SA 4.0)**  
 ---  
-#### **Русская версия**  
+### **Русская версия**  
 **Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)**  
-**Автор: Phoenix (Discord: phoenix_7002)**  
+**Автор: Phoenix**  
+**Контакты:**  
+- Email: **kkd2010rem@gmail.com**  
+- Discord: **phoenix_7002**  
 
 **Разрешено:**  
 - **Делиться** — копировать и распространять материал в любом формате.  
@@ -12,18 +14,22 @@
 **Условия:**  
 1. **Указание авторства** — Вы должны:  
    - Назвать автора (**Phoenix**).  
-   - Указать контакт (Discord: **phoenix_7002**).  
+   - Указать контакты (**kkd2010rem@gmail.com** и/или **Discord: phoenix_7002**).  
    - Дать ссылку на лицензию ([CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)).  
    - Отметить, если были внесены изменения.  
-2. **Некоммерческое использование** — Запрещено использовать материал в коммерческих целях (включая продажу, рекламу и платный доступ).  
-3. **Сохранение лицензии** — Если вы изменяете материал, распространяйте его **только** под этой же лицензией (CC BY-NC-SA 4.0).  
+2. **Некоммерческое использование** — Запрещено использовать материал в коммерческих целях.  
+3. **Сохранение лицензии** — Производные работы распространяются только под **CC BY-NC-SA 4.0**.  
 
-Полный текст лицензии: [https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode)  
+Полный текст: [https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode)  
 
 ---  
-#### **English Version**  
+
+### **English Version**  
 **Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)**  
-**Author: Phoenix (Discord: phoenix_7002)**  
+**Author: Phoenix**  
+**Contacts:**  
+- Email: **kkd2010rem@gmail.com**  
+- Discord: **phoenix_7002**  
 
 **You are free to:**  
 - **Share** — copy and redistribute the material in any medium or format.  
@@ -32,12 +38,12 @@
 **Under the following terms:**  
 1. **Attribution** — You must:  
    - Credit the author (**Phoenix**).  
-   - Provide contact (Discord: **phoenix_7002**).  
+   - Provide contacts (**kkd2010rem@gmail.com** and/or **Discord: phoenix_7002**).  
    - Link to the license ([CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)).  
    - Indicate if changes were made.  
-2. **NonCommercial** — You may not use the material for commercial purposes (including selling, advertising, or paid access).  
-3. **ShareAlike** — If you remix or modify the material, you must distribute it under the **same license** (CC BY-NC-SA 4.0).  
+2. **NonCommercial** — No commercial use is allowed.  
+3. **ShareAlike** — Derivative works must be licensed under **CC BY-NC-SA 4.0**.  
 
-Full license text: [https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode)  
+Full license: [https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode)  
 
----  
+---
