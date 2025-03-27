@@ -501,36 +501,32 @@
             const countdownElement = document.getElementById('countdown');
             countdownElement.innerHTML = '';
             
-            const digitContainer = document.createElement('div');
-            digitContainer.className = 'countdown-digit';
-            digitContainer.textContent = gameState.currentCountdown;
-            countdownElement.appendChild(digitContainer);
+            const digitElement = document.createElement('div');
+            digitElement.className = 'countdown-digit';
+            digitElement.textContent = gameState.currentCountdown;
+            countdownElement.appendChild(digitElement);
 
             gameState.countdownInterval = setInterval(() => {
-                flipDigit(digitContainer);
-            }, 1000);
+                flipDigit();
+            }, 600);
         }
 
-        function flipDigit(digitElement) {
-            digitElement.classList.add('flip');
+        function flipDigit() {
+            const digitElement = document.querySelector('.countdown-digit');
+            digitElement.classList.add('flipping');
             
             setTimeout(() => {
                 gameState.currentCountdown--;
                 digitElement.textContent = gameState.currentCountdown;
+                digitElement.classList.remove('flipping');
                 
                 if (gameState.currentCountdown <= 0) {
-                    setTimeout(() => {
-                        clearInterval(gameState.countdownInterval);
-                        endCountdown();
-                    }, 500);
+                    clearInterval(gameState.countdownInterval);
+                    endCountdown();
+                    return;
                 }
-            }, 500);
-            
-            setTimeout(() => {
-                digitElement.classList.remove('flip');
-            }, 1000);
+            }, 300);
         }
-
         function endCountdown() {
             const gameOverlay = document.getElementById('game-overlay');
             gameOverlay.classList.add('fade-out');
