@@ -305,23 +305,26 @@
             const gameWindow = document.getElementById('game-window-container');
             const countdown = document.getElementById('countdown');
             const codeInput = document.getElementById('code-input');
+            const gameOverlay = document.getElementById('game-overlay');
             
             gameWindow.style.display = 'block';
             codeInput.disabled = true;
-
+            gameOverlay.style.display = 'flex';
+            gameOverlay.style.backdropFilter = 'blur(5px)';
+            gameOverlay.style.webkitBackdropFilter = 'blur(5px)';
+            
             let seconds = 5;
+            countdown.textContent = seconds;
+            
             const countdownInterval = setInterval(function() {
                 seconds--;
                 countdown.textContent = seconds;
                 
                 if (seconds <= 0) {
                     clearInterval(countdownInterval);
-                    document.getElementById('game-overlay').style.display = 'none';
+                    gameOverlay.style.display = 'none';
                     codeInput.disabled = false;
                     codeInput.focus();
-                    
-                    document.querySelector('.game-window-overlay').style.backdropFilter = 'none';
-                    document.querySelector('.game-window-overlay').style.webkitBackdropFilter = 'none';
                 }
             }, 1000);
         }
@@ -338,8 +341,10 @@
         function exitGame() {
             document.getElementById('game-window-container').style.display = 'none';
             document.getElementById('confirm-exit').style.display = 'none';
-            // Сбрасываем состояние
-            document.getElementById('game-overlay').style.display = 'flex';
+            const gameOverlay = document.getElementById('game-overlay');
+            gameOverlay.style.display = 'flex';
+            gameOverlay.style.backdropFilter = 'blur(5px)';
+            gameOverlay.style.webkitBackdropFilter = 'blur(5px)';
             document.getElementById('code-input').disabled = true;
             document.getElementById('countdown').textContent = '5';
         }
