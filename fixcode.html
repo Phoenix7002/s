@@ -198,22 +198,22 @@
             animation: flip 1s ease forwards;
         }
         
-        @keyframes flip {
-            0% {
-                transform: rotateX(0deg);
-            }
-            50% {
-                transform: rotateX(90deg);
-                opacity: 0;
-            }
-            51% {
-                opacity: 0;
-            }
-            100% {
-                transform: rotateX(0deg);
-                opacity: 1;
-            }
-        }
+@keyframes flip {
+    0% {
+        transform: rotateX(0deg);
+    }
+    50% {
+        transform: rotateX(90deg);
+        opacity: 0;
+    }
+    51% {
+        opacity: 0;
+    }
+    100% {
+        transform: rotateX(0deg);
+        opacity: 1;
+    }
+}
 
         .flipping {
             animation: flip 1.0s ease forwards;
@@ -501,36 +501,43 @@
             document.getElementById('results-window').style.display = 'none';
         }
 
-        function startCountdown() {
-            const countdownElement = document.getElementById('countdown');
-            countdownElement.innerHTML = '';
-            
-            const digitElement = document.createElement('div');
-            digitElement.className = 'countdown-digit';
+function startCountdown() {
+    const countdownElement = document.getElementById('countdown');
+    countdownElement.innerHTML = '';
+    
+    const digitElement = document.createElement('div');
+    digitElement.className = 'countdown-digit';
+    digitElement.textContent = gameState.currentCountdown;
+    countdownElement.appendChild(digitElement);
+
+    flipDigit();
+    
+    setTimeout(() => {
+        gameState.countdownInterval = setInterval(() => {
+            flipDigit();
+        }, 1000);
+    }, 1000);
+}
+
+function flipDigit() {
+    const digitElement = document.querySelector('.countdown-digit');
+    digitElement.classList.add('flip');
+    
+    setTimeout(() => {
+        gameState.currentCountdown--;
+        if (gameState.currentCountdown >= 0) {
             digitElement.textContent = gameState.currentCountdown;
-            countdownElement.appendChild(digitElement);
-
-            gameState.countdownInterval = setInterval(() => {
-                flipDigit();
-            }, 1000);
         }
-
-        function flipDigit() {
-            const digitElement = document.querySelector('.countdown-digit');
-            digitElement.classList.add('flipping');
-            
-            setTimeout(() => {
-                gameState.currentCountdown--;
-                digitElement.textContent = gameState.currentCountdown;
-                digitElement.classList.remove('flipping');
-                
-                if (gameState.currentCountdown <= 0) {
-                    clearInterval(gameState.countdownInterval);
-                    endCountdown();
-                    return;
-                }
-            }, 500);
+        digitElement.classList.remove('flip');
+        
+        if (gameState.currentCountdown <= 0) {
+            clearInterval(gameState.countdownInterval);
+            endCountdown();
+            return;
         }
+    }, 500);
+}
+        
         function endCountdown() {
             const gameOverlay = document.getElementById('game-overlay');
             gameOverlay.classList.add('fade-out');
