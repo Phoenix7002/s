@@ -48,26 +48,30 @@
             font-size: 16px;
         }
 
-        .menu-buttons {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 50px;
-        }
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Добавляем центрирование по вертикали */
+    gap: 15px;
+    height: 100%; /* Занимаем всю высоту контейнера */
+    margin-top: 0; /* Убираем отступ сверху */
+    flex-grow: 1; /* Растягиваем на всё доступное пространство */
+}
 
-        .menu-button {
-            padding: 12px 24px;
-            background-color: var(--button-bg);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 18px;
-            width: 500px;
-            text-align: center;
-        }
+.menu-button {
+    padding: 12px 24px;
+    background-color: var(--button-bg);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    width: 80%; /* Делаем ширину относительной */
+    max-width: 500px; /* Но не шире 500px */
+    text-align: center;
+    margin: 0 auto; /* Центрируем кнопки по горизонтали */
+}
 
         .menu-button:hover {
             background-color: var(--hover-button-bg);
