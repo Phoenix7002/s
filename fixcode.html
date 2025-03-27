@@ -510,17 +510,16 @@ function startCountdown() {
     digitElement.textContent = gameState.currentCountdown;
     countdownElement.appendChild(digitElement);
 
-    flipDigit();
-    
-    setTimeout(() => {
-        gameState.countdownInterval = setInterval(() => {
-            flipDigit();
-        }, 1000);
+    gameState.countdownInterval = setInterval(() => {
+        flipDigit();
     }, 1000);
+    
+    flipDigit();
 }
 
 function flipDigit() {
     const digitElement = document.querySelector('.countdown-digit');
+    
     digitElement.classList.add('flip');
     
     setTimeout(() => {
@@ -528,16 +527,17 @@ function flipDigit() {
         if (gameState.currentCountdown >= 0) {
             digitElement.textContent = gameState.currentCountdown;
         }
+    }, 500);
+    
+    setTimeout(() => {
         digitElement.classList.remove('flip');
         
         if (gameState.currentCountdown <= 0) {
             clearInterval(gameState.countdownInterval);
             endCountdown();
-            return;
         }
-    }, 500);
-}
-        
+    }, 1000);
+}    
         function endCountdown() {
             const gameOverlay = document.getElementById('game-overlay');
             gameOverlay.classList.add('fade-out');
