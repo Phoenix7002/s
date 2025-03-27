@@ -484,21 +484,6 @@ loremTexts: [
     "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
     "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.",
-    "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.",
-    "Lorem ipsum dolor sit amet, consectetur cras amet.",
-    "Incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
-    "Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse.",
-    "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.",
-    "Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet.",
-    "L0r3m 1psu d0l0r s1t @met, c0ns3ct3tur 4d1p1sc1ng 3l1t.",
-    "Lorem? Ipsum! Dolor... sit amet: consectetur; adipiscing 'elit'.",
-    "LOREM IPSUM DOLOR SIT AMET, CONSECTETUR ADIPISCING ELIT.",
-    "lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    "LoReM iPsUm DoLoR sIt AmEt, CoNsEcTeTuR aDiPiScInG eLiT.",
-    "Лорем ипсум долор сит амет, consectetur adipiscing elit.",
-    "Lorem ipsum 漢字 dolor sit amet, カタカナ adipiscing elit.",
-    "Lorem ipsum ~!@#$%^&*()_+ dolor sit amet, {[]} adipiscing elit.",
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-    "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia."
 ]
 };
