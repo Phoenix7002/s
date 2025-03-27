@@ -495,36 +495,33 @@
 
         function startCountdown() {
             const countdownElement = document.getElementById('countdown');
-            countdownElement.innerHTML = '<div class="countdown-inner"></div>';
-            const innerElement = countdownElement.querySelector('.countdown-inner');
+            countdownElement.innerHTML = '';
             
             const digitElement = document.createElement('div');
             digitElement.className = 'countdown-digit';
             digitElement.textContent = gameState.currentCountdown;
-            innerElement.appendChild(digitElement);
+            countdownElement.appendChild(digitElement);
 
             gameState.countdownInterval = setInterval(() => {
-                rotateDigit();
-            }, 800);
+                flipDigit();
+            }, 600);
         }
 
-        function rotateDigit() {
+        function flipDigit() {
             const digitElement = document.querySelector('.countdown-digit');
-            digitElement.classList.add('rotating');
+            digitElement.classList.add('flipping');
             
             setTimeout(() => {
                 gameState.currentCountdown--;
-                digitElement.classList.remove('rotating');
-                digitElement.style.transform = 'rotateY(0deg)';
+                digitElement.textContent = gameState.currentCountdown;
+                digitElement.classList.remove('flipping');
                 
                 if (gameState.currentCountdown <= 0) {
                     clearInterval(gameState.countdownInterval);
                     endCountdown();
                     return;
                 }
-                
-                digitElement.textContent = gameState.currentCountdown;
-            }, 800);
+            }, 300);
         }
 
         function endCountdown() {
