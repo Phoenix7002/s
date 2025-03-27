@@ -72,7 +72,7 @@
     background-color: var(--container-bg);
     color: var(--text-color);
     transition: left 0.3s ease, background-color 0.3s ease;
-    z-index: 999;
+    z-index: 1005;
     padding: 20px 0;
     border: 5px solid var(--border-color);
     border-radius: 10px; 
