@@ -190,10 +190,14 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            backface-visibility: hidden;
             transform-style: preserve-3d;
+            transition: transform 0.5s;
         }
 
+        .countdown-digit.flip {
+            animation: flip 1s ease forwards;
+        }
+        
         @keyframes flip {
             0% {
                 transform: rotateX(0deg);
@@ -209,10 +213,6 @@
                 transform: rotateX(0deg);
                 opacity: 1;
             }
-        }
-
-        .flipping {
-            animation: flip 1s ease-in-out forwards;
         }
 
         @keyframes fadeOut {
@@ -501,34 +501,33 @@
             const countdownElement = document.getElementById('countdown');
             countdownElement.innerHTML = '';
             
-            const digitElement = document.createElement('div');
-            digitElement.className = 'countdown-digit';
-            digitElement.textContent = gameState.currentCountdown;
-            countdownElement.appendChild(digitElement);
+            const digitContainer = document.createElement('div');
+            digitContainer.className = 'countdown-digit';
+            digitContainer.textContent = gameState.currentCountdown;
+            countdownElement.appendChild(digitContainer);
 
             gameState.countdownInterval = setInterval(() => {
-                flipDigit();
+                flipDigit(digitContainer);
             }, 1000);
         }
 
-        function flipDigit() {
-            const digitElement = document.querySelector('.countdown-digit');
-            digitElement.classList.add('flipping');
+        function flipDigit(digitElement) {
+            digitElement.classList.add('flip');
             
             setTimeout(() => {
                 gameState.currentCountdown--;
-                if (gameState.currentCountdown >= 0) {
-                    digitElement.textContent = gameState.currentCountdown;
+                digitElement.textContent = gameState.currentCountdown;
+                
+                if (gameState.currentCountdown <= 0) {
+                    setTimeout(() => {
+                        clearInterval(gameState.countdownInterval);
+                        endCountdown();
+                    }, 500);
                 }
             }, 500);
             
             setTimeout(() => {
-                digitElement.classList.remove('flipping');
-                
-                if (gameState.currentCountdown <= 0) {
-                    clearInterval(gameState.countdownInterval);
-                    endCountdown();
-                }
+                digitElement.classList.remove('flip');
             }, 1000);
         }
 
