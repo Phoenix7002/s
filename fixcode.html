@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Code Fix Game</title>
     <style>
-        /* Стили остаются без изменений */
         body {
             margin: 0;
             padding: 0;
@@ -146,7 +145,6 @@
             z-index: 2;
         }
 
-        .code-display,
         .code-input {
             flex: 1;
             background-color: var(--input-bg);
@@ -155,12 +153,12 @@
             font-family: 'Courier New', monospace;
             overflow: auto;
             z-index: 2;
-        }
-
-        .code-input {
             resize: none;
             color: var(--text-color);
             border: 1px solid var(--border-color);
+            height: 70vh;
+            font-size: 16px;
+            line-height: 1.5;
         }
 
         .code-input:disabled {
@@ -315,12 +313,6 @@
                 <button class="exit-button" onclick="showExitConfirm()">Выйти</button>
             </div>
             <div class="code-container">
-                <div id="code-display" class="code-display">
-                    // Здесь будет отображаться код с ошибками
-                    function example() {
-                    console.log("Hello world)
-                    }
-                </div>
                 <textarea id="code-input" class="code-input" spellcheck="false" disabled>
                     // Введите исправленный код здесь
                     function example() {
@@ -427,7 +419,6 @@
             gameState.correctCode = generateCorrectCode(template, templatesData.correctTags, templatesData.loremTexts);
             const brokenCode = generateBrokenCode(gameState.correctCode, templatesData.correctTags, templatesData.incorrectTags);
 
-            document.getElementById('code-display').textContent = brokenCode;
             document.getElementById('code-input').value = brokenCode;
 
             resetTimerProgress();
