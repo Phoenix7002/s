@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Fix Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            position: relative;
+        }
+
+        .game-container {
+            background-color: var(--container-bg);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 8px var(--shadow-color);
+            width: 80%;
+            max-width: 600px;
+            position: relative;
+            min-height: 300px;
+        }
+
+        .profile-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 8px 16px;
+            background-color: var(--button-bg);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .menu-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-top: 60px;
+        }
+
+        .menu-button {
+            padding: 12px 24px;
+            background-color: var(--button-bg);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            width: 200px;
+            text-align: center;
+        }
+
+        .menu-button:hover {
+            background-color: var(--hover-button-bg);
+        }
+
+        .menu-button:disabled {
+            cursor: not-allowed;
+        }
+
+        .settings-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .settings-button img {
+            width: 24px;
+            height: 24px;
+        }
+
+        .docs-link {
+            position: absolute;
+            bottom: 20px;
+            color: var(--text-color);
+            text-decoration: none;
+        }
+    </style>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" type="image/x-icon" href="images/icon.png">
+</head>
+
+<body>
+    <div class="container">
+        <div class="game-container">
+            <button class="profile-button">Профиль</button>
+
+            <div class="menu-buttons">
+                <button class="menu-button">Одиночная игра</button>
+                <button class="menu-button" disabled>Онлайн игра (coming soon...)</button>
+            </div>
+
+            <button id="settings-button" class="settings-button">
+                <img src="images/settings_icon.png" alt="Настройки">
+            </button>
+        </div>
+    </div>
+    <script>
+
+    </script>
+    <script src="js/script.js"></script>
+</body>
+
+</html>
