@@ -353,172 +353,172 @@
     </div>
     <script src="js/gameTemplates.js"></script>
     <script>
-        let correctCode = '';
-        let userCode = '';
-        let gameTimer;
-        let countdownInterval;
+let correctCode = '';
+let userCode = '';
+let gameTimer;
+let countdownInterval;
 
-        function loadGameTemplates() {
-            return typeof gameTemplates !== 'undefined' ? gameTemplates : {
-                templates: [], correctTags: {}, incorrectTags: {}, loremTexts: []
-            };
+function loadGameTemplates() {
+    return typeof gameTemplates !== 'undefined' ? gameTemplates : {
+        templates: [], correctTags: {}, incorrectTags: {}, loremTexts: []
+    };
+}
+
+function generateCorrectCode(template, correctTags, loremTexts) {
+    let code = template;
+    let loremIndex = 0;
+
+    for (const [tag, correct] of Object.entries(correctTags)) {
+        code = code.replace(new RegExp(`\\(${tag}\\)`, 'g'), correct);
+        code = code.replace(new RegExp(`\\(/${tag}\\)`, 'g'), `</${tag}>`);
+    }
+
+    code = code.replace(/\(lorem\)/g, () => {
+        return loremTexts[loremIndex++ % loremTexts.length];
+    });
+
+    return code;
+}
+
+function generateBrokenCode(correctCode, correctTags, incorrectTags) {
+    let brokenCode = correctCode;
+
+    Object.entries(correctTags).forEach(([tag, correct]) => {
+        if (Math.random() > 0.5 && incorrectTags[tag]) {
+            const incorrect = incorrectTags[tag][Math.floor(Math.random() * incorrectTags[tag].length)];
+            brokenCode = brokenCode.replace(new RegExp(correct, 'g'), incorrect);
         }
+    });
 
-        function generateCorrectCode(template, correctTags, loremTexts) {
-            let code = template;
-            let loremIndex = 0;
+    return brokenCode;
+}
 
-            for (const [tag, correct] of Object.entries(correctTags)) {
-                code = code.replace(new RegExp(`\\(${tag}\\)`, 'g'), correct);
-                code = code.replace(new RegExp(`\\(/${tag}\\)`, 'g'), `</${tag}>`);
-            }
+function startSinglePlayer() {
+    // Сброс предыдущего состояния
+    clearInterval(countdownInterval);
+    clearInterval(gameTimer);
+    
+    const templatesData = loadGameTemplates();
+    const codeDisplay = document.getElementById('code-display');
+    const codeInput = document.getElementById('code-input');
+    const gameWindow = document.getElementById('game-window-container');
+    const countdown = document.getElementById('countdown');
+    const gameOverlay = document.getElementById('game-overlay');
+    const timerProgress = document.getElementById('timer-progress');
+    const resultsWindow = document.getElementById('results-window');
 
-            code = code.replace(/\(lorem\)/g, () => {
-                return loremTexts[loremIndex++ % loremTexts.length];
-            });
+    // Скрываем окно результатов при новом запуске
+    resultsWindow.style.display = 'none';
 
-            return code;
-        }
+    const template = templatesData.templates[
+        Math.floor(Math.random() * templatesData.templates.length)
+    ];
 
-        function generateBrokenCode(correctCode, correctTags, incorrectTags) {
-            let brokenCode = correctCode;
+    correctCode = generateCorrectCode(template, templatesData.correctTags, templatesData.loremTexts);
+    const brokenCode = generateBrokenCode(correctCode, templatesData.correctTags, templatesData.incorrectTags);
 
-            Object.entries(correctTags).forEach(([tag, correct]) => {
-                if (Math.random() > 0.5 && incorrectTags[tag]) {
-                    const incorrect = incorrectTags[tag][Math.floor(Math.random() * incorrectTags[tag].length)];
-                    brokenCode = brokenCode.replace(new RegExp(correct, 'g'), incorrect);
-                }
-            });
+    codeDisplay.textContent = brokenCode;
+    codeInput.value = brokenCode;
 
-            return brokenCode;
-        }
+    // Сброс прогрессбара
+    timerProgress.style.width = '100%';
+    timerProgress.style.backgroundColor = 'var(--primary-color)';
+    timerProgress.style.transition = 'none'; // Временно отключаем анимацию
+    setTimeout(() => {
+        timerProgress.style.transition = 'width 1s linear'; // Возвращаем анимацию
+    }, 10);
 
-        function startSinglePlayer() {
-            const templatesData = loadGameTemplates();
-            const codeDisplay = document.getElementById('code-display');
-            const codeInput = document.getElementById('code-input');
-            const gameWindow = document.getElementById('game-window-container');
-            const countdown = document.getElementById('countdown');
-            const gameOverlay = document.getElementById('game-overlay');
-            const timerProgress = document.getElementById('timer-progress');
-            const resultsText = document.getElementById('results-text');
+    gameWindow.style.display = 'block';
+    codeInput.disabled = true;
+    gameOverlay.style.display = 'flex';
+    gameOverlay.style.backdropFilter = 'blur(5px)';
+    gameOverlay.style.webkitBackdropFilter = 'blur(5px)';
 
-            const template = templatesData.templates[
-                Math.floor(Math.random() * templatesData.templates.length)
-            ];
+    let seconds = 5;
+    countdown.textContent = seconds;
 
-            correctCode = generateCorrectCode(template, templatesData.correctTags, templatesData.loremTexts);
-            const brokenCode = generateBrokenCode(correctCode, templatesData.correctTags, templatesData.incorrectTags);
+    countdownInterval = setInterval(function () {
+        seconds--;
+        countdown.textContent = seconds;
 
-            codeDisplay.textContent = brokenCode;
-            codeInput.value = brokenCode;
-
-            timerProgress.style.width = '100%';
-            timerProgress.style.backgroundColor = 'var(--primary-color)';
-
-            gameWindow.style.display = 'block';
-            codeInput.disabled = true;
-            gameOverlay.style.display = 'flex';
-            gameOverlay.style.backdropFilter = 'blur(5px)';
-            gameOverlay.style.webkitBackdropFilter = 'blur(5px)';
-
-            let seconds = 5;
-            countdown.textContent = seconds;
-
-            countdownInterval = setInterval(function () {
-                seconds--;
-                countdown.textContent = seconds;
-
-                if (seconds <= 0) {
-                    clearInterval(countdownInterval);
-                    startGameTimer();
-                    gameOverlay.style.display = 'none';
-                    codeInput.disabled = false;
-                    codeInput.focus();
-                }
-            }, 1000);
-
-            startPreparationTimer();
-        }
-
-        function startPreparationTimer() {
-            const countdown = document.getElementById('countdown');
-            const gameOverlay = document.getElementById('game-overlay');
-            const codeInput = document.getElementById('code-input');
-
-            gameOverlay.style.display = 'flex';
-            codeInput.disabled = true;
-
-            let seconds = 5;
-            countdown.textContent = seconds;
-
-            countdownInterval = setInterval(() => {
-                seconds--;
-                countdown.textContent = seconds;
-
-                if (seconds <= 0) {
-                    clearInterval(countdownInterval);
-                    gameOverlay.style.display = 'none';
-                    codeInput.disabled = false;
-                    codeInput.focus();
-                    startGameTimer();
-                }
-            }, 1000);
-        }
-
-        function startGameTimer() {
-            const timerProgress = document.getElementById('timer-progress');
-            const codeInput = document.getElementById('code-input');
-
-            let timeLeft = 60;
-            timerProgress.style.width = '100%';
-
-            gameTimer = setInterval(() => {
-                timeLeft--;
-                timerProgress.style.width = `${(timeLeft / 60) * 100}%`;
-
-                if (timeLeft <= 0) {
-                    clearInterval(gameTimer);
-                    showResults();
-                }
-            }, 1000);
-        }
-
-        function showResults() {
-            const userCode = document.getElementById('code-input').value;
-            const similarity = calculateSimilarity(correctCode, userCode);
-            const resultsText = document.getElementById('results-text');
-            const resultsWindow = document.getElementById('results-window');
-            const gameOverlay = document.getElementById('game-overlay');
-
-            resultsText.textContent = `Ваш результат: ${similarity}% совпадения!`;
-            resultsWindow.style.display = 'flex';
-            gameOverlay.style.display = 'flex';
-        }
-
-        function calculateSimilarity(correct, user) {
-            let match = 0;
-            const length = Math.min(correct.length, user.length);
-
-            for (let i = 0; i < length; i++) {
-                if (correct[i] === user[i]) match++;
-            }
-
-            return Math.round((match / correct.length) * 100);
-        }
-
-        function exitGame() {
+        if (seconds <= 0) {
             clearInterval(countdownInterval);
-            clearInterval(gameTimer);
+            gameOverlay.style.display = 'none';
+            codeInput.disabled = false;
+            codeInput.focus();
+            startGameTimer();
+        }
+    }, 1000);
+}
 
-            document.getElementById('game-window-container').style.display = 'none';
-            document.getElementById('results-window').style.display = 'none';
-            document.getElementById('game-overlay').style.display = 'none';
+function startGameTimer() {
+    const timerProgress = document.getElementById('timer-progress');
+    const codeInput = document.getElementById('code-input');
+
+    let timeLeft = 60;
+    timerProgress.style.width = '100%';
+
+    // Очищаем предыдущий таймер
+    clearInterval(gameTimer);
+    
+    gameTimer = setInterval(() => {
+        timeLeft--;
+        const progressPercent = (timeLeft / 60) * 100;
+        timerProgress.style.width = `${progressPercent}%`;
+
+        if (timeLeft <= 10) {
+            timerProgress.style.backgroundColor = '#dc3545';
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelector('.menu-button').onclick = startSinglePlayer;
-        });
+        if (timeLeft <= 0) {
+            clearInterval(gameTimer);
+            showResults();
+        }
+    }, 1000);
+}
+
+function showResults() {
+    const userCode = document.getElementById('code-input').value;
+    const similarity = calculateSimilarity(correctCode, userCode);
+    const resultsText = document.getElementById('results-text');
+    const resultsWindow = document.getElementById('results-window');
+    const gameOverlay = document.getElementById('game-overlay');
+
+    resultsText.textContent = `Ваш результат: ${similarity}% совпадения!`;
+    resultsWindow.style.display = 'flex';
+    gameOverlay.style.display = 'flex';
+}
+
+function calculateSimilarity(correct, user) {
+    let match = 0;
+    const length = Math.min(correct.length, user.length);
+
+    for (let i = 0; i < length; i++) {
+        if (correct[i] === user[i]) match++;
+    }
+
+    return Math.round((match / correct.length) * 100);
+}
+
+function exitGame() {
+    clearInterval(countdownInterval);
+    clearInterval(gameTimer);
+
+    document.getElementById('game-window-container').style.display = 'none';
+    document.getElementById('results-window').style.display = 'none';
+    document.getElementById('game-overlay').style.display = 'none';
+    
+    // Полный сброс состояния
+    document.getElementById('code-input').value = '';
+    document.getElementById('countdown').textContent = '5';
+    const timerProgress = document.getElementById('timer-progress');
+    timerProgress.style.width = '100%';
+    timerProgress.style.backgroundColor = 'var(--primary-color)';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelector('.menu-button').addEventListener('click', startSinglePlayer);
+});
     </script>
 
     <script src="js/script.js"></script>
