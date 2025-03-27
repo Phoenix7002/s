@@ -467,6 +467,8 @@
         function startCountdown() {
             const countdownElement = document.getElementById('countdown');
             const sound = document.getElementById('countdown-sound');
+
+            sound.volume = 0.2;
             
             countdownElement.innerHTML = '';
             gameState.currentCountdown = 5;
@@ -500,6 +502,7 @@
 
         function playSound(sound) {
             sound.currentTime = 0;
+            sound.volume = 0.2;
             sound.play().catch(e => console.log("Не удалось воспроизвести звук:", e));
         }
         
