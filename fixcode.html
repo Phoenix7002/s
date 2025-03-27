@@ -10,8 +10,8 @@
             margin: 0;
             padding: 0;
             font-family: 'Arial', sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
+            background-color: #1a1a1a;
+            color: #ffffff;
         }
 
         .container {
@@ -25,10 +25,10 @@
         }
 
         .game-container {
-            background-color: var(--container-bg);
+            background-color: #2d2d2d;
             border-radius: 10px;
-            border: 5px solid var(--border-color);
-            box-shadow: 0 4px 8px var(--shadow-color);
+            border: 5px solid #444;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
             padding: 30px;
             width: 80%;
             max-width: 600px;
@@ -62,7 +62,7 @@
 
         .menu-button {
             padding: 12px 24px;
-            background-color: var(--button-bg);
+            background-color: #007bff;
             color: white;
             border: none;
             border-radius: 5px;
@@ -75,7 +75,7 @@
         }
 
         .menu-button:hover {
-            background-color: var(--hover-button-bg);
+            background-color: #0069d9;
         }
 
         .menu-button:disabled {
@@ -94,7 +94,7 @@
         }
 
         .game-window {
-            background-color: var(--container-bg);
+            background-color: #2d2d2d;
             border-radius: 10px;
             padding: 20px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
@@ -147,22 +147,22 @@
 
         .code-input {
             flex: 1;
-            background-color: var(--input-bg);
+            background-color: #3d3d3d;
             border-radius: 5px;
             padding: 15px;
             font-family: 'Courier New', monospace;
             overflow: auto;
             z-index: 2;
             resize: none;
-            color: var(--text-color);
-            border: 1px solid var(--border-color);
+            color: #ffffff;
+            border: 1px solid #444;
             height: 70vh;
             font-size: 16px;
             line-height: 1.5;
         }
 
         .code-input:disabled {
-            background-color: var(--input-bg);
+            background-color: #3d3d3d;
             opacity: 0.7;
         }
 
@@ -170,7 +170,7 @@
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            background-color: var(--primary-color);
+            background-color: #007bff;
             color: white;
             display: flex;
             justify-content: center;
@@ -182,82 +182,47 @@
             position: relative;
             overflow: hidden;
         }
-        
-.digits-container {
-    position: relative;
-    width: 100%;
-    height: 100%;
-}
-        
-.countdown-digit {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 72px;
-    font-weight: bold;
-    transform-style: preserve-3d;
-    backface-visibility: hidden;
-}
 
-.countdown-digit.next {
-    transform: rotateX(90deg);
-    opacity: 0;
-}
-        
-.countdown-digit.flipping {
-    animation: flip 1s ease-out forwards;
-}
-        
-@keyframes flip {
-    0% {
-        transform: rotateX(0deg);
-        opacity: 1;
-    }
-    49% {
-        opacity: 1;
-    }
-    50% {
-        transform: rotateX(90deg);
-        opacity: 0;
-    }
-    51% {
-        transform: rotateX(-90deg);
-    }
-    100% {
-        transform: rotateX(0deg);
-        opacity: 1;
-    }
-}
-
-        .flipping {
-            animation: flip 1.0s ease forwards;
+        .countdown-digit {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backface-visibility: hidden;
+            transform-style: preserve-3d;
         }
 
-        @keyframes fadeOut {
+        .countdown-digit.flipping {
+            animation: flip 1s ease-out forwards;
+        }
+
+        @keyframes flip {
             0% {
+                transform: rotateX(0deg);
                 opacity: 1;
-                transform: scale(1);
-                backdrop-filter: blur(5px);
-                -webkit-backdrop-filter: blur(5px);
+            }
+            49% {
+                opacity: 1;
+            }
+            50% {
+                transform: rotateX(90deg);
+                opacity: 0;
+            }
+            51% {
+                transform: rotateX(-90deg);
             }
             100% {
-                opacity: 0;
-                transform: scale(0);
-                backdrop-filter: blur(0);
-                -webkit-backdrop-filter: blur(0);
+                transform: rotateX(0deg);
+                opacity: 1;
             }
-        }
-
-        .fade-out {
-            animation: fadeOut 0.5s ease-out forwards;
         }
 
         .timer-container {
             width: 100%;
             height: 10px;
-            background-color: var(--input-bg);
+            background-color: #3d3d3d;
             border-radius: 5px;
             margin-top: 15px;
             overflow: hidden;
@@ -266,108 +231,14 @@
 
         .timer-progress {
             height: 100%;
-            background-color: var(--primary-color);
+            background-color: #007bff;
             width: 100%;
             transition: width 1s linear;
         }
-
-        .confirm-exit {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: var(--container-bg);
-            padding: 20px;
-            border-radius: 10px;
-            z-index: 1002;
-            display: none;
-            flex-direction: column;
-            gap: 15px;
-            width: 300px;
-        }
-
-        .confirm-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .confirm-button {
-            padding: 8px;
-            background-color: #dc3545;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .results-window {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: var(--container-bg);
-            padding: 30px;
-            border-radius: 10px;
-            z-index: 1002;
-            width: 80%;
-            max-width: 500px;
-            display: none;
-            flex-direction: column;
-            gap: 20px;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
-        }
-
-        .results-content {
-            text-align: center;
-            width: 100%;
-        }
     </style>
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="icon" type="image/x-icon" href="images/icon.png">
 </head>
 
 <body>
-    <button id="settings-button" class="settings-button" onclick="openSettingsWindow()">
-        <img src="images/settings_icon.png" alt="Настройки">
-    </button>
-
-    <div id="settings-window" class="settings-window">
-        <button class="close-button" onclick="closeSettingsWindow()">×</button>
-        <h2>Настройки</h2>
-        <div class="settings-option">
-            <label for="theme-select">Тема:</label>
-            <select id="theme-select">
-                <option value="dark">Тёмная</option>
-                <option value="light">Светлая</option>
-            </select>
-        </div>
-    </div>
-    <button id="navToggle" class="nav-toggle" onclick="toggleNavPanel()"></button>
-
-    <nav id="navPanel" class="nav-panel">
-        <ul>
-            <li>
-                <a href="https://phoenix7002.github.io/tbs">
-                    <img src="images/home_icon.png" alt="Главная">
-                    <span>Главная</span>
-                </a>
-            </li>
-            <li>
-                <a href="https://phoenix7002.github.io/tbs/survey">
-                    <img src="images/survey_icon.png" alt="Опрос">
-                    <span>Опрос</span>
-                </a>
-            </li>
-            <li>
-                <a href="https://phoenix7002.github.io/tbs/translator">
-                    <img src="images/translate_icon.png" alt="Переводчик">
-                    <span>Переводчик</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
-
     <div class="container">
         <div class="game-container">
             <button class="profile-button" onclick="openProfile()">Профиль</button>
@@ -397,27 +268,11 @@
                 </div>
             </div>
             <div id="game-overlay" class="game-window-overlay">
-                <div id="countdown" class="countdown">5</div>
+                <div id="countdown" class="countdown"></div>
             </div>
         </div>
     </div>
 
-    <div id="confirm-exit" class="confirm-exit">
-        <div class="confirm-header">
-            <button class="close-button" onclick="hideExitConfirm()">×</button>
-        </div>
-        <p>Вы точно хотите выйти?</p>
-        <button class="confirm-button" onclick="exitGame()">Покинуть раунд</button>
-    </div>
-
-    <div id="results-window" class="results-window">
-        <div class="results-content">
-            <h3>Результаты</h3>
-            <p id="results-text">Ваш результат: 0% совпадения с правильным кодом!</p>
-        </div>
-        <button class="confirm-button" onclick="exitGame()">В главное меню</button>
-    </div>
-    <script src="js/gameTemplates.js"></script>
     <script>
         const gameState = {
             correctCode: '',
@@ -426,72 +281,17 @@
             currentCountdown: 5
         };
 
-        function openSettingsWindow() {
-            document.getElementById('settings-window').style.display = 'block';
-        }
-
-        function closeSettingsWindow() {
-            document.getElementById('settings-window').style.display = 'none';
-        }
-
-        function toggleNavPanel() {
-            const navPanel = document.getElementById('navPanel');
-            navPanel.style.display = navPanel.style.display === 'none' ? 'block' : 'none';
-        }
-
         function openProfile() {
             alert('Функция профиля в разработке');
-        }
-
-        function loadGameTemplates() {
-            return typeof gameTemplates !== 'undefined' ? gameTemplates : {
-                templates: [], 
-                correctTags: {}, 
-                incorrectTags: {}, 
-                loremTexts: []
-            };
-        }
-
-        function generateCorrectCode(template, correctTags, loremTexts) {
-            let code = template;
-            let loremIndex = 0;
-
-            for (const [tag, correct] of Object.entries(correctTags)) {
-                code = code.replace(new RegExp(`\\(${tag}\\)`, 'g'), correct);
-                code = code.replace(new RegExp(`\\(/${tag}\\)`, 'g'), `</${tag}>`);
-            }
-
-            code = code.replace(/\(lorem\)/g, () => {
-                return loremTexts[loremIndex++ % loremTexts.length];
-            });
-
-            return code;
-        }
-
-        function generateBrokenCode(correctCode, correctTags, incorrectTags) {
-            let brokenCode = correctCode;
-
-            Object.entries(correctTags).forEach(([tag, correct]) => {
-                if (Math.random() > 0.5 && incorrectTags[tag]) {
-                    const incorrect = incorrectTags[tag][Math.floor(Math.random() * incorrectTags[tag].length)];
-                    brokenCode = brokenCode.replace(new RegExp(correct, 'g'), incorrect);
-                }
-            });
-
-            return brokenCode;
         }
 
         function startSinglePlayer() {
             clearInterval(gameState.countdownInterval);
             clearInterval(gameState.gameTimer);
             
-            const templatesData = loadGameTemplates();
-            const template = templatesData.templates[
-                Math.floor(Math.random() * templatesData.templates.length)
-            ];
-
-            gameState.correctCode = generateCorrectCode(template, templatesData.correctTags, templatesData.loremTexts);
-            const brokenCode = generateBrokenCode(gameState.correctCode, templatesData.correctTags, templatesData.incorrectTags);
+            // Пример данных для игры
+            gameState.correctCode = 'function example() {\n    console.log("Hello world");\n}';
+            const brokenCode = 'function example() {\n    console.log("Hello world)\n}';
 
             document.getElementById('code-input').value = brokenCode;
 
@@ -503,7 +303,7 @@
         function resetTimerProgress() {
             const timerProgress = document.getElementById('timer-progress');
             timerProgress.style.width = '100%';
-            timerProgress.style.backgroundColor = 'var(--primary-color)';
+            timerProgress.style.backgroundColor = '#007bff';
             timerProgress.style.transition = 'none';
             setTimeout(() => {
                 timerProgress.style.transition = 'width 1s linear';
@@ -514,42 +314,64 @@
             document.getElementById('game-window-container').style.display = 'block';
             document.getElementById('code-input').disabled = true;
             document.getElementById('game-overlay').style.display = 'flex';
-            document.getElementById('results-window').style.display = 'none';
+            document.getElementById('countdown').innerHTML = '';
+            gameState.currentCountdown = 5;
         }
 
-function startCountdown() {
-    const countdownElement = document.getElementById('countdown');
-    countdownElement.innerHTML = '';
-    gameState.currentCountdown = 5;
-    
-    const digitElement = document.createElement('div');
-    digitElement.className = 'countdown-digit';
-    digitElement.textContent = gameState.currentCountdown;
-    countdownElement.appendChild(digitElement);
-    
-    const handleFlip = () => {
-        digitElement.classList.add('flipping');
-        
-        setTimeout(() => {
-            gameState.currentCountdown--;
-            digitElement.textContent = gameState.currentCountdown;
+        function startCountdown() {
+            const countdownElement = document.getElementById('countdown');
+            countdownElement.innerHTML = '';
             
-            if (gameState.currentCountdown < 0) {
-                clearInterval(flipInterval);
-                endCountdown();
-            }
-        }, 500);
-        
-        setTimeout(() => {
-            digitElement.classList.remove('flipping');
-        }, 1000);
-    };
-    
-    handleFlip();
-    
-    const flipInterval = setInterval(handleFlip, 1000);
-    gameState.countdownInterval = flipInterval;
-}
+            const digitElement = document.createElement('div');
+            digitElement.className = 'countdown-digit';
+            digitElement.textContent = gameState.currentCountdown;
+            countdownElement.appendChild(digitElement);
+
+            // Функция для обработки перехода
+            const handleFlip = () => {
+                // Запускаем анимацию
+                digitElement.classList.add('flipping');
+                
+                // Через 500ms (середина анимации) меняем цифру
+                setTimeout(() => {
+                    gameState.currentCountdown--;
+                    digitElement.textContent = gameState.currentCountdown;
+                    
+                    // Если достигли 0, завершаем отсчет
+                    if (gameState.currentCountdown < 0) {
+                        clearInterval(flipInterval);
+                        endCountdown();
+                    }
+                }, 500);
+                
+                // В конце анимации убираем класс
+                setTimeout(() => {
+                    digitElement.classList.remove('flipping');
+                }, 1000);
+            };
+            
+            // Запускаем первую анимацию сразу
+            handleFlip();
+            
+            // Устанавливаем интервал для последующих анимаций
+            const flipInterval = setInterval(handleFlip, 1000);
+            gameState.countdownInterval = flipInterval;
+        }
+
+        function endCountdown() {
+            const gameOverlay = document.getElementById('game-overlay');
+            gameOverlay.classList.add('fade-out');
+            
+            setTimeout(() => {
+                gameOverlay.style.display = 'none';
+                document.getElementById('code-input').disabled = false;
+                document.getElementById('code-input').focus();
+                startGameTimer();
+                gameOverlay.classList.remove('fade-out');
+                gameState.currentCountdown = 5;
+            }, 500);
+        }
+
         function startGameTimer() {
             let timeLeft = 60;
             const timerProgress = document.getElementById('timer-progress');
@@ -577,9 +399,8 @@ function startCountdown() {
             const userCode = document.getElementById('code-input').value;
             const similarity = calculateSimilarity(gameState.correctCode, userCode);
             
-            document.getElementById('results-text').textContent = `Ваш результат: ${similarity}% совпадения!`;
-            document.getElementById('results-window').style.display = 'flex';
-            document.getElementById('game-overlay').style.display = 'flex';
+            alert(`Ваш результат: ${similarity}% совпадения!`);
+            exitGame();
         }
 
         function calculateSimilarity(correct, user) {
@@ -594,11 +415,9 @@ function startCountdown() {
         }
 
         function showExitConfirm() {
-            document.getElementById('confirm-exit').style.display = 'flex';
-        }
-
-        function hideExitConfirm() {
-            document.getElementById('confirm-exit').style.display = 'none';
+            if (confirm("Вы точно хотите выйти?")) {
+                exitGame();
+            }
         }
         
         function exitGame() {
@@ -606,19 +425,14 @@ function startCountdown() {
             clearInterval(gameState.gameTimer);
 
             document.getElementById('game-window-container').style.display = 'none';
-            document.getElementById('results-window').style.display = 'none';
             document.getElementById('game-overlay').style.display = 'none';
-            document.getElementById('confirm-exit').style.display = 'none';
             
             document.getElementById('code-input').value = '';
             document.getElementById('code-input').disabled = true;
-            document.getElementById('countdown').textContent = '5';
             resetTimerProgress();
             gameState.currentCountdown = 5;
         }
     </script>
-
-    <script src="js/script.js"></script>
 </body>
 
 </html>
