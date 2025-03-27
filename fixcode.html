@@ -104,12 +104,28 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
             border-radius: 10px;
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 1;
+            z-index: 10;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+
+        .countdown {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 48px;
+            font-weight: bold;
+            z-index: 20;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
         }
 
         .game-header {
@@ -302,9 +318,7 @@
             const countdown = document.getElementById('countdown');
             const codeInput = document.getElementById('code-input');
             
-            // Показываем игровое окно
             gameWindow.style.display = 'block';
-            // Блокируем поле ввода
             codeInput.disabled = true;
 
             let seconds = 5;
@@ -314,13 +328,16 @@
                 
                 if (seconds <= 0) {
                     clearInterval(countdownInterval);
-                    // Убираем затемнение и разблокируем поле ввода
                     document.getElementById('game-overlay').style.display = 'none';
                     codeInput.disabled = false;
                     codeInput.focus();
+                    
+                    document.querySelector('.game-window-overlay').style.backdropFilter = 'none';
+                    document.querySelector('.game-window-overlay').style.webkitBackdropFilter = 'none';
                 }
             }, 1000);
         }
+
 
         function showExitConfirm() {
             document.getElementById('confirm-exit').style.display = 'flex';
