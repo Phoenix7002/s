@@ -185,57 +185,6 @@
             position: relative;
             perspective: 1000px;
         }
-        
-        .countdown-digit {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 80px;
-            font-weight: bold;
-            background-color: #007bff;
-            color: white;
-            border-radius: 50%;
-            backface-visibility: hidden;
-            transform-style: preserve-3d;
-        }
-        
-        .countdown-digit.front {
-            animation: flipFront 0.5s ease-out forwards;
-        }
-        
-        .countdown-digit.back {
-            transform: rotateX(180deg);
-            animation: flipBack 0.5s ease-out 0.5s forwards;
-        }
-        
-        @keyframes flipFront {
-            0% { transform: rotateX(0deg); }
-            100% { transform: rotateX(-180deg); }
-        }
-        
-        @keyframes flipBack {
-            0% { transform: rotateX(180deg); }
-            100% { transform: rotateX(0deg); }
-        }
-
-        @keyframes fadeOut {
-            0% {
-                opacity: 1;
-                transform: scale(1);
-                backdrop-filter: blur(5px);
-                -webkit-backdrop-filter: blur(5px);
-            }
-
-            100% {
-                opacity: 0;
-                transform: scale(0);
-                backdrop-filter: blur(0);
-                -webkit-backdrop-filter: blur(0);
-            }
-        }
 
         .fade-out {
             animation: fadeOut 0.5s ease-out forwards;
@@ -506,38 +455,19 @@
 
         function startCountdown() {
             const countdownElement = document.getElementById('countdown');
-            countdownElement.innerHTML = '';
             gameState.currentCountdown = 5;
 
-            const digitElement = document.createElement('div');
-            digitElement.className = 'countdown-digit';
-            digitElement.textContent = gameState.currentCountdown;
-            countdownElement.appendChild(digitElement);
+            countdownElement.textContent = gameState.currentCountdown;
 
-            const handleFlip = () => {
-                digitElement.classList.add('flipping');
+            gameState.countdownInterval = setInterval(() => {
+                gameState.currentCountdown--;
+                countdownElement.textContent = gameState.currentCountdown;
 
-                setTimeout(() => {
-                    gameState.currentCountdown--;
-                    if (gameState.currentCountdown >= 0) {
-                        digitElement.textContent = gameState.currentCountdown;
-                    }
-
-                    if (gameState.currentCountdown < 0) {
-                        clearInterval(flipInterval);
-                        endCountdown();
-                    }
-                }, 300);
-
-                setTimeout(() => {
-                    digitElement.classList.remove('flipping');
-                }, 600);
-            };
-
-            handleFlip();
-
-            const flipInterval = setInterval(handleFlip, 1000);
-            gameState.countdownInterval = flipInterval;
+                if (gameState.currentCountdown <= 0) {
+                    clearInterval(gameState.countdownInterval);
+                    endCountdown();
+                }
+            }, 1000);
         }
 
         function endCountdown() {
