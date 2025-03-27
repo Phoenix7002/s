@@ -508,6 +508,10 @@ function showExitConfirm() {
         console.error("Окно подтверждения не найдено!");
     }
 }
+
+function hideExitConfirm() {
+    document.getElementById('confirm-exit').style.display = 'none';
+}
         
 function exitGame() {
     clearInterval(countdownInterval);
@@ -523,14 +527,12 @@ function exitGame() {
     gameWindow.style.display = 'none';
     resultsWindow.style.display = 'none';
     gameOverlay.style.display = 'none';
-    console.log("Окна скрыты");
 
     codeInput.value = '';
     codeInput.disabled = true;
     countdown.textContent = '5';
     timerProgress.style.width = '100%';
     timerProgress.style.backgroundColor = 'var(--primary-color)';
-    console.log("Состояние игры сброшено");
 }
 
 document.addEventListener('DOMContentLoaded', () => {
