@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +63,7 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 18px;
-            width: 400px;
+            width: 500px;
             text-align: center;
         }
 
@@ -75,12 +74,123 @@
         .menu-button:disabled {
             cursor: not-allowed;
         }
+
+        .game-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .game-window {
+            background-color: var(--container-bg);
+            border-radius: 10px;
+            width: 90%;
+            max-width: 900px;
+            height: 80vh;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .exit-button {
+            padding: 8px 16px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .code-container {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            gap: 20px;
+        }
+
+        .code-display, .code-input {
+            flex: 1;
+            background-color: var(--input-bg);
+            border-radius: 5px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            overflow: auto;
+        }
+
+        .code-input {
+            resize: none;
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+
+        .countdown {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 36px;
+            z-index: 1001;
+        }
+
+        .confirm-exit {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--container-bg);
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 1002;
+            display: none;
+            flex-direction: column;
+            gap: 15px;
+            width: 300px;
+        }
+
+        .confirm-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .confirm-button {
+            padding: 8px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
     </style>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="icon" type="image/x-icon" href="images/icon.png">
 </head>
 
 <body>
+    <!-- Ваше оригинальное меню и кнопки -->
     <button id="settings-button" class="settings-button">
         <img src="images/settings_icon.png" alt="Настройки">
     </button>
@@ -121,13 +231,12 @@
         </ul>
     </nav>
 
-
     <div class="container">
         <div class="game-container">
             <button class="profile-button">Профиль</button>
 
             <div class="menu-buttons">
-                <button class="menu-button">Одиночная игра</button>
+                <button class="menu-button" onclick="startSinglePlayer()">Одиночная игра</button>
                 <button class="menu-button" disabled>Онлайн игра (coming soon...)</button>
             </div>
 
@@ -136,10 +245,81 @@
             </button>
         </div>
     </div>
-    <script>
 
+    <!-- Игровое окно -->
+    <div id="game-overlay" class="game-overlay">
+        <div class="game-window">
+            <div class="game-header">
+                <h3>Исправьте код</h3>
+                <button class="exit-button" onclick="showExitConfirm()">Выйти</button>
+            </div>
+            <div class="code-container">
+                <div id="code-display" class="code-display">
+                    // Здесь будет отображаться код с ошибками
+                    function example() {
+                        console.log("Hello world)
+                    }
+                </div>
+                <textarea id="code-input" class="code-input" spellcheck="false">
+                    // Введите исправленный код здесь
+                    function example() {
+                        console.log("Hello world)
+                    }
+                </textarea>
+            </div>
+        </div>
+    </div>
+
+    <div id="countdown" class="countdown" style="display: none;">5</div>
+
+    <div id="confirm-exit" class="confirm-exit">
+        <div class="confirm-header">
+            <h3>Подтверждение</h3>
+            <button class="close-button" onclick="hideExitConfirm()">×</button>
+        </div>
+        <p>Вы точно хотите выйти?</p>
+        <button class="confirm-button" onclick="exitGame()">Покинуть раунд</button>
+    </div>
+
+    <script>
+        function startSinglePlayer() {
+            const overlay = document.getElementById('game-overlay');
+            const countdown = document.getElementById('countdown');
+
+            overlay.style.display = 'flex';
+            countdown.style.display = 'flex';
+
+            let seconds = 5;
+            const countdownInterval = setInterval(function() {
+                seconds--;
+                countdown.textContent = seconds;
+                
+                if (seconds <= 0) {
+                    clearInterval(countdownInterval);
+                    countdown.style.display = 'none';
+                    document.getElementById('code-input').focus();
+                }
+            }, 1000);
+        }
+
+        function showExitConfirm() {
+            document.getElementById('confirm-exit').style.display = 'flex';
+        }
+
+        function hideExitConfirm() {
+            document.getElementById('confirm-exit').style.display = 'none';
+        }
+
+        function exitGame() {
+            document.getElementById('game-overlay').style.display = 'none';
+            document.getElementById('confirm-exit').style.display = 'none';
+        }
+
+        function closeSettingsWindow() {
+            document.getElementById('settings-window').style.display = 'none';
+        }
     </script>
+    
     <script src="js/script.js"></script>
 </body>
-
 </html>
