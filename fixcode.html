@@ -179,6 +179,81 @@
             font-weight: bold;
             z-index: 20;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .countdown-digit {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform-style: preserve-3d;
+        }
+
+        .countdown-digit span {
+            position: absolute;
+            backface-visibility: hidden;
+            transform: rotateX(0deg);
+        }
+
+        .countdown-digit .front {
+            transform: rotateX(0deg) translateZ(60px);
+        }
+
+        .countdown-digit .back {
+            transform: rotateX(-180deg) translateZ(60px);
+        }
+
+        @keyframes flip {
+            0% {
+                transform: rotateX(0deg);
+            }
+            100% {
+                transform: rotateX(180deg);
+            }
+        }
+
+        .flipping {
+            animation: flip 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+                backdrop-filter: blur(5px);
+                -webkit-backdrop-filter: blur(5px);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0);
+                backdrop-filter: blur(0);
+                -webkit-backdrop-filter: blur(0);
+            }
+        }
+
+        .fade-out {
+            animation: fadeOut 0.5s ease-out forwards;
+        }
+
+        .timer-container {
+            width: 100%;
+            height: 10px;
+            background-color: var(--input-bg);
+            border-radius: 5px;
+            margin-top: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .timer-progress {
+            height: 100%;
+            background-color: var(--primary-color);
+            width: 100%;
+            transition: width 1s linear;
         }
 
         .confirm-exit {
@@ -209,23 +284,6 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-        }
-
-        .timer-container {
-            width: 100%;
-            height: 10px;
-            background-color: var(--input-bg);
-            border-radius: 5px;
-            margin-top: 15px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .timer-progress {
-            height: 100%;
-            background-color: var(--primary-color);
-            width: 100%;
-            transition: width 1s linear;
         }
 
         .results-window {
@@ -349,7 +407,8 @@
         const gameState = {
             correctCode: '',
             gameTimer: null,
-            countdownInterval: null
+            countdownInterval: null,
+            currentCountdown: 5
         };
 
         function openSettingsWindow() {
@@ -444,22 +503,69 @@
         }
 
         function startCountdown() {
-            let seconds = 5;
-            const countdown = document.getElementById('countdown');
-            countdown.textContent = seconds;
+            const countdownElement = document.getElementById('countdown');
+            countdownElement.innerHTML = '';
+            
+            // Создаём цифры для таймера
+            for (let i = 0; i < 5; i++) {
+                const digitElement = document.createElement('div');
+                digitElement.className = 'countdown-digit';
+                digitElement.innerHTML = `
+                    <span class="front">${gameState.currentCountdown}</span>
+                    <span class="back">${gameState.currentCountdown - 1}</span>
+                `;
+                countdownElement.appendChild(digitElement);
+            }
 
             gameState.countdownInterval = setInterval(() => {
-                seconds--;
-                countdown.textContent = seconds;
-
-                if (seconds <= 0) {
-                    clearInterval(gameState.countdownInterval);
-                    document.getElementById('game-overlay').style.display = 'none';
-                    document.getElementById('code-input').disabled = false;
-                    document.getElementById('code-input').focus();
-                    startGameTimer();
-                }
+                flipDigit();
             }, 1000);
+        }
+
+        function flipDigit() {
+            const digits = document.querySelectorAll('.countdown-digit');
+            const currentDigit = digits[5 - gameState.currentCountdown];
+            
+            if (currentDigit) {
+                currentDigit.classList.add('flipping');
+            }
+
+            setTimeout(() => {
+                gameState.currentCountdown--;
+                
+                if (gameState.currentCountdown <= 0) {
+                    clearInterval(gameState.countdownInterval);
+                    endCountdown();
+                    return;
+                }
+
+                // Обновляем цифры для следующего флипа
+                digits.forEach((digit, index) => {
+                    const front = digit.querySelector('.front');
+                    const back = digit.querySelector('.back');
+                    
+                    if (index >= 5 - gameState.currentCountdown) {
+                        front.textContent = gameState.currentCountdown;
+                        back.textContent = gameState.currentCountdown - 1;
+                        digit.classList.remove('flipping');
+                        digit.style.transform = 'rotateX(0deg)';
+                    }
+                });
+            }, 300);
+        }
+
+        function endCountdown() {
+            const gameOverlay = document.getElementById('game-overlay');
+            gameOverlay.classList.add('fade-out');
+            
+            setTimeout(() => {
+                gameOverlay.style.display = 'none';
+                document.getElementById('code-input').disabled = false;
+                document.getElementById('code-input').focus();
+                startGameTimer();
+                gameOverlay.classList.remove('fade-out');
+                gameState.currentCountdown = 5; // Сброс для следующего раунда
+            }, 500);
         }
 
         function startGameTimer() {
@@ -526,6 +632,7 @@
             document.getElementById('code-input').disabled = true;
             document.getElementById('countdown').textContent = '5';
             resetTimerProgress();
+            gameState.currentCountdown = 5;
         }
     </script>
 
