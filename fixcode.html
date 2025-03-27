@@ -317,7 +317,7 @@
                 <div id="code-display" class="code-display">
                     // Здесь будет отображаться код с ошибками
                     function example() {
-                        console.log("Hello world)
+                    console.log("Hello world)
                     }
                 </div>
                 <textarea id="code-input" class="code-input" spellcheck="false" disabled>
@@ -347,27 +347,108 @@
     <div id="results-window" class="results-window">
         <div class="results-content">
             <h3>Результаты</h3>
-            <p id="results-text">Вы успешно исправили код за 1:00!</p>
+            <p id="results-text">Ваш результат: 0% совпадения с правильным кодом!</p>
         </div>
         <button class="confirm-button" onclick="exitGame()">В главное меню</button>
     </div>
 
     <script>
+        let correctCode = '';
+        let userCode = '';
+
+        async function loadGameTemplates() {
+            try {
+                const response = await fetch('js/gameTemplates.js');
+                const script = await response.text();
+                const module = {};
+                new Function('exports', script)(module);
+                return module;
+            } catch (error) {
+                console.error('Error loading game templates:', error);
+                return {};
+            }
+        }
+
+        function generateCorrectCode(template, correctTags, loremTexts) {
+            let code = template;
+
+            for (const [tag, correct] of Object.entries(correctTags)) {
+                code = code.replace(new RegExp(`\\(${tag}\\)`, 'g'), correct);
+                code = code.replace(new RegExp(`\\(/${tag}\\)`, 'g'), `</${tag}>`);
+            }
+
+            let loremCount = 0;
+            code = code.replace(/\(lorem\)/g, () => {
+                return loremTexts[loremCount++ % loremTexts.length];
+            });
+
+            return code;
+        }
+
+        function generateBrokenCode(correctCode, correctTags, incorrectTags) {
+            let brokenCode = correctCode;
+            const tags = Object.keys(correctTags);
+
+            tags.forEach(tag => {
+                if (Math.random() > 0.5) {
+                    const incorrectOptions = incorrectTags[tag];
+                    const incorrect = incorrectOptions[Math.floor(Math.random() * incorrectOptions.length)];
+
+                    const correctOpen = correctTags[tag];
+                    const correctClose = `</${tag}>`;
+
+                    brokenCode = brokenCode.replace(new RegExp(correctOpen, 'g'), incorrect);
+
+                    if (incorrect.endsWith('/>')) {
+                        brokenCode = brokenCode.replace(new RegExp(correctClose, 'g'), '');
+                    }
+                }
+            });
+
+            return brokenCode;
+        }
+
+        function calculateSimilarity(correct, user) {
+            if (correct.length === 0 || user.length === 0) return 0;
+
+            let matchCount = 0;
+            const maxLength = Math.max(correct.length, user.length);
+
+            for (let i = 0; i < maxLength; i++) {
+                if (correct[i] === user[i]) {
+                    matchCount++;
+                }
+            }
+
+            return Math.round((matchCount / maxLength) * 100);
+        }
+
         let gameTimer;
         let countdownInterval;
 
-        function startSinglePlayer() {
+        async function startSinglePlayer() {
             const gameWindow = document.getElementById('game-window-container');
             const countdown = document.getElementById('countdown');
             const codeInput = document.getElementById('code-input');
             const gameOverlay = document.getElementById('game-overlay');
             const timerProgress = document.getElementById('timer-progress');
-            const resultsWindow = document.getElementById('results-window');
+            const codeDisplay = document.getElementById('code-display');
+            const resultsText = document.getElementById('results-text');
 
-            resultsWindow.style.display = 'none';
+            const { templates, correctTags, incorrectTags, loremTexts } = await loadGameTemplates();
+
+            const template = templates[Math.floor(Math.random() * templates.length)];
+
+            correctCode = generateCorrectCode(template, correctTags, loremTexts);
+
+            const brokenCode = generateBrokenCode(correctCode, correctTags, incorrectTags);
+
+            codeDisplay.textContent = brokenCode;
+            codeInput.value = brokenCode;
+
             timerProgress.style.width = '100%';
             timerProgress.style.backgroundColor = 'var(--primary-color)';
-            
+
             gameWindow.style.display = 'block';
             codeInput.disabled = true;
             gameOverlay.style.display = 'flex';
@@ -377,10 +458,10 @@
             let seconds = 5;
             countdown.textContent = seconds;
 
-            countdownInterval = setInterval(function() {
+            countdownInterval = setInterval(function () {
                 seconds--;
                 countdown.textContent = seconds;
-                
+
                 if (seconds <= 0) {
                     clearInterval(countdownInterval);
                     startGameTimer();
@@ -396,23 +477,31 @@
             const gameOverlay = document.getElementById('game-overlay');
             const codeInput = document.getElementById('code-input');
             const resultsWindow = document.getElementById('results-window');
-            
+            const resultsText = document.getElementById('results-text');
+
             let timeLeft = 60;
             timerProgress.style.width = '100%';
-            
-            gameTimer = setInterval(function() {
+
+            gameTimer = setInterval(function () {
                 timeLeft--;
                 const progressPercent = (timeLeft / 60) * 100;
                 timerProgress.style.width = progressPercent + '%';
-                
+
                 if (timeLeft <= 10) {
                     timerProgress.style.backgroundColor = '#dc3545';
                 }
-                
+
                 if (timeLeft <= 0) {
                     clearInterval(gameTimer);
                     codeInput.disabled = true;
+
+                    userCode = codeInput.value;
+
+                    const similarity = calculateSimilarity(correctCode, userCode);
+
+                    resultsText.textContent = `Ваш результат: ${similarity}% совпадения с правильным кодом!`;
                     resultsWindow.style.display = 'flex';
+
                     gameOverlay.style.display = 'flex';
                     gameOverlay.style.backdropFilter = 'blur(5px)';
                     gameOverlay.style.webkitBackdropFilter = 'blur(5px)';
@@ -431,11 +520,11 @@
         function exitGame() {
             clearInterval(countdownInterval);
             clearInterval(gameTimer);
-            
+
             document.getElementById('game-window-container').style.display = 'none';
             document.getElementById('confirm-exit').style.display = 'none';
             document.getElementById('results-window').style.display = 'none';
-            
+
             const gameOverlay = document.getElementById('game-overlay');
             gameOverlay.style.display = 'flex';
             gameOverlay.style.backdropFilter = 'blur(5px)';
