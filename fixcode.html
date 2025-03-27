@@ -453,22 +453,33 @@
             document.getElementById('results-window').style.display = 'none';
         }
 
-        function startCountdown() {
-            const countdownElement = document.getElementById('countdown');
-            gameState.currentCountdown = 5;
+function startCountdown() {
+    const countdownElement = document.getElementById('countdown');
+    countdownElement.innerHTML = '';
+    gameState.currentCountdown = 5;
 
-            countdownElement.textContent = gameState.currentCountdown;
+    const digitElement = document.createElement('div');
+    digitElement.className = 'countdown-digit';
+    digitElement.textContent = gameState.currentCountdown;
+    countdownElement.appendChild(digitElement);
 
-            gameState.countdownInterval = setInterval(() => {
-                gameState.currentCountdown--;
-                countdownElement.textContent = gameState.currentCountdown;
-
-                if (gameState.currentCountdown <= 0) {
-                    clearInterval(gameState.countdownInterval);
-                    endCountdown();
-                }
-            }, 1000);
+    const updateCountdown = () => {
+        gameState.currentCountdown--;
+        if (gameState.currentCountdown >= 0) {
+            digitElement.textContent = gameState.currentCountdown;
         }
+
+        if (gameState.currentCountdown < 0) {
+            clearInterval(countdownInterval);
+            endCountdown();
+        }
+    };
+
+    updateCountdown();
+
+    const countdownInterval = setInterval(updateCountdown, 1000);
+    gameState.countdownInterval = countdownInterval;
+}
 
         function endCountdown() {
              const gameOverlay = document.getElementById('game-overlay');
