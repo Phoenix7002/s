@@ -353,175 +353,165 @@
     </div>
 
     <script>
-        let correctCode = '';
-        let userCode = '';
+// Глобальные переменные
+let correctCode = '';
+let userCode = '';
+let gameTimer;
+let countdownInterval;
 
+// Загрузка шаблонов
 function loadGameTemplates() {
-    if (typeof gameTemplates !== 'undefined') {
-        return gameTemplates;
-    } else {
-        console.error('Game templates not loaded');
-        return {
-            templates: [],
-            correctTags: {},
-            incorrectTags: {},
-            loremTexts: []
-        };
-    }
+    return typeof gameTemplates !== 'undefined' ? gameTemplates : {
+        templates: [], correctTags: {}, incorrectTags: {}, loremTexts: []
+    };
 }
 
-        function generateCorrectCode(template, correctTags, loremTexts) {
-            let code = template;
-
-            for (const [tag, correct] of Object.entries(correctTags)) {
-                code = code.replace(new RegExp(`\\(${tag}\\)`, 'g'), correct);
-                code = code.replace(new RegExp(`\\(/${tag}\\)`, 'g'), `</${tag}>`);
-            }
-
-            let loremCount = 0;
-            code = code.replace(/\(lorem\)/g, () => {
-                return loremTexts[loremCount++ % loremTexts.length];
-            });
-
-            return code;
-        }
-
-        function generateBrokenCode(correctCode, correctTags, incorrectTags) {
-            let brokenCode = correctCode;
-            const tags = Object.keys(correctTags);
-
-            tags.forEach(tag => {
-                if (Math.random() > 0.5) {
-                    const incorrectOptions = incorrectTags[tag];
-                    const incorrect = incorrectOptions[Math.floor(Math.random() * incorrectOptions.length)];
-
-                    const correctOpen = correctTags[tag];
-                    const correctClose = `</${tag}>`;
-
-                    brokenCode = brokenCode.replace(new RegExp(correctOpen, 'g'), incorrect);
-
-                    if (incorrect.endsWith('/>')) {
-                        brokenCode = brokenCode.replace(new RegExp(correctClose, 'g'), '');
-                    }
-                }
-            });
-
-            return brokenCode;
-        }
-
-        function calculateSimilarity(correct, user) {
-            if (correct.length === 0 || user.length === 0) return 0;
-
-            let matchCount = 0;
-            const maxLength = Math.max(correct.length, user.length);
-
-            for (let i = 0; i < maxLength; i++) {
-                if (correct[i] === user[i]) {
-                    matchCount++;
-                }
-            }
-
-            return Math.round((matchCount / maxLength) * 100);
-        }
-
-        let gameTimer;
-        let countdownInterval;
-
-async function startSinglePlayer() {
-    const gameWindow = document.getElementById('game-window-container');
-    const countdown = document.getElementById('countdown');
-    const codeInput = document.getElementById('code-input');
-    const gameOverlay = document.getElementById('game-overlay');
-    const timerProgress = document.getElementById('timer-progress');
-    const codeDisplay = document.getElementById('code-display');
-    const resultsText = document.getElementById('results-text');
+// Генерация правильного кода
+function generateCorrectCode(template, correctTags, loremTexts) {
+    let code = template;
+    let loremIndex = 0;
     
+    // Заменяем теги
+    for (const [tag, correct] of Object.entries(correctTags)) {
+        code = code.replace(new RegExp(`\\(${tag}\\)`, 'g'), correct);
+        code = code.replace(new RegExp(`\\(/${tag}\\)`, 'g'), `</${tag}>`);
+    }
+    
+    // Заменяем lorem текст
+    code = code.replace(/\(lorem\)/g, () => {
+        return loremTexts[loremIndex++ % loremTexts.length];
+    });
+    
+    return code;
+}
+
+// Генерация сломанного кода
+function generateBrokenCode(correctCode, correctTags, incorrectTags) {
+    let brokenCode = correctCode;
+    
+    // Заменяем случайные 50% тегов на ошибочные
+    Object.entries(correctTags).forEach(([tag, correct]) => {
+        if (Math.random() > 0.5 && incorrectTags[tag]) {
+            const incorrect = incorrectTags[tag][Math.floor(Math.random() * incorrectTags[tag].length)];
+            brokenCode = brokenCode.replace(new RegExp(correct, 'g'), incorrect);
+        }
+    });
+    
+    return brokenCode;
+}
+
+// Запуск игры
+function startSinglePlayer() {
     const templatesData = loadGameTemplates();
+    const codeDisplay = document.getElementById('code-display');
+    const codeInput = document.getElementById('code-input');
     
+    // Проверка загрузки шаблонов
     if (templatesData.templates.length === 0) {
-        alert('Ошибка загрузки шаблонов игры');
+        alert('Шаблоны не загружены!');
         return;
     }
     
+    // Выбор случайного шаблона
     const template = templatesData.templates[
         Math.floor(Math.random() * templatesData.templates.length)
     ];
     
+    // Генерация кодов
     correctCode = generateCorrectCode(template, templatesData.correctTags, templatesData.loremTexts);
-    
     const brokenCode = generateBrokenCode(correctCode, templatesData.correctTags, templatesData.incorrectTags);
     
+    // Отображение кода
     codeDisplay.textContent = brokenCode;
     codeInput.value = brokenCode;
     
+    // Запуск таймера подготовки
+    startPreparationTimer();
 }
 
-        function startGameTimer() {
-            const timerProgress = document.getElementById('timer-progress');
-            const gameOverlay = document.getElementById('game-overlay');
-            const codeInput = document.getElementById('code-input');
-            const resultsWindow = document.getElementById('results-window');
-            const resultsText = document.getElementById('results-text');
-
-            let timeLeft = 60;
-            timerProgress.style.width = '100%';
-
-            gameTimer = setInterval(function () {
-                timeLeft--;
-                const progressPercent = (timeLeft / 60) * 100;
-                timerProgress.style.width = progressPercent + '%';
-
-                if (timeLeft <= 10) {
-                    timerProgress.style.backgroundColor = '#dc3545';
-                }
-
-                if (timeLeft <= 0) {
-                    clearInterval(gameTimer);
-                    codeInput.disabled = true;
-
-                    userCode = codeInput.value;
-
-                    const similarity = calculateSimilarity(correctCode, userCode);
-
-                    resultsText.textContent = `Ваш результат: ${similarity}% совпадения с правильным кодом!`;
-                    resultsWindow.style.display = 'flex';
-
-                    gameOverlay.style.display = 'flex';
-                    gameOverlay.style.backdropFilter = 'blur(5px)';
-                    gameOverlay.style.webkitBackdropFilter = 'blur(5px)';
-                }
-            }, 1000);
-        }
-
-        function showExitConfirm() {
-            document.getElementById('confirm-exit').style.display = 'flex';
-        }
-
-        function hideExitConfirm() {
-            document.getElementById('confirm-exit').style.display = 'none';
-        }
-
-        function exitGame() {
+// Таймер подготовки
+function startPreparationTimer() {
+    const countdown = document.getElementById('countdown');
+    const gameOverlay = document.getElementById('game-overlay');
+    const codeInput = document.getElementById('code-input');
+    
+    gameOverlay.style.display = 'flex';
+    codeInput.disabled = true;
+    
+    let seconds = 5;
+    countdown.textContent = seconds;
+    
+    countdownInterval = setInterval(() => {
+        seconds--;
+        countdown.textContent = seconds;
+        
+        if (seconds <= 0) {
             clearInterval(countdownInterval);
+            gameOverlay.style.display = 'none';
+            codeInput.disabled = false;
+            codeInput.focus();
+            startGameTimer();
+        }
+    }, 1000);
+}
+
+// Таймер игры
+function startGameTimer() {
+    const timerProgress = document.getElementById('timer-progress');
+    const codeInput = document.getElementById('code-input');
+    
+    let timeLeft = 60;
+    timerProgress.style.width = '100%';
+    
+    gameTimer = setInterval(() => {
+        timeLeft--;
+        timerProgress.style.width = `${(timeLeft / 60) * 100}%`;
+        
+        if (timeLeft <= 0) {
             clearInterval(gameTimer);
-
-            document.getElementById('game-window-container').style.display = 'none';
-            document.getElementById('confirm-exit').style.display = 'none';
-            document.getElementById('results-window').style.display = 'none';
-
-            const gameOverlay = document.getElementById('game-overlay');
-            gameOverlay.style.display = 'flex';
-            gameOverlay.style.backdropFilter = 'blur(5px)';
-            gameOverlay.style.webkitBackdropFilter = 'blur(5px)';
-            document.getElementById('code-input').disabled = true;
-            document.getElementById('countdown').textContent = '5';
-            document.getElementById('timer-progress').style.width = '100%';
-            document.getElementById('timer-progress').style.backgroundColor = 'var(--primary-color)';
+            showResults();
         }
+    }, 1000);
+}
 
-        function closeSettingsWindow() {
-            document.getElementById('settings-window').style.display = 'none';
-        }
+// Показ результатов
+function showResults() {
+    const userCode = document.getElementById('code-input').value;
+    const similarity = calculateSimilarity(correctCode, userCode);
+    const resultsText = document.getElementById('results-text');
+    const resultsWindow = document.getElementById('results-window');
+    const gameOverlay = document.getElementById('game-overlay');
+    
+    resultsText.textContent = `Ваш результат: ${similarity}% совпадения!`;
+    resultsWindow.style.display = 'flex';
+    gameOverlay.style.display = 'flex';
+}
+
+// Расчет совпадения
+function calculateSimilarity(correct, user) {
+    let match = 0;
+    const length = Math.min(correct.length, user.length);
+    
+    for (let i = 0; i < length; i++) {
+        if (correct[i] === user[i]) match++;
+    }
+    
+    return Math.round((match / correct.length) * 100);
+}
+
+// Выход из игры
+function exitGame() {
+    clearInterval(countdownInterval);
+    clearInterval(gameTimer);
+    
+    document.getElementById('game-window-container').style.display = 'none';
+    document.getElementById('results-window').style.display = 'none';
+    document.getElementById('game-overlay').style.display = 'none';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelector('.menu-button').onclick = startSinglePlayer;
+});
     </script>
 
     <script src="js/script.js"></script>
