@@ -75,29 +75,41 @@
             cursor: not-allowed;
         }
 
-        .game-overlay {
+        /* Новые стили для игрового окна */
+        .game-window-container {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70%;
+            max-width: 700px;
             z-index: 1000;
             display: none;
-            justify-content: center;
-            align-items: center;
         }
 
         .game-window {
             background-color: var(--container-bg);
             border-radius: 10px;
-            width: 90%;
-            max-width: 900px;
-            height: 80vh;
             padding: 20px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
             display: flex;
             flex-direction: column;
+            height: 60vh;
+            position: relative;
+        }
+
+        .game-window-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
         }
 
         .game-header {
@@ -105,6 +117,7 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
+            z-index: 2;
         }
 
         .exit-button {
@@ -114,6 +127,7 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            z-index: 3;
         }
 
         .code-container {
@@ -121,6 +135,7 @@
             flex-direction: column;
             flex-grow: 1;
             gap: 20px;
+            z-index: 2;
         }
 
         .code-display, .code-input {
@@ -130,6 +145,7 @@
             padding: 15px;
             font-family: 'Courier New', monospace;
             overflow: auto;
+            z-index: 2;
         }
 
         .code-input {
@@ -138,11 +154,12 @@
             border: 1px solid var(--border-color);
         }
 
+        .code-input:disabled {
+            background-color: var(--input-bg);
+            opacity: 0.7;
+        }
+
         .countdown {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
             width: 100px;
             height: 100px;
             border-radius: 50%;
@@ -152,7 +169,6 @@
             justify-content: center;
             align-items: center;
             font-size: 36px;
-            z-index: 1001;
         }
 
         .confirm-exit {
@@ -190,7 +206,6 @@
 </head>
 
 <body>
-    <!-- Ваше оригинальное меню и кнопки -->
     <button id="settings-button" class="settings-button">
         <img src="images/settings_icon.png" alt="Настройки">
     </button>
@@ -236,7 +251,7 @@
             <button class="profile-button">Профиль</button>
 
             <div class="menu-buttons">
-                <button class="menu-button" onclick="startSinglePlayer()">Одиночная игра</button>
+                <button class="menu-button" onclick="startSinglePlayer()">Тренировка</button>
                 <button class="menu-button" disabled>Онлайн игра (coming soon...)</button>
             </div>
 
@@ -247,7 +262,7 @@
     </div>
 
     <!-- Игровое окно -->
-    <div id="game-overlay" class="game-overlay">
+    <div id="game-window-container" class="game-window-container">
         <div class="game-window">
             <div class="game-header">
                 <h3>Исправьте код</h3>
@@ -260,21 +275,21 @@
                         console.log("Hello world)
                     }
                 </div>
-                <textarea id="code-input" class="code-input" spellcheck="false">
+                <textarea id="code-input" class="code-input" spellcheck="false" disabled>
                     // Введите исправленный код здесь
                     function example() {
                         console.log("Hello world)
                     }
                 </textarea>
             </div>
+            <div id="game-overlay" class="game-window-overlay">
+                <div id="countdown" class="countdown">5</div>
+            </div>
         </div>
     </div>
 
-    <div id="countdown" class="countdown" style="display: none;">5</div>
-
     <div id="confirm-exit" class="confirm-exit">
         <div class="confirm-header">
-            <h3>Подтверждение</h3>
             <button class="close-button" onclick="hideExitConfirm()">×</button>
         </div>
         <p>Вы точно хотите выйти?</p>
@@ -283,11 +298,14 @@
 
     <script>
         function startSinglePlayer() {
-            const overlay = document.getElementById('game-overlay');
+            const gameWindow = document.getElementById('game-window-container');
             const countdown = document.getElementById('countdown');
-
-            overlay.style.display = 'flex';
-            countdown.style.display = 'flex';
+            const codeInput = document.getElementById('code-input');
+            
+            // Показываем игровое окно
+            gameWindow.style.display = 'block';
+            // Блокируем поле ввода
+            codeInput.disabled = true;
 
             let seconds = 5;
             const countdownInterval = setInterval(function() {
@@ -296,8 +314,10 @@
                 
                 if (seconds <= 0) {
                     clearInterval(countdownInterval);
-                    countdown.style.display = 'none';
-                    document.getElementById('code-input').focus();
+                    // Убираем затемнение и разблокируем поле ввода
+                    document.getElementById('game-overlay').style.display = 'none';
+                    codeInput.disabled = false;
+                    codeInput.focus();
                 }
             }, 1000);
         }
@@ -311,8 +331,12 @@
         }
 
         function exitGame() {
-            document.getElementById('game-overlay').style.display = 'none';
+            document.getElementById('game-window-container').style.display = 'none';
             document.getElementById('confirm-exit').style.display = 'none';
+            // Сбрасываем состояние
+            document.getElementById('game-overlay').style.display = 'flex';
+            document.getElementById('code-input').disabled = true;
+            document.getElementById('countdown').textContent = '5';
         }
 
         function closeSettingsWindow() {
