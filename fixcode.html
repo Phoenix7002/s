@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Code Fix Game</title>
     <style>
+        /* Стили остаются без изменений */
         body {
             margin: 0;
             padding: 0;
@@ -256,7 +257,7 @@
 </head>
 
 <body>
-    <button id="settings-button" class="settings-button">
+    <button id="settings-button" class="settings-button" onclick="openSettingsWindow()">
         <img src="images/settings_icon.png" alt="Настройки">
     </button>
 
@@ -271,7 +272,7 @@
             </select>
         </div>
     </div>
-    <button id="navToggle" class="nav-toggle"></button>
+    <button id="navToggle" class="nav-toggle" onclick="toggleNavPanel()"></button>
 
     <nav id="navPanel" class="nav-panel">
         <ul>
@@ -298,7 +299,7 @@
 
     <div class="container">
         <div class="game-container">
-            <button class="profile-button">Профиль</button>
+            <button class="profile-button" onclick="openProfile()">Профиль</button>
 
             <div class="menu-buttons">
                 <button class="menu-button" onclick="startSinglePlayer()">Тренировка</button>
@@ -353,192 +354,188 @@
     </div>
     <script src="js/gameTemplates.js"></script>
     <script>
-let correctCode = '';
-let userCode = '';
-let gameTimer;
-let countdownInterval;
+        const gameState = {
+            correctCode: '',
+            gameTimer: null,
+            countdownInterval: null
+        };
 
-function loadGameTemplates() {
-    return typeof gameTemplates !== 'undefined' ? gameTemplates : {
-        templates: [], correctTags: {}, incorrectTags: {}, loremTexts: []
-    };
-}
-
-function generateCorrectCode(template, correctTags, loremTexts) {
-    let code = template;
-    let loremIndex = 0;
-
-    for (const [tag, correct] of Object.entries(correctTags)) {
-        code = code.replace(new RegExp(`\\(${tag}\\)`, 'g'), correct);
-        code = code.replace(new RegExp(`\\(/${tag}\\)`, 'g'), `</${tag}>`);
-    }
-
-    code = code.replace(/\(lorem\)/g, () => {
-        return loremTexts[loremIndex++ % loremTexts.length];
-    });
-
-    return code;
-}
-
-function generateBrokenCode(correctCode, correctTags, incorrectTags) {
-    let brokenCode = correctCode;
-
-    Object.entries(correctTags).forEach(([tag, correct]) => {
-        if (Math.random() > 0.5 && incorrectTags[tag]) {
-            const incorrect = incorrectTags[tag][Math.floor(Math.random() * incorrectTags[tag].length)];
-            brokenCode = brokenCode.replace(new RegExp(correct, 'g'), incorrect);
-        }
-    });
-
-    return brokenCode;
-}
-
-function startSinglePlayer() {
-    // Сброс предыдущего состояния
-    clearInterval(countdownInterval);
-    clearInterval(gameTimer);
-    
-    const templatesData = loadGameTemplates();
-    const codeDisplay = document.getElementById('code-display');
-    const codeInput = document.getElementById('code-input');
-    const gameWindow = document.getElementById('game-window-container');
-    const countdown = document.getElementById('countdown');
-    const gameOverlay = document.getElementById('game-overlay');
-    const timerProgress = document.getElementById('timer-progress');
-    const resultsWindow = document.getElementById('results-window');
-
-    // Скрываем окно результатов при новом запуске
-    resultsWindow.style.display = 'none';
-
-    const template = templatesData.templates[
-        Math.floor(Math.random() * templatesData.templates.length)
-    ];
-
-    correctCode = generateCorrectCode(template, templatesData.correctTags, templatesData.loremTexts);
-    const brokenCode = generateBrokenCode(correctCode, templatesData.correctTags, templatesData.incorrectTags);
-
-    codeDisplay.textContent = brokenCode;
-    codeInput.value = brokenCode;
-
-    // Сброс прогрессбара
-    timerProgress.style.width = '100%';
-    timerProgress.style.backgroundColor = 'var(--primary-color)';
-    timerProgress.style.transition = 'none'; // Временно отключаем анимацию
-    setTimeout(() => {
-        timerProgress.style.transition = 'width 1s linear'; // Возвращаем анимацию
-    }, 10);
-
-    gameWindow.style.display = 'block';
-    codeInput.disabled = true;
-    gameOverlay.style.display = 'flex';
-    gameOverlay.style.backdropFilter = 'blur(5px)';
-    gameOverlay.style.webkitBackdropFilter = 'blur(5px)';
-
-    let seconds = 5;
-    countdown.textContent = seconds;
-
-    countdownInterval = setInterval(function () {
-        seconds--;
-        countdown.textContent = seconds;
-
-        if (seconds <= 0) {
-            clearInterval(countdownInterval);
-            gameOverlay.style.display = 'none';
-            codeInput.disabled = false;
-            codeInput.focus();
-            startGameTimer();
-        }
-    }, 1000);
-}
-
-function startGameTimer() {
-    const timerProgress = document.getElementById('timer-progress');
-    const codeInput = document.getElementById('code-input');
-
-    let timeLeft = 60;
-    timerProgress.style.width = '100%';
-
-    // Очищаем предыдущий таймер
-    clearInterval(gameTimer);
-    
-    gameTimer = setInterval(() => {
-        timeLeft--;
-        const progressPercent = (timeLeft / 60) * 100;
-        timerProgress.style.width = `${progressPercent}%`;
-
-        if (timeLeft <= 10) {
-            timerProgress.style.backgroundColor = '#dc3545';
+        function openSettingsWindow() {
+            document.getElementById('settings-window').style.display = 'block';
         }
 
-        if (timeLeft <= 0) {
-            clearInterval(gameTimer);
-            showResults();
+        function closeSettingsWindow() {
+            document.getElementById('settings-window').style.display = 'none';
         }
-    }, 1000);
-}
 
-function showResults() {
-    const userCode = document.getElementById('code-input').value;
-    const similarity = calculateSimilarity(correctCode, userCode);
-    const resultsText = document.getElementById('results-text');
-    const resultsWindow = document.getElementById('results-window');
-    const gameOverlay = document.getElementById('game-overlay');
+        function toggleNavPanel() {
+            const navPanel = document.getElementById('navPanel');
+            navPanel.style.display = navPanel.style.display === 'none' ? 'block' : 'none';
+        }
 
-    resultsText.textContent = `Ваш результат: ${similarity}% совпадения!`;
-    resultsWindow.style.display = 'flex';
-    gameOverlay.style.display = 'flex';
-}
+        function openProfile() {
+            alert('Функция профиля в разработке');
+        }
 
-function calculateSimilarity(correct, user) {
-    let match = 0;
-    const length = Math.min(correct.length, user.length);
+        function loadGameTemplates() {
+            return typeof gameTemplates !== 'undefined' ? gameTemplates : {
+                templates: [], 
+                correctTags: {}, 
+                incorrectTags: {}, 
+                loremTexts: []
+            };
+        }
 
-    for (let i = 0; i < length; i++) {
-        if (correct[i] === user[i]) match++;
-    }
+        function generateCorrectCode(template, correctTags, loremTexts) {
+            let code = template;
+            let loremIndex = 0;
 
-    return Math.round((match / correct.length) * 100);
-}
+            for (const [tag, correct] of Object.entries(correctTags)) {
+                code = code.replace(new RegExp(`\\(${tag}\\)`, 'g'), correct);
+                code = code.replace(new RegExp(`\\(/${tag}\\)`, 'g'), `</${tag}>`);
+            }
 
-function showExitConfirm() {
-    const confirmExit = document.getElementById('confirm-exit');
-    if (confirmExit) {
-        confirmExit.style.display = 'flex';
-    } else {
-        console.error("Окно подтверждения не найдено!");
-    }
-}
+            code = code.replace(/\(lorem\)/g, () => {
+                return loremTexts[loremIndex++ % loremTexts.length];
+            });
 
-function hideExitConfirm() {
-    document.getElementById('confirm-exit').style.display = 'none';
-}
+            return code;
+        }
+
+        function generateBrokenCode(correctCode, correctTags, incorrectTags) {
+            let brokenCode = correctCode;
+
+            Object.entries(correctTags).forEach(([tag, correct]) => {
+                if (Math.random() > 0.5 && incorrectTags[tag]) {
+                    const incorrect = incorrectTags[tag][Math.floor(Math.random() * incorrectTags[tag].length)];
+                    brokenCode = brokenCode.replace(new RegExp(correct, 'g'), incorrect);
+                }
+            });
+
+            return brokenCode;
+        }
+
+        function startSinglePlayer() {
+            clearInterval(gameState.countdownInterval);
+            clearInterval(gameState.gameTimer);
+            
+            const templatesData = loadGameTemplates();
+            const template = templatesData.templates[
+                Math.floor(Math.random() * templatesData.templates.length)
+            ];
+
+            gameState.correctCode = generateCorrectCode(template, templatesData.correctTags, templatesData.loremTexts);
+            const brokenCode = generateBrokenCode(gameState.correctCode, templatesData.correctTags, templatesData.incorrectTags);
+
+            document.getElementById('code-display').textContent = brokenCode;
+            document.getElementById('code-input').value = brokenCode;
+
+            resetTimerProgress();
+            setupGameWindow();
+            startCountdown();
+        }
+
+        function resetTimerProgress() {
+            const timerProgress = document.getElementById('timer-progress');
+            timerProgress.style.width = '100%';
+            timerProgress.style.backgroundColor = 'var(--primary-color)';
+            timerProgress.style.transition = 'none';
+            setTimeout(() => {
+                timerProgress.style.transition = 'width 1s linear';
+            }, 10);
+        }
+
+        function setupGameWindow() {
+            document.getElementById('game-window-container').style.display = 'block';
+            document.getElementById('code-input').disabled = true;
+            document.getElementById('game-overlay').style.display = 'flex';
+            document.getElementById('results-window').style.display = 'none';
+        }
+
+        function startCountdown() {
+            let seconds = 5;
+            const countdown = document.getElementById('countdown');
+            countdown.textContent = seconds;
+
+            gameState.countdownInterval = setInterval(() => {
+                seconds--;
+                countdown.textContent = seconds;
+
+                if (seconds <= 0) {
+                    clearInterval(gameState.countdownInterval);
+                    document.getElementById('game-overlay').style.display = 'none';
+                    document.getElementById('code-input').disabled = false;
+                    document.getElementById('code-input').focus();
+                    startGameTimer();
+                }
+            }, 1000);
+        }
+
+        function startGameTimer() {
+            let timeLeft = 60;
+            const timerProgress = document.getElementById('timer-progress');
+            timerProgress.style.width = '100%';
+
+            clearInterval(gameState.gameTimer);
+            
+            gameState.gameTimer = setInterval(() => {
+                timeLeft--;
+                const progressPercent = (timeLeft / 60) * 100;
+                timerProgress.style.width = `${progressPercent}%`;
+
+                if (timeLeft <= 10) {
+                    timerProgress.style.backgroundColor = '#dc3545';
+                }
+
+                if (timeLeft <= 0) {
+                    clearInterval(gameState.gameTimer);
+                    showResults();
+                }
+            }, 1000);
+        }
+
+        function showResults() {
+            const userCode = document.getElementById('code-input').value;
+            const similarity = calculateSimilarity(gameState.correctCode, userCode);
+            
+            document.getElementById('results-text').textContent = `Ваш результат: ${similarity}% совпадения!`;
+            document.getElementById('results-window').style.display = 'flex';
+            document.getElementById('game-overlay').style.display = 'flex';
+        }
+
+        function calculateSimilarity(correct, user) {
+            let match = 0;
+            const length = Math.min(correct.length, user.length);
+
+            for (let i = 0; i < length; i++) {
+                if (correct[i] === user[i]) match++;
+            }
+
+            return Math.round((match / correct.length) * 100);
+        }
+
+        function showExitConfirm() {
+            document.getElementById('confirm-exit').style.display = 'flex';
+        }
+
+        function hideExitConfirm() {
+            document.getElementById('confirm-exit').style.display = 'none';
+        }
         
-function exitGame() {
-    clearInterval(countdownInterval);
-    clearInterval(gameTimer);
+        function exitGame() {
+            clearInterval(gameState.countdownInterval);
+            clearInterval(gameState.gameTimer);
 
-    const gameWindow = document.getElementById('game-window-container');
-    const resultsWindow = document.getElementById('results-window');
-    const gameOverlay = document.getElementById('game-overlay');
-    const codeInput = document.getElementById('code-input');
-    const countdown = document.getElementById('countdown');
-    const timerProgress = document.getElementById('timer-progress');
-    
-    gameWindow.style.display = 'none';
-    resultsWindow.style.display = 'none';
-    gameOverlay.style.display = 'none';
-    document.getElementById('confirm-exit').style.display = 'none';
-    
-    codeInput.value = '';
-    codeInput.disabled = true;
-    countdown.textContent = '5';
-    timerProgress.style.width = '100%';
-    timerProgress.style.backgroundColor = 'var(--primary-color)';
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelector('.menu-button').addEventListener('click', startSinglePlayer);
-});
+            document.getElementById('game-window-container').style.display = 'none';
+            document.getElementById('results-window').style.display = 'none';
+            document.getElementById('game-overlay').style.display = 'none';
+            document.getElementById('confirm-exit').style.display = 'none';
+            
+            document.getElementById('code-input').value = '';
+            document.getElementById('code-input').disabled = true;
+            document.getElementById('countdown').textContent = '5';
+            resetTimerProgress();
+        }
     </script>
 
     <script src="js/script.js"></script>
