@@ -211,6 +211,46 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
+        .timer-container {
+            width: 100%;
+            height: 10px;
+            background-color: var(--input-bg);
+            border-radius: 5px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .timer-progress {
+            height: 100%;
+            background-color: var(--primary-color);
+            width: 100%;
+            transition: width 1s linear;
+        }
+
+        .results-window {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--container-bg);
+            padding: 30px;
+            border-radius: 10px;
+            z-index: 30;
+            width: 80%;
+            max-width: 500px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+        }
+
+        .results-content {
+            text-align: center;
+            width: 100%;
+        }
     </style>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="icon" type="image/x-icon" href="images/icon.png">
@@ -268,18 +308,20 @@
         </div>
     </div>
 
-    <!-- Игровое окно -->
     <div id="game-window-container" class="game-window-container">
         <div class="game-window">
             <div class="game-header">
                 <h3>Исправьте код</h3>
+                <div class="timer-container">
+                    <div id="timer-progress" class="timer-progress"></div>
+                </div>
                 <button class="exit-button" onclick="showExitConfirm()">Выйти</button>
             </div>
             <div class="code-container">
                 <div id="code-display" class="code-display">
                     // Здесь будет отображаться код с ошибками
                     function example() {
-                    console.log("Hello world)
+                        console.log("Hello world)
                     }
                 </div>
                 <textarea id="code-input" class="code-input" spellcheck="false" disabled>
@@ -303,12 +345,26 @@
         <button class="confirm-button" onclick="exitGame()">Покинуть раунд</button>
     </div>
 
+    <div id="results-window" class="results-window">
+        <div class="results-content">
+            <h3>Результаты</h3>
+            <p id="results-text">Здесь будут ваши результаты</p>
+        </div>
+        <button class="confirm-button" onclick="exitGame()">В главное меню</button>
+    </div>
+
     <script>
+        let gameTimer;
+        let countdownInterval;
+
         function startSinglePlayer() {
             const gameWindow = document.getElementById('game-window-container');
             const countdown = document.getElementById('countdown');
             const codeInput = document.getElementById('code-input');
             const gameOverlay = document.getElementById('game-overlay');
+            const timerProgress = document.getElementById('timer-progress');
+
+            timerProgress.style.width = '100%';
 
             gameWindow.style.display = 'block';
             codeInput.disabled = true;
@@ -319,12 +375,13 @@
             let seconds = 5;
             countdown.textContent = seconds;
 
-            const countdownInterval = setInterval(function () {
+            countdownInterval = setInterval(function () {
                 seconds--;
                 countdown.textContent = seconds;
 
                 if (seconds <= 0) {
                     clearInterval(countdownInterval);
+                    startGameTimer();
                     gameOverlay.style.display = 'none';
                     codeInput.disabled = false;
                     codeInput.focus();
@@ -332,6 +389,33 @@
             }, 1000);
         }
 
+        function startGameTimer() {
+            const timerProgress = document.getElementById('timer-progress');
+            const gameOverlay = document.getElementById('game-overlay');
+            const codeInput = document.getElementById('code-input');
+
+            let timeLeft = 60;
+            timerProgress.style.width = '100%';
+
+            gameTimer = setInterval(function () {
+                timeLeft--;
+                const progressPercent = (timeLeft / 60) * 100;
+                timerProgress.style.width = progressPercent + '%';
+
+                if (timeLeft <= 10) {
+                    timerProgress.style.backgroundColor = '#dc3545';
+                }
+
+                if (timeLeft <= 0) {
+                    clearInterval(gameTimer);
+                    codeInput.disabled = true;
+                    gameOverlay.style.display = 'flex';
+                    gameOverlay.style.backdropFilter = 'blur(5px)';
+                    gameOverlay.style.webkitBackdropFilter = 'blur(5px)';
+                    document.getElementById('results-window').style.display = 'flex';
+                }
+            }, 1000);
+        }
 
         function showExitConfirm() {
             document.getElementById('confirm-exit').style.display = 'flex';
@@ -342,14 +426,21 @@
         }
 
         function exitGame() {
+            clearInterval(countdownInterval);
+            clearInterval(gameTimer);
+
             document.getElementById('game-window-container').style.display = 'none';
             document.getElementById('confirm-exit').style.display = 'none';
+            document.getElementById('results-window').style.display = 'none';
+
             const gameOverlay = document.getElementById('game-overlay');
             gameOverlay.style.display = 'flex';
             gameOverlay.style.backdropFilter = 'blur(5px)';
             gameOverlay.style.webkitBackdropFilter = 'blur(5px)';
             document.getElementById('code-input').disabled = true;
             document.getElementById('countdown').textContent = '5';
+            document.getElementById('timer-progress').style.width = '100%';
+            document.getElementById('timer-progress').style.backgroundColor = 'var(--primary-color)';
         }
 
         function closeSettingsWindow() {
