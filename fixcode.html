@@ -34,12 +34,6 @@
             max-width: 600px;
             position: relative;
             min-height: 300px;
-            transition: transform 0.5s ease, opacity 0.5s ease;
-        }
-
-        .game-container.shrink {
-            transform: scale(0.9);
-            opacity: 0.8;
         }
 
         .profile-button {
@@ -97,12 +91,6 @@
             max-width: 700px;
             z-index: 1000;
             display: none;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-
-        .game-window-container.show {
-            opacity: 1;
         }
 
         .game-window {
@@ -129,6 +117,12 @@
             z-index: 10;
             backdrop-filter: blur(5px);
             -webkit-backdrop-filter: blur(5px);
+            transition: backdrop-filter 0.5s ease, -webkit-backdrop-filter 0.5s ease;
+        }
+
+        .game-window-overlay.hide-blur {
+            backdrop-filter: blur(0);
+            -webkit-backdrop-filter: blur(0);
         }
 
         .game-header {
@@ -193,19 +187,12 @@
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
             position: relative;
             overflow: hidden;
+            transition: transform 0.5s ease, opacity 0.5s ease;
         }
 
-        .countdown-digit {
-            transition: opacity 0.3s ease;
-        }
-
-        .fade-out {
-            animation: fadeOut 0.5s ease-out forwards;
-        }
-
-        @keyframes fadeOut {
-            from { opacity: 1; }
-            to { opacity: 0; }
+        .countdown.shrink {
+            transform: scale(0);
+            opacity: 0;
         }
 
         .timer-container {
@@ -449,10 +436,6 @@
 
             document.getElementById('code-input').value = brokenCode;
 
-            // Анимация уменьшения основного контейнера
-            const mainContainer = document.getElementById('main-game-container');
-            mainContainer.classList.add('shrink');
-
             resetTimerProgress();
             setupGameWindow();
             startCountdown();
@@ -469,15 +452,16 @@
         }
 
         function setupGameWindow() {
-            const gameWindow = document.getElementById('game-window-container');
-            gameWindow.style.display = 'block';
-            setTimeout(() => {
-                gameWindow.classList.add('show');
-            }, 10);
-            
+            document.getElementById('game-window-container').style.display = 'block';
             document.getElementById('code-input').disabled = true;
             document.getElementById('game-overlay').style.display = 'flex';
             document.getElementById('results-window').style.display = 'none';
+            
+            // Сброс состояний анимации
+            const countdown = document.getElementById('countdown');
+            countdown.classList.remove('shrink');
+            const overlay = document.getElementById('game-overlay');
+            overlay.classList.remove('hide-blur');
         }
 
         function startCountdown() {
@@ -502,15 +486,20 @@
         }
 
         function endCountdown() {
-            const gameOverlay = document.getElementById('game-overlay');
-            gameOverlay.classList.add('fade-out');
+            const countdownElement = document.getElementById('countdown');
+            const overlay = document.getElementById('game-overlay');
+            
+            // Плавное уменьшение круга с цифрами
+            countdownElement.classList.add('shrink');
+            
+            // Плавное исчезновение блюра
+            overlay.classList.add('hide-blur');
             
             setTimeout(() => {
-                gameOverlay.style.display = 'none';
+                overlay.style.display = 'none';
                 document.getElementById('code-input').disabled = false;
                 document.getElementById('code-input').focus();
                 startGameTimer();
-                gameOverlay.classList.remove('fade-out');
                 gameState.currentCountdown = 5;
             }, 500);
         }
@@ -570,20 +559,10 @@
             clearInterval(gameState.countdownInterval);
             clearInterval(gameState.gameTimer);
 
-            const gameWindow = document.getElementById('game-window-container');
-            gameWindow.classList.remove('show');
-            
-            setTimeout(() => {
-                gameWindow.style.display = 'none';
-            }, 500);
-            
+            document.getElementById('game-window-container').style.display = 'none';
             document.getElementById('results-window').style.display = 'none';
             document.getElementById('game-overlay').style.display = 'none';
             document.getElementById('confirm-exit').style.display = 'none';
-
-            // Возвращаем основной контейнер к исходному размеру
-            const mainContainer = document.getElementById('main-game-container');
-            mainContainer.classList.remove('shrink');
 
             document.getElementById('code-input').value = '';
             document.getElementById('code-input').disabled = true;
