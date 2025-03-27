@@ -457,7 +457,6 @@
             document.getElementById('game-overlay').style.display = 'flex';
             document.getElementById('results-window').style.display = 'none';
             
-            // Сброс состояний анимации
             const countdown = document.getElementById('countdown');
             countdown.classList.remove('shrink');
             const overlay = document.getElementById('game-overlay');
@@ -474,25 +473,30 @@
             digitElement.textContent = gameState.currentCountdown;
             countdownElement.appendChild(digitElement);
 
-            gameState.countdownInterval = setInterval(() => {
+            setTimeout(() => {
+                updateCountdown();
+            }, 1000);
+
+            function updateCountdown() {
                 gameState.currentCountdown--;
                 digitElement.textContent = gameState.currentCountdown;
 
-                if (gameState.currentCountdown < 0) {
-                    clearInterval(gameState.countdownInterval);
-                    endCountdown();
+                if (gameState.currentCountdown > 0) {
+                    gameState.countdownInterval = setTimeout(updateCountdown, 1000);
+                } else if (gameState.currentCountdown === 0) {
+                    setTimeout(() => {
+                        endCountdown();
+                    }, 1000);
                 }
-            }, 1000);
+            }
         }
-
+        
         function endCountdown() {
             const countdownElement = document.getElementById('countdown');
             const overlay = document.getElementById('game-overlay');
             
-            // Плавное уменьшение круга с цифрами
             countdownElement.classList.add('shrink');
             
-            // Плавное исчезновение блюра
             overlay.classList.add('hide-blur');
             
             setTimeout(() => {
