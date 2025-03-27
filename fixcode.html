@@ -269,6 +269,7 @@
 </head>
 
 <body>
+    <audio id="countdown-sound" src="sounds/teak.wav" preload="auto"></audio>
     <button id="settings-button" class="settings-button" onclick="openSettingsWindow()">
         <img src="images/settings_icon.png" alt="Настройки">
     </button>
@@ -465,6 +466,8 @@
 
         function startCountdown() {
             const countdownElement = document.getElementById('countdown');
+            const sound = document.getElementById('countdown-sound');
+            
             countdownElement.innerHTML = '';
             gameState.currentCountdown = 5;
 
@@ -473,22 +476,31 @@
             digitElement.textContent = gameState.currentCountdown;
             countdownElement.appendChild(digitElement);
 
-            setTimeout(() => {
-                updateCountdown();
-            }, 1000);
+            // Первый звук сразу при старте
+            playSound(sound);
 
             function updateCountdown() {
                 gameState.currentCountdown--;
                 digitElement.textContent = gameState.currentCountdown;
+                
+                // Всегда проигрываем звук при смене цифры
+                playSound(sound);
 
                 if (gameState.currentCountdown > 0) {
                     gameState.countdownInterval = setTimeout(updateCountdown, 1000);
-                } else if (gameState.currentCountdown === 0) {
+                } else {
                     setTimeout(() => {
                         endCountdown();
                     }, 1000);
                 }
             }
+
+            setTimeout(updateCountdown, 1000);
+        }
+
+        function playSound(sound) {
+            sound.currentTime = 0;
+            sound.play().catch(e => console.log("Не удалось воспроизвести звук:", e));
         }
         
         function endCountdown() {
