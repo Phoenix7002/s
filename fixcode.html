@@ -34,6 +34,12 @@
             max-width: 600px;
             position: relative;
             min-height: 300px;
+            transition: transform 0.5s ease, opacity 0.5s ease;
+        }
+
+        .game-container.shrink {
+            transform: scale(0.9);
+            opacity: 0.8;
         }
 
         .profile-button {
@@ -91,6 +97,12 @@
             max-width: 700px;
             z-index: 1000;
             display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .game-window-container.show {
+            opacity: 1;
         }
 
         .game-window {
@@ -167,24 +179,33 @@
         }
 
         .countdown {
-             width: 120px;
-             height: 120px;
-             border-radius: 50%;
-             background-color: var(--primary-color);
-             color: white;
-             display: flex;
-             justify-content: center;
-             align-items: center;
-             font-size: 72px;
-             font-weight: bold;
-             z-index: 20;
-             box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-             position: relative;
-             overflow: hidden;
-         }
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 72px;
+            font-weight: bold;
+            z-index: 20;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .countdown-digit {
+            transition: opacity 0.3s ease;
+        }
 
         .fade-out {
             animation: fadeOut 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
         }
 
         .timer-container {
@@ -302,7 +323,7 @@
     </nav>
 
     <div class="container">
-        <div class="game-container">
+        <div class="game-container" id="main-game-container">
             <button class="profile-button" onclick="openProfile()">Профиль</button>
 
             <div class="menu-buttons">
@@ -428,6 +449,10 @@
 
             document.getElementById('code-input').value = brokenCode;
 
+            // Анимация уменьшения основного контейнера
+            const mainContainer = document.getElementById('main-game-container');
+            mainContainer.classList.add('shrink');
+
             resetTimerProgress();
             setupGameWindow();
             startCountdown();
@@ -444,7 +469,12 @@
         }
 
         function setupGameWindow() {
-            document.getElementById('game-window-container').style.display = 'block';
+            const gameWindow = document.getElementById('game-window-container');
+            gameWindow.style.display = 'block';
+            setTimeout(() => {
+                gameWindow.classList.add('show');
+            }, 10);
+            
             document.getElementById('code-input').disabled = true;
             document.getElementById('game-overlay').style.display = 'flex';
             document.getElementById('results-window').style.display = 'none';
@@ -460,45 +490,30 @@
             digitElement.textContent = gameState.currentCountdown;
             countdownElement.appendChild(digitElement);
 
-            const handleFlip = () => {
-                digitElement.classList.add('flipping');
+            gameState.countdownInterval = setInterval(() => {
+                gameState.currentCountdown--;
+                digitElement.textContent = gameState.currentCountdown;
 
-                setTimeout(() => {
-                    gameState.currentCountdown--;
-                    if (gameState.currentCountdown >= 0) {
-                        digitElement.textContent = gameState.currentCountdown;
-                    }
-
-                    if (gameState.currentCountdown < 0) {
-                        clearInterval(flipInterval);
-                        endCountdown();
-                    }
-                }, 300);
-
-                setTimeout(() => {
-                    digitElement.classList.remove('flipping');
-                }, 600);
-            };
-
-            handleFlip();
-
-            const flipInterval = setInterval(handleFlip, 1000);
-            gameState.countdownInterval = flipInterval;
+                if (gameState.currentCountdown < 0) {
+                    clearInterval(gameState.countdownInterval);
+                    endCountdown();
+                }
+            }, 1000);
         }
 
         function endCountdown() {
-             const gameOverlay = document.getElementById('game-overlay');
-             gameOverlay.classList.add('fade-out');
-             
-             setTimeout(() => {
-                 gameOverlay.style.display = 'none';
-                 document.getElementById('code-input').disabled = false;
-                 document.getElementById('code-input').focus();
-                 startGameTimer();
-                 gameOverlay.classList.remove('fade-out');
-                 gameState.currentCountdown = 5;
-             }, 500);
-         }
+            const gameOverlay = document.getElementById('game-overlay');
+            gameOverlay.classList.add('fade-out');
+            
+            setTimeout(() => {
+                gameOverlay.style.display = 'none';
+                document.getElementById('code-input').disabled = false;
+                document.getElementById('code-input').focus();
+                startGameTimer();
+                gameOverlay.classList.remove('fade-out');
+                gameState.currentCountdown = 5;
+            }, 500);
+        }
 
         function startGameTimer() {
             let timeLeft = 60;
@@ -555,10 +570,20 @@
             clearInterval(gameState.countdownInterval);
             clearInterval(gameState.gameTimer);
 
-            document.getElementById('game-window-container').style.display = 'none';
+            const gameWindow = document.getElementById('game-window-container');
+            gameWindow.classList.remove('show');
+            
+            setTimeout(() => {
+                gameWindow.style.display = 'none';
+            }, 500);
+            
             document.getElementById('results-window').style.display = 'none';
             document.getElementById('game-overlay').style.display = 'none';
             document.getElementById('confirm-exit').style.display = 'none';
+
+            // Возвращаем основной контейнер к исходному размеру
+            const mainContainer = document.getElementById('main-game-container');
+            mainContainer.classList.remove('shrink');
 
             document.getElementById('code-input').value = '';
             document.getElementById('code-input').disabled = true;
