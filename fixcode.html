@@ -453,33 +453,41 @@
             document.getElementById('results-window').style.display = 'none';
         }
 
-function startCountdown() {
-    const countdownElement = document.getElementById('countdown');
-    countdownElement.innerHTML = '';
-    gameState.currentCountdown = 5;
+        function startCountdown() {
+            const countdownElement = document.getElementById('countdown');
+            countdownElement.innerHTML = '';
+            gameState.currentCountdown = 5;
 
-    const digitElement = document.createElement('div');
-    digitElement.className = 'countdown-digit';
-    digitElement.textContent = gameState.currentCountdown;
-    countdownElement.appendChild(digitElement);
-
-    const updateCountdown = () => {
-        gameState.currentCountdown--;
-        if (gameState.currentCountdown >= 0) {
+            const digitElement = document.createElement('div');
+            digitElement.className = 'countdown-digit';
             digitElement.textContent = gameState.currentCountdown;
+            countdownElement.appendChild(digitElement);
+
+            const handleFlip = () => {
+                digitElement.classList.add('flipping');
+
+                setTimeout(() => {
+                    gameState.currentCountdown--;
+                    if (gameState.currentCountdown >= 0) {
+                        digitElement.textContent = gameState.currentCountdown;
+                    }
+
+                    if (gameState.currentCountdown < 0) {
+                        clearInterval(flipInterval);
+                        endCountdown();
+                    }
+                }, 300);
+
+                setTimeout(() => {
+                    digitElement.classList.remove('flipping');
+                }, 600);
+            };
+
+            handleFlip();
+
+            const flipInterval = setInterval(handleFlip, 1000);
+            gameState.countdownInterval = flipInterval;
         }
-
-        if (gameState.currentCountdown < 0) {
-            clearInterval(countdownInterval);
-            endCountdown();
-        }
-    };
-
-    updateCountdown();
-
-    const countdownInterval = setInterval(updateCountdown, 1000);
-    gameState.countdownInterval = countdownInterval;
-}
 
         function endCountdown() {
              const gameOverlay = document.getElementById('game-overlay');
