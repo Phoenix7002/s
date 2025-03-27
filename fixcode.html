@@ -500,6 +500,15 @@ function calculateSimilarity(correct, user) {
     return Math.round((match / correct.length) * 100);
 }
 
+function showExitConfirm() {
+    const confirmExit = document.getElementById('confirm-exit');
+    if (confirmExit) {
+        confirmExit.style.display = 'flex';
+    } else {
+        console.error("Окно подтверждения не найдено!");
+    }
+}
+        
 function exitGame() {
     clearInterval(countdownInterval);
     clearInterval(gameTimer);
