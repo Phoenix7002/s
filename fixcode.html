@@ -217,7 +217,7 @@
             height: 10px;
             background-color: var(--input-bg);
             border-radius: 5px;
-            margin-bottom: 15px;
+            margin-top: 15px;
             overflow: hidden;
             position: relative;
         }
@@ -230,19 +230,18 @@
         }
 
         .results-window {
-            position: absolute;
+            position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             background-color: var(--container-bg);
             padding: 30px;
             border-radius: 10px;
-            z-index: 30;
+            z-index: 1002;
             width: 80%;
             max-width: 500px;
             display: none;
             flex-direction: column;
-            align-items: center;
             gap: 20px;
             box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
         }
@@ -312,9 +311,6 @@
         <div class="game-window">
             <div class="game-header">
                 <h3>Исправьте код</h3>
-                <div class="timer-container">
-                    <div id="timer-progress" class="timer-progress"></div>
-                </div>
                 <button class="exit-button" onclick="showExitConfirm()">Выйти</button>
             </div>
             <div class="code-container">
@@ -330,6 +326,9 @@
                         console.log("Hello world)
                     }
                 </textarea>
+                <div class="timer-container">
+                    <div id="timer-progress" class="timer-progress"></div>
+                </div>
             </div>
             <div id="game-overlay" class="game-window-overlay">
                 <div id="countdown" class="countdown">5</div>
@@ -348,7 +347,7 @@
     <div id="results-window" class="results-window">
         <div class="results-content">
             <h3>Результаты</h3>
-            <p id="results-text">Здесь будут ваши результаты</p>
+            <p id="results-text">Вы успешно исправили код за 1:00!</p>
         </div>
         <button class="confirm-button" onclick="exitGame()">В главное меню</button>
     </div>
@@ -363,9 +362,12 @@
             const codeInput = document.getElementById('code-input');
             const gameOverlay = document.getElementById('game-overlay');
             const timerProgress = document.getElementById('timer-progress');
+            const resultsWindow = document.getElementById('results-window');
 
+            resultsWindow.style.display = 'none';
             timerProgress.style.width = '100%';
-
+            timerProgress.style.backgroundColor = 'var(--primary-color)';
+            
             gameWindow.style.display = 'block';
             codeInput.disabled = true;
             gameOverlay.style.display = 'flex';
@@ -375,10 +377,10 @@
             let seconds = 5;
             countdown.textContent = seconds;
 
-            countdownInterval = setInterval(function () {
+            countdownInterval = setInterval(function() {
                 seconds--;
                 countdown.textContent = seconds;
-
+                
                 if (seconds <= 0) {
                     clearInterval(countdownInterval);
                     startGameTimer();
@@ -393,26 +395,27 @@
             const timerProgress = document.getElementById('timer-progress');
             const gameOverlay = document.getElementById('game-overlay');
             const codeInput = document.getElementById('code-input');
-
+            const resultsWindow = document.getElementById('results-window');
+            
             let timeLeft = 60;
             timerProgress.style.width = '100%';
-
-            gameTimer = setInterval(function () {
+            
+            gameTimer = setInterval(function() {
                 timeLeft--;
                 const progressPercent = (timeLeft / 60) * 100;
                 timerProgress.style.width = progressPercent + '%';
-
+                
                 if (timeLeft <= 10) {
                     timerProgress.style.backgroundColor = '#dc3545';
                 }
-
+                
                 if (timeLeft <= 0) {
                     clearInterval(gameTimer);
                     codeInput.disabled = true;
+                    resultsWindow.style.display = 'flex';
                     gameOverlay.style.display = 'flex';
                     gameOverlay.style.backdropFilter = 'blur(5px)';
                     gameOverlay.style.webkitBackdropFilter = 'blur(5px)';
-                    document.getElementById('results-window').style.display = 'flex';
                 }
             }, 1000);
         }
@@ -428,11 +431,11 @@
         function exitGame() {
             clearInterval(countdownInterval);
             clearInterval(gameTimer);
-
+            
             document.getElementById('game-window-container').style.display = 'none';
             document.getElementById('confirm-exit').style.display = 'none';
             document.getElementById('results-window').style.display = 'none';
-
+            
             const gameOverlay = document.getElementById('game-overlay');
             gameOverlay.style.display = 'flex';
             gameOverlay.style.backdropFilter = 'blur(5px)';
