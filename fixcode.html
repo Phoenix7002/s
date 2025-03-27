@@ -166,6 +166,23 @@
             opacity: 0.7;
         }
 
+        .countdown {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 72px;
+            font-weight: bold;
+            z-index: 20;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
 .digits-container {
     position: relative;
     width: 100%;
@@ -500,48 +517,38 @@ function startCountdown() {
     countdownElement.innerHTML = '';
     gameState.currentCountdown = 5;
     
-    const digitsContainer = document.createElement('div');
-    digitsContainer.className = 'digits-container';
-    countdownElement.appendChild(digitsContainer);
-    
     const digitElement = document.createElement('div');
-    digitElement.className = 'countdown-digit active';
+    digitElement.className = 'countdown-digit';
     digitElement.textContent = gameState.currentCountdown;
-    digitsContainer.appendChild(digitElement);
+    countdownElement.appendChild(digitElement);
     
     gameState.countdownInterval = setInterval(() => {
-        flipDigit(digitsContainer);
+        animateDigit(digitElement);
     }, 1000);
+    
+    animateDigit(digitElement);
 }
 
-function flipDigit(container) {
-    const currentDigit = container.querySelector('.countdown-digit.active');
-    if (!currentDigit) return;
+function animateDigit(element) {
+    // Запускаем анимацию
+    element.classList.add('flipping');
     
-    currentDigit.classList.remove('active');
-    
-    if (gameState.currentCountdown <= 0) {
-        clearInterval(gameState.countdownInterval);
-        endCountdown();
-        return;
-    }
-    
-    gameState.currentCountdown--;
-    
-    const newDigit = document.createElement('div');
-    newDigit.className = 'countdown-digit next';
-    newDigit.textContent = gameState.currentCountdown;
-    container.appendChild(newDigit);
-    
+    // Через половину времени анимации меняем цифру
     setTimeout(() => {
-        currentDigit.classList.add('flip');
-        newDigit.classList.add('flip');
-        newDigit.classList.remove('next');
-        newDigit.classList.add('active');
-    }, 10);
+        gameState.currentCountdown--;
+        if (gameState.currentCountdown >= 0) {
+            element.textContent = gameState.currentCountdown;
+        }
+    }, 500);
     
+    // Когда анимация завершится
     setTimeout(() => {
-        currentDigit.remove();
+        element.classList.remove('flipping');
+        
+        if (gameState.currentCountdown <= 0) {
+            clearInterval(gameState.countdownInterval);
+            endCountdown();
+        }
     }, 1000);
 }
         
