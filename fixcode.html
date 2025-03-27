@@ -192,7 +192,6 @@
             align-items: center;
             backface-visibility: hidden;
             transform-style: preserve-3d;
-            transition: transform 0.6s ease;
         }
 
         @keyframes flip {
@@ -201,14 +200,19 @@
             }
             50% {
                 transform: rotateX(90deg);
+                opacity: 0;
+            }
+            51% {
+                opacity: 0;
             }
             100% {
                 transform: rotateX(0deg);
+                opacity: 1;
             }
         }
 
         .flipping {
-            animation: flip 0.6s ease forwards;
+            animation: flip 1s ease-in-out forwards;
         }
 
         @keyframes fadeOut {
@@ -227,7 +231,7 @@
         }
 
         .fade-out {
-            animation: fadeOut 0.3s ease-out forwards;
+            animation: fadeOut 0.5s ease-out forwards;
         }
 
         .timer-container {
@@ -504,7 +508,7 @@
 
             gameState.countdownInterval = setInterval(() => {
                 flipDigit();
-            }, 600);
+            }, 1000);
         }
 
         function flipDigit() {
@@ -513,15 +517,19 @@
             
             setTimeout(() => {
                 gameState.currentCountdown--;
-                digitElement.textContent = gameState.currentCountdown;
+                if (gameState.currentCountdown >= 0) {
+                    digitElement.textContent = gameState.currentCountdown;
+                }
+            }, 500);
+            
+            setTimeout(() => {
                 digitElement.classList.remove('flipping');
                 
                 if (gameState.currentCountdown <= 0) {
                     clearInterval(gameState.countdownInterval);
                     endCountdown();
-                    return;
                 }
-            }, 300);
+            }, 1000);
         }
 
         function endCountdown() {
@@ -535,7 +543,7 @@
                 startGameTimer();
                 gameOverlay.classList.remove('fade-out');
                 gameState.currentCountdown = 5;
-            }, 300);
+            }, 500);
         }
 
         function startGameTimer() {
