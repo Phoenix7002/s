@@ -1,5 +1,38 @@
 const gameTemplates = {
-templates: [
+    correctTags: {
+        'div': '<div>',
+        'p': '<p>',
+        'span': '<span>',
+        'section': '<section>',
+        'h1': '<h1>',
+        'h2': '<h2>',
+        'article': '<article>'
+    },
+
+    incorrectTags: {
+        'div': ['<div/>', '<div', '</div>', 'div>', 'div', '<див>', '<vid>', '< div >', '"div"'],
+        'p': ['<p/>', '<p', '</p>', 'p>', 'p', '<р>', '<п>', '< p >', '"p"'],
+        'span': ['<span/>', '<span', '</span>', 'span>', 'span', '<спан>', '<сапн>', '< span >', '"span"'],
+        'section': ['<section/>', '<section', '</section>', 'section>', 'section', '<секция>', '<секшин>', '< section >', '"section"'],
+        'h1': ['<h1/>', '<h1', '</h1>', 'h1>', 'h1', '<ч1>', '<н1>', '< h1 >', '"h1"'],
+        'h2': ['<h2/>', '<h2', '</h2>', 'h2>', 'h2', '<ч2>', '<н2>', '< h2 >', '"h2"'],
+        'article': ['<article/>', '<article', '</article>', 'article>', 'article', '<артикл>', '<атикле>', '< article >', '"article"']
+    },
+
+    loremTexts: [
+        "Lorem ipsum dolor sit amet.",
+        "Consectetur adipiscing elit.",
+        "Sed do eiusmod tempor incididunt.",
+        "Ut labore et dolore magna aliqua.",
+        "Ut enim ad minim veniam.",
+        "Duis aute irure dolor in reprehenderit.",
+        "Excepteur sint occaecat cupidatat non proident.",
+        "Sunt in culpa qui officia deserunt mollit.",
+        "Exercitation ullamco laboris nisi ut aliquip.",
+        "Quis nostrud exercitation ullamco laboris."
+    ],
+
+    templates: [
     `(div)
         (section)
             (article)
@@ -429,61 +462,5 @@ templates: [
             (/section)
         (/div)
     (/article)`
-],
-    
-    correctTags: {
-        'div': '<div>',
-        'p': '<p>',
-        'span': '<span>',
-        'section': '<section>',
-        'h1': '<h1>',
-        'h2': '<h2>',
-        'article': '<article>'
-    },
-    
-incorrectTags: {
-    'div': [
-        '<div/>', '<div', '</div>',
-        'div>', 'div', '<див>',
-        '<vid>', '< div >', '"div"'
-    ],
-    'p': [
-        '<p/>', '<p', '</p>',
-        'p>', 'p', '<р>',
-        '<п>', '< p >', '"p"'
-    ],
-    'span': [
-        '<span/>', '<span', '</span>',
-        'span>', 'span', '<спан>',
-        '<сапн>', '< span >', '"span"'
-    ],
-    'section': [
-        '<section/>', '<section', '</section>',
-        'section>', 'section', '<секция>',
-        '<секшин>', '< section >', '"section"'
-    ],
-    'h1': [
-        '<h1/>', '<h1', '</h1>',
-        'h1>', 'h1', '<ч1>',
-        '<н1>', '< h1 >', '"h1"'
-    ],
-    'h2': [
-        '<h2/>', '<h2', '</h2>',
-        'h2>', 'h2', '<ч2>',
-        '<н2>', '< h2 >', '"h2"'
-    ],
-    'article': [
-        '<article/>', '<article', '</article>',
-        'article>', 'article', '<артикл>',
-        '<атикле>', '< article >', '"article"'
     ]
-}
-    
-loremTexts: [
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
-    "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.",
-    "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia."
-]
 };
