@@ -190,7 +190,6 @@
 }
         
 .countdown-digit {
-    position: absolute;
     width: 100%;
     height: 100%;
     display: flex;
@@ -198,8 +197,8 @@
     align-items: center;
     font-size: 72px;
     font-weight: bold;
-    backface-visibility: hidden;
     transform-style: preserve-3d;
+    backface-visibility: hidden;
 }
 
 .countdown-digit.next {
@@ -207,8 +206,8 @@
     opacity: 0;
 }
         
-.countdown-digit.flip {
-    animation: flip 1s ease forwards;
+.countdown-digit.flipping {
+    animation: flip 1s ease-out forwards;
 }
         
 @keyframes flip {
@@ -216,9 +215,15 @@
         transform: rotateX(0deg);
         opacity: 1;
     }
+    49% {
+        opacity: 1;
+    }
     50% {
         transform: rotateX(90deg);
         opacity: 0;
+    }
+    51% {
+        transform: rotateX(-90deg);
     }
     100% {
         transform: rotateX(0deg);
@@ -522,50 +527,29 @@ function startCountdown() {
     digitElement.textContent = gameState.currentCountdown;
     countdownElement.appendChild(digitElement);
     
-    gameState.countdownInterval = setInterval(() => {
-        animateDigit(digitElement);
-    }, 1000);
-    
-    animateDigit(digitElement);
-}
-
-function animateDigit(element) {
-    // Запускаем анимацию
-    element.classList.add('flipping');
-    
-    // Через половину времени анимации меняем цифру
-    setTimeout(() => {
-        gameState.currentCountdown--;
-        if (gameState.currentCountdown >= 0) {
-            element.textContent = gameState.currentCountdown;
-        }
-    }, 500);
-    
-    // Когда анимация завершится
-    setTimeout(() => {
-        element.classList.remove('flipping');
+    const handleFlip = () => {
+        digitElement.classList.add('flipping');
         
-        if (gameState.currentCountdown <= 0) {
-            clearInterval(gameState.countdownInterval);
-            endCountdown();
-        }
-    }, 1000);
-}
-        
-        function endCountdown() {
-            const gameOverlay = document.getElementById('game-overlay');
-            gameOverlay.classList.add('fade-out');
+        setTimeout(() => {
+            gameState.currentCountdown--;
+            digitElement.textContent = gameState.currentCountdown;
             
-            setTimeout(() => {
-                gameOverlay.style.display = 'none';
-                document.getElementById('code-input').disabled = false;
-                document.getElementById('code-input').focus();
-                startGameTimer();
-                gameOverlay.classList.remove('fade-out');
-                gameState.currentCountdown = 5;
-            }, 500);
-        }
-
+            if (gameState.currentCountdown < 0) {
+                clearInterval(flipInterval);
+                endCountdown();
+            }
+        }, 500);
+        
+        setTimeout(() => {
+            digitElement.classList.remove('flipping');
+        }, 1000);
+    };
+    
+    handleFlip();
+    
+    const flipInterval = setInterval(handleFlip, 1000);
+    gameState.countdownInterval = flipInterval;
+}
         function startGameTimer() {
             let timeLeft = 60;
             const timerProgress = document.getElementById('timer-progress');
