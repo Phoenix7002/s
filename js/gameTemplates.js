@@ -1,35 +1,100 @@
 const gameTemplates = {
     correctTags: {
+        // Основные HTML теги
         'div': '<div>',
         'p': '<p>',
         'span': '<span>',
         'section': '<section>',
+        'article': '<article>',
+        'header': '<header>',
+        'footer': '<footer>',
+        'nav': '<nav>',
+        'main': '<main>',
+        'aside': '<aside>',
         'h1': '<h1>',
         'h2': '<h2>',
-        'article': '<article>'
+        'h3': '<h3>',
+        'h4': '<h4>',
+        'h5': '<h5>',
+        'h6': '<h6>',
+        'ul': '<ul>',
+        'ol': '<ol>',
+        'li': '<li>',
+        'form': '<form>',
+        'label': '<label>',
+        'input': '<input>',
+        'button': '<button>',
+        'select': '<select>',
+        'option': '<option>',
+        'textarea': '<textarea>',
+        'table': '<table>',
+        'thead': '<thead>',
+        'tbody': '<tbody>',
+        'tr': '<tr>',
+        'th': '<th>',
+        'td': '<td>',
+        'img': '<img>',
+        'video': '<video>',
+        'audio': '<audio>',
+        'figure': '<figure>',
+        'figcaption': '<figcaption>',
+        'time': '<time>',
+        'mark': '<mark>'
     },
 
     incorrectTags: {
-        'div': ['<div/>', '<div', '</div>', 'div>', 'div', '<див>', '<vid>', '< div >', '"div"'],
-        'p': ['<p/>', '<p', '</p>', 'p>', 'p', '<р>', '<п>', '< p >', '"p"'],
-        'span': ['<span/>', '<span', '</span>', 'span>', 'span', '<спан>', '<сапн>', '< span >', '"span"'],
-        'section': ['<section/>', '<section', '</section>', 'section>', 'section', '<секция>', '<секшин>', '< section >', '"section"'],
-        'h1': ['<h1/>', '<h1', '</h1>', 'h1>', 'h1', '<ч1>', '<н1>', '< h1 >', '"h1"'],
-        'h2': ['<h2/>', '<h2', '</h2>', 'h2>', 'h2', '<ч2>', '<н2>', '< h2 >', '"h2"'],
-        'article': ['<article/>', '<article', '</article>', 'article>', 'article', '<артикл>', '<атикле>', '< article >', '"article"']
+        'div': ['<div/>', '<div', '</div>', 'div>', 'div', '<див>', '<vid>', '< div >', '"div"', '{div}', '[div]', 'div]', '<div]'],
+        'p': ['<p/>', '<p', '</p>', 'p>', 'p', '<р>', '<п>', '< p >', '"p"', '{p}', '[p]', 'p]', '<p]'],
+        'span': ['<span/>', '<span', '</span>', 'span>', 'span', '<спан>', '<сапн>', '< span >', '"span"', '{span}', '[span]', 'span]', '<span]'],
+        'section': ['<section/>', '<section', '</section>', 'section>', 'section', '<секция>', '<секшин>', '< section >', '"section"', '{section}', '[section]', 'section]', '<section]'],
+        'article': ['<article/>', '<article', '</article>', 'article>', 'article', '<артикл>', '<атикле>', '< article >', '"article"', '{article}', '[article]', 'article]', '<article]'],
+        'header': ['<header/>', '<header', '</header>', 'header>', 'header', '<хедер>', '<хеадер>', '< header >', '"header"', '{header}', '[header]', 'header]', '<header]'],
+        'footer': ['<footer/>', '<footer', '</footer>', 'footer>', 'footer', '<футер>', '<фоотер>', '< footer >', '"footer"', '{footer}', '[footer]', 'footer]', '<footer]'],
+        'nav': ['<nav/>', '<nav', '</nav>', 'nav>', 'nav', '<нав>', '<навигация>', '< nav >', '"nav"', '{nav}', '[nav]', 'nav]', '<nav]'],
+        'main': ['<main/>', '<main', '</main>', 'main>', 'main', '<маин>', '<мэйн>', '< main >', '"main"', '{main}', '[main]', 'main]', '<main]'],
+        'aside': ['<aside/>', '<aside', '</aside>', 'aside>', 'aside', '<асайд>', '<асайде>', '< aside >', '"aside"', '{aside}', '[aside]', 'aside]', '<aside]'],
+        'h1': ['<h1/>', '<h1', '</h1>', 'h1>', 'h1', '<ч1>', '<н1>', '< h1 >', '"h1"', '{h1}', '[h1]', 'h1]', '<h1]'],
+        'h2': ['<h2/>', '<h2', '</h2>', 'h2>', 'h2', '<ч2>', '<н2>', '< h2 >', '"h2"', '{h2}', '[h2]', 'h2]', '<h2]'],
+        'h3': ['<h3/>', '<h3', '</h3>', 'h3>', 'h3', '<ч3>', '<н3>', '< h3 >', '"h3"', '{h3}', '[h3]', 'h3]', '<h3]'],
+        'h4': ['<h4/>', '<h4', '</h4>', 'h4>', 'h4', '<ч4>', '<н4>', '< h4 >', '"h4"', '{h4}', '[h4]', 'h4]', '<h4]'],
+        'h5': ['<h5/>', '<h5', '</h5>', 'h5>', 'h5', '<ч5>', '<н5>', '< h5 >', '"h5"', '{h5}', '[h5]', 'h5]', '<h5]'],
+        'h6': ['<h6/>', '<h6', '</h6>', 'h6>', 'h6', '<ч6>', '<н6>', '< h6 >', '"h6"', '{h6}', '[h6]', 'h6]', '<h6]'],
+        'ul': ['<ul/>', '<ul', '</ul>', 'ul>', 'ul', '<ул>', '<юл>', '< ul >', '"ul"', '{ul}', '[ul]', 'ul]', '<ul]'],
+        'ol': ['<ol/>', '<ol', '</ol>', 'ol>', 'ol', '<ол>', '<оул>', '< ol >', '"ol"', '{ol}', '[ol]', 'ol]', '<ol]'],
+        'li': ['<li/>', '<li', '</li>', 'li>', 'li', '<ли>', '<лi>', '< li >', '"li"', '{li}', '[li]', 'li]', '<li]'],
+        'form': ['<form/>', '<form', '</form>', 'form>', 'form', '<форм>', '<фоорм>', '< form >', '"form"', '{form}', '[form]', 'form]', '<form]'],
+        'label': ['<label/>', '<label', '</label>', 'label>', 'label', '<лабел>', '<лейбл>', '< label >', '"label"', '{label}', '[label]', 'label]', '<label]'],
+        'input': ['<input/>', '<input', '</input>', 'input>', 'input', '<инпут>', '<импут>', '< input >', '"input"', '{input}', '[input]', 'input]', '<input]'],
+        'button': ['<button/>', '<button', '</button>', 'button>', 'button', '<баттон>', '<буттон>', '< button >', '"button"', '{button}', '[button]', 'button]', '<button]'],
+        'select': ['<select/>', '<select', '</select>', 'select>', 'select', '<селект>', '<селкт>', '< select >', '"select"', '{select}', '[select]', 'select]', '<select]'],
+        'option': ['<option/>', '<option', '</option>', 'option>', 'option', '<опция>', '<опшин>', '< option >', '"option"', '{option}', '[option]', 'option]', '<option]'],
+        'textarea': ['<textarea/>', '<textarea', '</textarea>', 'textarea>', 'textarea', '<текстареа>', '<текстбокс>', '< textarea >', '"textarea"', '{textarea}', '[textarea]', 'textarea]', '<textarea]'],
+        'table': ['<table/>', '<table', '</table>', 'table>', 'table', '<таблица>', '<тейбл>', '< table >', '"table"', '{table}', '[table]', 'table]', '<table]'],
+        'thead': ['<thead/>', '<thead', '</thead>', 'thead>', 'thead', '<тхед>', '<теад>', '< thead >', '"thead"', '{thead}', '[thead]', 'thead]', '<thead]'],
+        'tbody': ['<tbody/>', '<tbody', '</tbody>', 'tbody>', 'tbody', '<тбоди>', '<тебоди>', '< tbody >', '"tbody"', '{tbody}', '[tbody]', 'tbody]', '<tbody]'],
+        'tr': ['<tr/>', '<tr', '</tr>', 'tr>', 'tr', '<тр>', '<тээр>', '< tr >', '"tr"', '{tr}', '[tr]', 'tr]', '<tr]'],
+        'th': ['<th/>', '<th', '</th>', 'th>', 'th', '<тх>', '<тэаш>', '< th >', '"th"', '{th}', '[th]', 'th]', '<th]'],
+        'td': ['<td/>', '<td', '</td>', 'td>', 'td', '<тд>', '<тэди>', '< td >', '"td"', '{td}', '[td]', 'td]', '<td]'],
+        'img': ['<img/>', '<img', '</img>', 'img>', 'img', '<имг>', '<имаге>', '< img >', '"img"', '{img}', '[img]', 'img]', '<img]'],
+        'video': ['<video/>', '<video', '</video>', 'video>', 'video', '<видео>', '<видио>', '< video >', '"video"', '{video}', '[video]', 'video]', '<video]'],
+        'audio': ['<audio/>', '<audio', '</audio>', 'audio>', 'audio', '<аудио>', '<одио>', '< audio >', '"audio"', '{audio}', '[audio]', 'audio]', '<audio]'],
+        'figure': ['<figure/>', '<figure', '</figure>', 'figure>', 'figure', '<фигура>', '<фигур>', '< figure >', '"figure"', '{figure}', '[figure]', 'figure]', '<figure]'],
+        'figcaption': ['<figcaption/>', '<figcaption', '</figcaption>', 'figcaption>', 'figcaption', '<фигкапшн>', '<фигкэпшн>', '< figcaption >', '"figcaption"', '{figcaption}', '[figcaption]', 'figcaption]', '<figcaption]'],
+        'time': ['<time/>', '<time', '</time>', 'time>', 'time', '<тайм>', '<тиме>', '< time >', '"time"', '{time}', '[time]', 'time]', '<time]'],
+        'mark': ['<mark/>', '<mark', '</mark>', 'mark>', 'mark', '<марк>', '<маарк>', '< mark >', '"mark"', '{mark}', '[mark]', 'mark]', '<mark]']
     },
 
     loremTexts: [
-        "Lorem ipsum dolor sit amet.",
-        "Consectetur adipiscing elit.",
-        "Sed do eiusmod tempor incididunt.",
-        "Ut labore et dolore magna aliqua.",
-        "Ut enim ad minim veniam.",
-        "Duis aute irure dolor in reprehenderit.",
-        "Excepteur sint occaecat cupidatat non proident.",
-        "Sunt in culpa qui officia deserunt mollit.",
-        "Exercitation ullamco laboris nisi ut aliquip.",
-        "Quis nostrud exercitation ullamco laboris."
+        "Lorem ipsum dolor sit amet",
+        "Consectetur adipiscing elit",
+        "Sed do eiusmod tempor incididunt",
+        "Ut labore et dolore magna aliqua",
+        "Ut enim ad minim veniam",
+        "Duis aute irure dolor in reprehenderit",
+        "Excepteur sint occaecat cupidatat non proident",
+        "Sunt in culpa qui officia deserunt mollit",
+        "Exercitation ullamco laboris nisi ut aliquip",
+        "Quis nostrud exercitation ullamco laboris"
     ],
 
     templates: [
@@ -461,6 +526,440 @@ const gameTemplates = {
                 (/div)
             (/section)
         (/div)
-    (/article)`
+    (/article)`,
+
+            `(nav)
+        (ul)
+            (li)
+                (a)(lorem)(/a)
+                (ul)
+                    (li)(a)(lorem)(/a)(/li)
+                    (li)
+                        (a)(lorem)(/a)
+                        (ul)
+                            (li)(a)(lorem)(/a)(/li)
+                            (li)(a)(lorem)(/a)(/li)
+                        (/ul)
+                    (/li)
+                (/ul)
+            (/li)
+            (li)(a)(lorem)(/a)(/li)
+        (/ul)
+    (/nav)`,
+
+    `(table)
+        (thead)
+            (tr)
+                (th colspan="2")(lorem)(/th)
+                (th rowspan="2")(lorem)(/th)
+            (/tr)
+            (tr)
+                (th)(lorem)(/th)
+                (th)(lorem)(/th)
+            (/tr)
+        (/thead)
+        (tbody)
+            (tr)
+                (td rowspan="2")
+                    (ul)
+                        (li)(lorem)(/li)
+                        (li)(lorem)(/li)
+                    (/ul)
+                (/td)
+                (td)(lorem)(/td)
+                (td)(lorem)(/td)
+            (/tr)
+            (tr)
+                (td)(lorem)(/td)
+                (td)(lorem)(/td)
+            (/tr)
+        (/tbody)
+    (/table)`,
+
+    `(form)
+        (fieldset)
+            (legend)(lorem)(/legend)
+            (div)
+                (label)(lorem)(/label)
+                (input)
+            (/div)
+            (div)
+                (label)(lorem)(/label)
+                (select)
+                    (optgroup label="Group 1")
+                        (option)(lorem)(/option)
+                        (option)(lorem)(/option)
+                    (/optgroup)
+                    (optgroup label="Group 2")
+                        (option)(lorem)(/option)
+                        (option)(lorem)(/option)
+                    (/optgroup)
+                (/select)
+            (/div)
+        (/fieldset)
+        (fieldset)
+            (legend)(lorem)(/legend)
+            (div)
+                (input type="radio" id="r1")
+                (label for="r1")(lorem)(/label)
+            (/div)
+            (div)
+                (input type="checkbox" id="c1")
+                (label for="c1")(lorem)(/label)
+            (/div)
+        (/fieldset)
+        (div)
+            (button type="submit")(lorem)(/button)
+            (button type="reset")(lorem)(/button)
+        (/div)
+    (/form)`,
+
+    `(article)
+        (header)
+            (h1)(lorem)(/h1)
+            (div)
+                (span)(lorem)(/span)
+                (span)(lorem)(/span)
+            (/div)
+        (/header)
+        (section)
+            (p)(lorem)(/p)
+            (figure)
+                (img)
+                (figcaption)(lorem)(/figcaption)
+            (/figure)
+            (p)(lorem)(/p)
+        (/section)
+        (section)
+            (h2)(lorem)(/h2)
+            (article)
+                (header)
+                    (h3)(lorem)(/h3)
+                    (span)(lorem)(/span)
+                (/header)
+                (p)(lorem)(/p)
+            (/article)
+            (article)
+                (header)
+                    (h3)(lorem)(/h3)
+                    (span)(lorem)(/span)
+                (/header)
+                (p)(lorem)(/p)
+                (section)
+                    (h4)(lorem)(/h4)
+                    (p)(lorem)(/p)
+                (/section)
+            (/article)
+        (/section)
+    (/article)`,
+
+    `(div)
+        (header)
+            (nav)
+                (ul)
+                    (li)(a)(lorem)(/a)(/li)
+                    (li)(a)(lorem)(/a)(/li)
+                (/ul)
+            (/nav)
+        (/header)
+        (main)
+            (aside)
+                (nav)
+                    (ul)
+                        (li)(a)(lorem)(/a)(/li)
+                        (li)(a)(lorem)(/a)(/li)
+                    (/ul)
+                (/nav)
+            (/aside)
+            (article)
+                (section)
+                    (h1)(lorem)(/h1)
+                    (div)
+                        (p)(lorem)(/p)
+                        (aside)(lorem)(/aside)
+                    (/div)
+                (/section)
+                (section)
+                    (h2)(lorem)(/h2)
+                    (div)
+                        (div)
+                            (p)(lorem)(/p)
+                            (ul)
+                                (li)(lorem)(/li)
+                                (li)(lorem)(/li)
+                            (/ul)
+                        (/div)
+                        (figure)
+                            (img)
+                            (figcaption)(lorem)(/figcaption)
+                        (/figure)
+                    (/div)
+                (/section)
+            (/article)
+        (/main)
+        (footer)
+            (div)
+                (div)
+                    (nav)
+                        (ul)
+                            (li)(a)(lorem)(/a)(/li)
+                            (li)(a)(lorem)(/a)(/li)
+                        (/ul)
+                    (/nav)
+                (/div)
+                (div)(lorem)(/div)
+            (/div)
+        (/footer)
+    (/div)`,
+
+    `(table)
+        (colgroup)
+            (col span="2")
+            (col)
+        (/colgroup)
+        (thead)
+            (tr)
+                (th colspan="2")(lorem)(/th)
+                (th rowspan="2")(lorem)(/th)
+            (/tr)
+            (tr)
+                (th)(lorem)(/th)
+                (th)(lorem)(/th)
+            (/tr)
+        (/thead)
+        (tbody)
+            (tr)
+                (td rowspan="3")
+                    (ul)
+                        (li)(lorem)(/li)
+                        (li)(lorem)(/li)
+                    (/ul)
+                (/td)
+                (td)(lorem)(/td)
+                (td)(lorem)(/td)
+            (/tr)
+            (tr)
+                (td)(lorem)(/td)
+                (td)(lorem)(/td)
+            (/tr)
+            (tr)
+                (td)(lorem)(/td)
+                (td)(lorem)(/td)
+            (/tr)
+        (/tbody)
+        (tfoot)
+            (tr)
+                (td colspan="2")(lorem)(/td)
+                (td)(lorem)(/td)
+            (/tr)
+        (/tfoot)
+    (/table)`,
+
+    `(form)
+        (fieldset)
+            (legend)(lorem)(/legend)
+            (div)
+                (label)(lorem)(/label)
+                (input)
+            (/div)
+            (div)
+                (label)(lorem)(/label)
+                (div)
+                    (input type="radio")
+                    (label)(lorem)(/label)
+                (/div)
+                (div)
+                    (input type="radio")
+                    (label)(lorem)(/label)
+                (/div)
+            (/div)
+        (/fieldset)
+        (fieldset)
+            (legend)(lorem)(/legend)
+            (div)
+                (label)(lorem)(/label)
+                (select)
+                    (optgroup label="Group A")
+                        (option)(lorem)(/option)
+                        (option)(lorem)(/option)
+                    (/optgroup)
+                    (optgroup label="Group B")
+                        (option)(lorem)(/option)
+                        (option)(lorem)(/option)
+                    (/optgroup)
+                (/select)
+            (/div)
+            (div)
+                (label)(lorem)(/label)
+                (textarea)(/textarea)
+            (/div)
+        (/fieldset)
+        (div)
+            (button type="button")(lorem)(/button)
+            (button type="submit")(lorem)(/button)
+        (/div)
+    (/form)`,
+
+    `(div)
+        (header)
+            (h1)(lorem)(/h1)
+            (nav)
+                (ul)
+                    (li)(a)(lorem)(/a)(/li)
+                    (li)(a)(lorem)(/a)(/li)
+                (/ul)
+            (/nav)
+        (/header)
+        (main)
+            (article)
+                (header)
+                    (h2)(lorem)(/h2)
+                    (div)
+                        (span)(lorem)(/span)
+                        (span)(lorem)(/span)
+                    (/div)
+                (/header)
+                (section)
+                    (h3)(lorem)(/h3)
+                    (p)(lorem)(/p)
+                    (div)
+                        (figure)
+                            (img)
+                            (figcaption)(lorem)(/figcaption)
+                        (/figure)
+                        (p)(lorem)(/p)
+                    (/div)
+                (/section)
+                (section)
+                    (h3)(lorem)(/h3)
+                    (div)
+                        (div)
+                            (p)(lorem)(/p)
+                            (ul)
+                                (li)(lorem)(/li)
+                                (li)(lorem)(/li)
+                            (/ul)
+                        (/div)
+                        (div)
+                            (p)(lorem)(/p)
+                            (ol)
+                                (li)(lorem)(/li)
+                                (li)(lorem)(/li)
+                            (/ol)
+                        (/div)
+                    (/div)
+                (/section)
+            (/article)
+            (aside)
+                (h2)(lorem)(/h2)
+                (div)
+                    (section)
+                        (h3)(lorem)(/h3)
+                        (ul)
+                            (li)(a)(lorem)(/a)(/li)
+                            (li)(a)(lorem)(/a)(/li)
+                        (/ul)
+                    (/section)
+                    (section)
+                        (h3)(lorem)(/h3)
+                        (p)(lorem)(/p)
+                    (/section)
+                (/div)
+            (/aside)
+        (/main)
+        (footer)
+            (div)
+                (nav)
+                    (ul)
+                        (li)(a)(lorem)(/a)(/li)
+                        (li)(a)(lorem)(/a)(/li)
+                    (/ul)
+                (/nav)
+                (div)(lorem)(/div)
+            (/div)
+        (/footer)
+    (/div)`,
+
+    `(dl)
+        (dt)(lorem)(/dt)
+        (dd)(lorem)(/dd)
+        (dt)(lorem)(/dt)
+        (dd)
+            (ul)
+                (li)(lorem)(/li)
+                (li)
+                    (ol)
+                        (li)(lorem)(/li)
+                        (li)(lorem)(/li)
+                    (/ol)
+                (/li)
+            (/ul)
+        (/dd)
+        (dt)(lorem)(/dt)
+        (dd)
+            (dl)
+                (dt)(lorem)(/dt)
+                (dd)(lorem)(/dd)
+                (dt)(lorem)(/dt)
+                (dd)(lorem)(/dd)
+            (/dl)
+        (/dd)
+    (/dl)`,
+
+    `(div)
+        (section)
+            (h1)(lorem)(/h1)
+            (section)
+                (h2)(lorem)(/h2)
+                (div)
+                    (p)(lorem)(/p)
+                    (blockquote)
+                        (p)(lorem)(/p)
+                        (footer)(lorem)(/footer)
+                    (/blockquote)
+                (/div)
+                (section)
+                    (h3)(lorem)(/h3)
+                    (div)
+                        (div)
+                            (p)(lorem)(/p)
+                            (pre)(code)(lorem)(/code)(/pre)
+                        (/div)
+                        (div)
+                            (p)(lorem)(/p)
+                            (figure)
+                                (img)
+                                (figcaption)(lorem)(/figcaption)
+                            (/figure)
+                        (/div)
+                    (/div)
+                (/section)
+            (/section)
+            (section)
+                (h2)(lorem)(/h2)
+                (div)
+                    (table)
+                        (tr)
+                            (th)(lorem)(/th)
+                            (th)(lorem)(/th)
+                        (/tr)
+                        (tr)
+                            (td)(lorem)(/td)
+                            (td)(lorem)(/td)
+                        (/tr)
+                    (/table)
+                    (form)
+                        (div)
+                            (label)(lorem)(/label)
+                            (input)
+                        (/div)
+                        (div)
+                            (button)(lorem)(/button)
+                        (/div)
+                    (/form)
+                (/div)
+            (/section)
+        (/section)
+    (/div)`
     ]
 };
