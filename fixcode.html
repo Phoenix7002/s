@@ -270,6 +270,7 @@
 
 <body>
     <audio id="countdown-sound" src="sounds/teak.wav" preload="auto" volume="0.2"></audio>
+    <audio id="game-sound" src="sounds/timer_music.wav" preload="auto" loop></audio>
     <button id="settings-button" class="settings-button" onclick="openSettingsWindow()">
         <img src="images/settings_icon.png" alt="Настройки">
     </button>
@@ -524,28 +525,35 @@
             }, 500);
         }
 
-        function startGameTimer() {
-            let timeLeft = 60;
-            const timerProgress = document.getElementById('timer-progress');
-            timerProgress.style.width = '100%';
+function startGameTimer() {
+    let timeLeft = 60;
+    const timerProgress = document.getElementById('timer-progress');
+    const gameSound = document.getElementById('game-sound');
+    
+    timerProgress.style.width = '100%';
+    gameSound.currentTime = 0;
+    gameSound.volume = 0.3;
+    gameSound.loop = true;
+    gameSound.play().catch(e => console.log("Audio error:", e));
+    
+    clearInterval(gameState.gameTimer);
+    
+    gameState.gameTimer = setInterval(() => {
+        timeLeft--;
+        const progressPercent = (timeLeft / 60) * 100;
+        timerProgress.style.width = `${progressPercent}%`;
 
-            clearInterval(gameState.gameTimer);
-            
-            gameState.gameTimer = setInterval(() => {
-                timeLeft--;
-                const progressPercent = (timeLeft / 60) * 100;
-                timerProgress.style.width = `${progressPercent}%`;
-
-                if (timeLeft <= 10) {
-                    timerProgress.style.backgroundColor = '#dc3545';
-                }
-
-                if (timeLeft <= 0) {
-                    clearInterval(gameState.gameTimer);
-                    showResults();
-                }
-            }, 1000);
+        if (timeLeft <= 10) {
+            timerProgress.style.backgroundColor = '#dc3545';
         }
+
+        if (timeLeft <= 0) {
+            clearInterval(gameState.gameTimer);
+            gameSound.pause();
+            showResults();
+        }
+    }, 1000);
+}
 
         function showResults() {
             const userCode = document.getElementById('code-input').value;
@@ -587,6 +595,7 @@
             document.getElementById('code-input').value = '';
             document.getElementById('code-input').disabled = true;
             document.getElementById('countdown').textContent = '5';
+            document.getElementById('game-sound').pause();
             resetTimerProgress();
             gameState.currentCountdown = 5;
         }
