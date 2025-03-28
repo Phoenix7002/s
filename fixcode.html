@@ -143,34 +143,28 @@
             z-index: 3;
         }
 
-        .code-container {
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-            gap: 20px;
-            z-index: 2;
-        }
+.code-editor {
+    flex: 1;
+    border-radius: 5px;
+    overflow: hidden;
+    z-index: 2;
+    height: 70vh;
+    font-size: 16px;
+    line-height: 1.5;
+    border: 1px solid var(--border-color);
+}
 
-        .code-input {
-            flex: 1;
-            background-color: var(--input-bg);
-            border-radius: 5px;
-            padding: 15px;
-            font-family: 'Courier New', monospace;
-            overflow: auto;
-            z-index: 2;
-            resize: none;
-            color: var(--text-color);
-            border: 1px solid var(--border-color);
-            height: 70vh;
-            font-size: 16px;
-            line-height: 1.5;
-        }
+.CodeMirror {
+    height: 100% !important;
+    font-family: 'Courier New', monospace !important;
+    background-color: var(--input-bg) !important;
+    color: var(--text-color) !important;
+}
 
-        .code-input:disabled {
-            background-color: var(--input-bg);
-            opacity: 0.7;
-        }
+.CodeMirror-gutters {
+    background-color: var(--input-bg) !important;
+    border-right: 1px solid var(--border-color) !important;
+}
 
         .countdown {
             width: 120px;
@@ -266,6 +260,8 @@
     </style>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="icon" type="image/x-icon" href="images/icon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/dracula.min.css">
 </head>
 
 <body>
@@ -329,12 +325,7 @@
                 <button class="exit-button" onclick="showExitConfirm()">Выйти</button>
             </div>
             <div class="code-container">
-                <textarea id="code-input" class="code-input" spellcheck="false" disabled>
-                    // Введите исправленный код здесь
-                    function example() {
-                        console.log("Hello world)
-                    }
-                </textarea>
+              <div id="code-editor"></div>
                 <div class="timer-container">
                     <div id="timer-progress" class="timer-progress"></div>
                 </div>
@@ -362,6 +353,14 @@
     </div>
     <script src="js/script.js"></script>
     <script src="js/gameTemplates.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/htmlmixed/htmlmixed.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/css/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/clike/clike.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/matchbrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"></script>
     <script>
         const gameState = {
             correctCode: '',
@@ -444,6 +443,27 @@
             startCountdown();
         }
 
+function initializeCodeEditor() {
+    codeEditor = CodeMirror(document.getElementById('code-editor'), {
+        mode: 'javascript',
+        theme: 'dracula',
+        lineNumbers: true,
+        indentUnit: 4,
+        tabSize: 4,
+        lineWrapping: true,
+        matchBrackets: true,
+        autoCloseBrackets: true,
+        value: '// Введите исправленный код здесь\nfunction example() {\n    console.log("Hello world)\n}'
+    });
+    
+    document.addEventListener('themeChanged', updateEditorTheme);
+}
+        
+function updateEditorTheme() {
+    const theme = document.body.classList.contains('light-theme') ? 'default' : 'dracula';
+    codeEditor.setOption('theme', theme);
+}
+        
         function resetTimerProgress() {
             const timerProgress = document.getElementById('timer-progress');
             timerProgress.style.width = '100%';
@@ -456,7 +476,7 @@
 
         function setupGameWindow() {
             document.getElementById('game-window-container').style.display = 'block';
-            document.getElementById('code-input').disabled = true;
+            codeEditor.setOption('readOnly', true);
             document.getElementById('game-overlay').style.display = 'flex';
             document.getElementById('results-window').style.display = 'none';
             
@@ -551,6 +571,8 @@ function startGameTimer() {
             clearInterval(gameState.gameTimer);
             gameSound.pause();
             showResults();
+            codeEditor.setOption('readOnly', false);
+            codeEditor.focus();
         }
     }, 1000);
 }
@@ -596,6 +618,7 @@ function startGameTimer() {
             document.getElementById('code-input').disabled = true;
             document.getElementById('countdown').textContent = '5';
             document.getElementById('game-sound').pause();
+            codeEditor.setOption('readOnly', true);
             resetTimerProgress();
             gameState.currentCountdown = 5;
         }
