@@ -143,28 +143,28 @@
             z-index: 3;
         }
 
-.code-editor {
-    flex: 1;
-    border-radius: 5px;
-    overflow: hidden;
-    z-index: 2;
-    height: 70vh;
-    font-size: 16px;
-    line-height: 1.5;
-    border: 1px solid var(--border-color);
-}
+        .code-editor {
+            flex: 1;
+            border-radius: 5px;
+            overflow: hidden;
+            z-index: 2;
+            height: 70vh;
+            font-size: 16px;
+            line-height: 1.5;
+            border: 1px solid var(--border-color);
+        }
 
-.CodeMirror {
-    height: 100% !important;
-    font-family: 'Courier New', monospace !important;
-    background-color: var(--input-bg) !important;
-    color: var(--text-color) !important;
-}
+        .CodeMirror {
+            height: 100% !important;
+            font-family: 'Courier New', monospace !important;
+            background-color: var(--input-bg) !important;
+            color: var(--text-color) !important;
+        }
 
-.CodeMirror-gutters {
-    background-color: var(--input-bg) !important;
-    border-right: 1px solid var(--border-color) !important;
-}
+        .CodeMirror-gutters {
+            background-color: var(--input-bg) !important;
+            border-right: 1px solid var(--border-color) !important;
+        }
 
         .countdown {
             width: 120px;
@@ -325,7 +325,7 @@
                 <button class="exit-button" onclick="showExitConfirm()">Выйти</button>
             </div>
             <div class="code-container">
-              <div id="code-editor"></div>
+                <div id="code-editor"></div>
                 <div class="timer-container">
                     <div id="timer-progress" class="timer-progress"></div>
                 </div>
@@ -351,17 +351,54 @@
         </div>
         <button class="confirm-button" onclick="exitGame()">В главное меню</button>
     </div>
+    
     <script src="js/script.js"></script>
     <script src="js/gameTemplates.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/htmlmixed/htmlmixed.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/xml/xml.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/css/css.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/clike/clike.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/matchbrackets.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"></script>
+    
     <script>
+        // Глобальная переменная для редактора кода
+        let codeEditor;
+        
+        // Инициализация CodeMirror
+        function initializeCodeEditor() {
+            codeEditor = CodeMirror(document.getElementById('code-editor'), {
+                mode: 'javascript',
+                theme: 'dracula',
+                lineNumbers: true,
+                indentUnit: 4,
+                tabSize: 4,
+                lineWrapping: true,
+                matchBrackets: true,
+                autoCloseBrackets: true,
+                value: '// Введите исправленный код здесь\nfunction example() {\n    console.log("Hello world)\n}'
+            });
+            
+            // Обновляем тему редактора при изменении темы приложения
+            document.addEventListener('themeChanged', updateEditorTheme);
+        }
+        
+        // Обновление темы редактора
+        function updateEditorTheme() {
+            const theme = document.body.classList.contains('light-theme') ? 'default' : 'dracula';
+            codeEditor.setOption('theme', theme);
+        }
+        
+        // Инициализация при загрузке страницы
+        window.onload = function() {
+            initializeCodeEditor();
+            
+            // Обновляем размер редактора при изменении размера окна
+            window.addEventListener('resize', function() {
+                if (codeEditor) {
+                    codeEditor.refresh();
+                }
+            });
+        };
+
         const gameState = {
             correctCode: '',
             gameTimer: null,
@@ -436,32 +473,12 @@
             gameState.correctCode = generateCorrectCode(template, templatesData.correctTags, templatesData.loremTexts);
             const brokenCode = generateBrokenCode(gameState.correctCode, templatesData.correctTags, templatesData.incorrectTags);
 
+            codeEditor.setValue(brokenCode);
             resetTimerProgress();
             setupGameWindow();
             startCountdown();
         }
 
-function initializeCodeEditor() {
-    codeEditor = CodeMirror(document.getElementById('code-editor'), {
-        mode: 'javascript',
-        theme: 'dracula',
-        lineNumbers: true,
-        indentUnit: 4,
-        tabSize: 4,
-        lineWrapping: true,
-        matchBrackets: true,
-        autoCloseBrackets: true,
-        value: '// Введите исправленный код здесь\nfunction example() {\n    console.log("Hello world)\n}'
-    });
-    
-    document.addEventListener('themeChanged', updateEditorTheme);
-}
-        
-function updateEditorTheme() {
-    const theme = document.body.classList.contains('light-theme') ? 'default' : 'dracula';
-    codeEditor.setOption('theme', theme);
-}
-        
         function resetTimerProgress() {
             const timerProgress = document.getElementById('timer-progress');
             timerProgress.style.width = '100%';
@@ -498,14 +515,12 @@ function updateEditorTheme() {
             digitElement.textContent = gameState.currentCountdown;
             countdownElement.appendChild(digitElement);
 
-            // Первый звук сразу при старте
             playSound(sound);
 
             function updateCountdown() {
                 gameState.currentCountdown--;
                 digitElement.textContent = gameState.currentCountdown;
                 
-                // Всегда проигрываем звук при смене цифры
                 playSound(sound);
 
                 if (gameState.currentCountdown > 0) {
@@ -531,52 +546,49 @@ function updateEditorTheme() {
             const overlay = document.getElementById('game-overlay');
             
             countdownElement.classList.add('shrink');
-            
             overlay.classList.add('hide-blur');
             
             setTimeout(() => {
                 overlay.style.display = 'none';
-                document.getElementById('code-input').disabled = false;
-                document.getElementById('code-input').focus();
+                codeEditor.setOption('readOnly', false);
+                codeEditor.focus();
                 startGameTimer();
                 gameState.currentCountdown = 5;
             }, 500);
         }
 
-function startGameTimer() {
-    let timeLeft = 60;
-    const timerProgress = document.getElementById('timer-progress');
-    const gameSound = document.getElementById('game-sound');
-    
-    timerProgress.style.width = '100%';
-    gameSound.currentTime = 0;
-    gameSound.volume = 0.3;
-    gameSound.loop = true;
-    gameSound.play().catch(e => console.log("Audio error:", e));
-    
-    clearInterval(gameState.gameTimer);
-    
-    gameState.gameTimer = setInterval(() => {
-        timeLeft--;
-        const progressPercent = (timeLeft / 60) * 100;
-        timerProgress.style.width = `${progressPercent}%`;
-
-        if (timeLeft <= 10) {
-            timerProgress.style.backgroundColor = '#dc3545';
-        }
-
-        if (timeLeft <= 0) {
+        function startGameTimer() {
+            let timeLeft = 60;
+            const timerProgress = document.getElementById('timer-progress');
+            const gameSound = document.getElementById('game-sound');
+            
+            timerProgress.style.width = '100%';
+            gameSound.currentTime = 0;
+            gameSound.volume = 0.3;
+            gameSound.loop = true;
+            gameSound.play().catch(e => console.log("Audio error:", e));
+            
             clearInterval(gameState.gameTimer);
-            gameSound.pause();
-            showResults();
-            codeEditor.setOption('readOnly', false);
-            codeEditor.focus();
+            
+            gameState.gameTimer = setInterval(() => {
+                timeLeft--;
+                const progressPercent = (timeLeft / 60) * 100;
+                timerProgress.style.width = `${progressPercent}%`;
+
+                if (timeLeft <= 10) {
+                    timerProgress.style.backgroundColor = '#dc3545';
+                }
+
+                if (timeLeft <= 0) {
+                    clearInterval(gameState.gameTimer);
+                    gameSound.pause();
+                    showResults();
+                }
+            }, 1000);
         }
-    }, 1000);
-}
 
         function showResults() {
-            const userCode = document.getElementById('code-input').value;
+            const userCode = codeEditor.getValue();
             const similarity = calculateSimilarity(gameState.correctCode, userCode);
 
             document.getElementById('results-text').textContent = `Ваш результат: ${similarity}% совпадения!`;
@@ -612,11 +624,10 @@ function startGameTimer() {
             document.getElementById('game-overlay').style.display = 'none';
             document.getElementById('confirm-exit').style.display = 'none';
 
-            document.getElementById('code-input').value = '';
-            document.getElementById('code-input').disabled = true;
+            codeEditor.setValue('');
+            codeEditor.setOption('readOnly', true);
             document.getElementById('countdown').textContent = '5';
             document.getElementById('game-sound').pause();
-            codeEditor.setOption('readOnly', true);
             resetTimerProgress();
             gameState.currentCountdown = 5;
         }
