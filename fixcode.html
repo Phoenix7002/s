@@ -436,8 +436,6 @@
             gameState.correctCode = generateCorrectCode(template, templatesData.correctTags, templatesData.loremTexts);
             const brokenCode = generateBrokenCode(gameState.correctCode, templatesData.correctTags, templatesData.incorrectTags);
 
-            document.getElementById('code-input').value = brokenCode;
-
             resetTimerProgress();
             setupGameWindow();
             startCountdown();
