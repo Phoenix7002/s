@@ -21,35 +21,50 @@ const auth = getAuth(app);
 
 const authModal = document.getElementById('auth-modal');
 const gameContainer = document.getElementById('game-container');
+const mainAuthWindow = document.getElementById('main-auth-window');
+const loginWindow = document.getElementById('login-window');
+const registerWindow = document.getElementById('register-window');
+const loginBtn = document.getElementById('login-btn');
+const registerBtn = document.getElementById('register-btn');
 const loginForm = document.getElementById('login');
 const registerForm = document.getElementById('register');
 const loginEmail = document.getElementById('login-email');
 const loginPassword = document.getElementById('login-password');
 const registerEmail = document.getElementById('register-email');
 const registerPassword = document.getElementById('register-password');
+const registerConfirmPassword = document.getElementById('register-confirm-password');
 const loginError = document.getElementById('login-error');
 const registerError = document.getElementById('register-error');
 const userInfo = document.getElementById('user-info');
-const authTabs = document.querySelectorAll('.auth-tab');
-const authContents = document.querySelectorAll('.auth-content');
+const backButtons = document.querySelectorAll('.auth-back-btn');
 
-authTabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-        const tabName = tab.dataset.tab;
-        
-        authTabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        
-        authContents.forEach(content => {
-            content.classList.remove('active');
-            if (content.id === `${tabName}-form`) {
-                content.classList.add('active');
-            }
-        });
-        
-        loginError.textContent = '';
-        registerError.textContent = '';
-    });
+function showMainAuthWindow() {
+    mainAuthWindow.style.display = 'block';
+    loginWindow.style.display = 'none';
+    registerWindow.style.display = 'none';
+}
+
+function showLoginWindow() {
+    mainAuthWindow.style.display = 'none';
+    loginWindow.style.display = 'block';
+    registerWindow.style.display = 'none';
+    loginError.textContent = '';
+    loginForm.reset();
+}
+
+function showRegisterWindow() {
+    mainAuthWindow.style.display = 'none';
+    loginWindow.style.display = 'none';
+    registerWindow.style.display = 'block';
+    registerError.textContent = '';
+    registerForm.reset();
+}
+
+loginBtn.addEventListener('click', showLoginWindow);
+registerBtn.addEventListener('click', showRegisterWindow);
+
+backButtons.forEach(btn => {
+    btn.addEventListener('click', showMainAuthWindow);
 });
 
 loginForm.addEventListener('submit', async (e) => {
@@ -68,6 +83,17 @@ registerForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = registerEmail.value;
     const password = registerPassword.value;
+    const confirmPassword = registerConfirmPassword.value;
+    
+    if (password !== confirmPassword) {
+        registerError.textContent = 'Пароли не совпадают';
+        return;
+    }
+    
+    if (password.length < 6) {
+        registerError.textContent = 'Пароль должен содержать минимум 6 символов';
+        return;
+    }
     
     try {
         await createUserWithEmailAndPassword(auth, email, password);
@@ -81,17 +107,11 @@ onAuthStateChanged(auth, (user) => {
         authModal.classList.remove('active');
         gameContainer.classList.remove('blurred');
         userInfo.textContent = user.email;
-        
-        console.log('Пользователь вошел:', user.email);
     } else {
         authModal.classList.add('active');
         gameContainer.classList.add('blurred');
         userInfo.textContent = '';
-        
-        loginForm.reset();
-        registerForm.reset();
-        loginError.textContent = '';
-        registerError.textContent = '';
+        showMainAuthWindow();
     }
 });
 
