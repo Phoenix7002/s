@@ -5,17 +5,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const loaderVideo = document.querySelector('.loader-wheel');
     
     const VIDEO_DURATION = 12500;
-    const ICON_CHANGE_DELAY = 100;
+    const FADE_DURATION = 1000;
     
     let currentImage = 0;
     let isVideoPlaying = true;
 
     loaderVideo.addEventListener('timeupdate', function() {
-        if(this.currentTime >= this.duration - 0.5) { 
+        if(this.currentTime >= this.duration - 0.5) {
             if(isVideoPlaying) {
-                changeImage();
                 isVideoPlaying = false;
-                setTimeout(() => isVideoPlaying = true, VIDEO_DURATION - ICON_CHANGE_DELAY);
+                fadeOutCurrentIcon();
+                setTimeout(() => {
+                    showNextIcon();
+                    isVideoPlaying = true;
+                }, FADE_DURATION);
             }
         }
     });
@@ -24,30 +27,38 @@ document.addEventListener('DOMContentLoaded', () => {
         loaderImages[currentImage].classList.add('active');
     }
 
-    function changeImage() {
-        loaderImages[currentImage].classList.remove('active');
-        currentImage = (currentImage + 1) % loaderImages.length;
-        loaderImages[currentImage].classList.add('active');
-        animateIconRotation();
+    function fadeOutCurrentIcon() {
+        const activeIcon = document.querySelector('.loader-images img.active');
+        if(activeIcon) {
+            activeIcon.style.transition = `all ${FADE_DURATION/1000}s ease-in-out`;
+            activeIcon.style.transform = 'translate(-50%, -50%) scale(0.5)';
+            activeIcon.style.opacity = '0';
+        }
     }
 
-    function animateIconRotation() {
-        loaderImages[currentImage].style.transform = 'translate(-50%, -50%) rotate(0deg)';
-        requestAnimationFrame(() => {
-            loaderImages[currentImage].style.transform = 'translate(-50%, -50%) rotate(360deg)';
-        });
+    function showNextIcon() {
+        const activeIcon = document.querySelector('.loader-images img.active');
+        if(activeIcon) {
+            activeIcon.classList.remove('active');
+            activeIcon.style.transition = 'none';
+            activeIcon.style.transform = 'translate(-50%, -50%) scale(1)';
+            activeIcon.style.opacity = '0';
+        }
+
+        currentImage = (currentImage + 1) % loaderImages.length;
+        const nextIcon = loaderImages[currentImage];
+        
+        nextIcon.classList.add('active');
+        nextIcon.style.transition = `all ${FADE_DURATION/1000}s ease-in-out`;
+        nextIcon.style.opacity = '1';
     }
 
     const requiredSignals = 3;
     let receivedSignals = 0;
     
-    const simulateLoading = () => {
-        setTimeout(() => window.reportLoadingSuccess('assets'), 2000);
-        setTimeout(() => window.reportLoadingSuccess('audio'), 4500);
-        setTimeout(() => window.reportLoadingSuccess('config'), 7000);
-    };
-    
     window.reportLoadingSuccess = function(signalName) {
+        if(loadingScreen.classList.contains('fade-out')) return;
+        
         receivedSignals++;
         console.log(`Сигнал получен: ${signalName} (${receivedSignals}/${requiredSignals})`);
         
@@ -57,12 +68,17 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     
     function completeLoading() {
-        loadingScreen.classList.add('fade-out');
+        const timeLeft = VIDEO_DURATION - (loaderVideo.currentTime * 1000);
         setTimeout(() => {
-            loadingScreen.style.display = 'none';
-            gameMenu.classList.add('visible');
-        }, 1000);
+            loadingScreen.classList.add('fade-out');
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+                gameMenu.classList.add('visible');
+            }, 1000);
+        }, timeLeft);
     }
-    
-    simulateLoading();
+
+    setTimeout(() => window.reportLoadingSuccess('assets'), 2000);
+    setTimeout(() => window.reportLoadingSuccess('audio'), 4500);
+    setTimeout(() => window.reportLoadingSuccess('config'), 7000);
 });
