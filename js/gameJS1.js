@@ -5,6 +5,8 @@ import {
     signInWithEmailAndPassword,
     onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+import { updateProfile } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+import { initMenu } from "./menu.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDoJ6gw_zuE5D-ftxQxe2vDeK6HVTWP23E",
@@ -81,12 +83,13 @@ loginForm.addEventListener('submit', async (e) => {
 
 registerForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const email = registerEmail.value;
-    const password = registerPassword.value;
-    const confirmPassword = registerConfirmPassword.value;
+    const email = document.getElementById('register-email').value;
+    const password = document.getElementById('register-password').value;
+    const confirmPassword = document.getElementById('register-confirm-password').value;
+    const nickname = prompt('Введите ваш никнейм:') || email.split('@')[0];
     
     if (password !== confirmPassword) {
-        registerError.textContent = 'Пароли не совпадают';
+        document.getElementById('register-error').textContent = 'Пароли не совпадают';
         return;
     }
     
