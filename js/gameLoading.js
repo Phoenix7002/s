@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const loadingScreen = document.querySelector('.loading-screen');
     const gameMenu = document.querySelector('.game-menu');
+    const authWindow = document.querySelector('.auth-window');
     const loaderImages = document.querySelectorAll('.loader-images img');
     const loaderVideo = document.querySelector('.loader-wheel');
     
@@ -9,6 +10,44 @@ document.addEventListener('DOMContentLoaded', () => {
     
     let currentImage = 0;
     let isVideoPlaying = true;
+    let loadingSignals = {
+        firebase: false,
+        auth: false,
+        server: false
+    };
+
+    async function checkServerConnection() {
+        try {
+            const response = await fetch(`https://${firebaseConfig.authDomain}/__/favicon.ico?${Date.now()}`);
+            if (response.ok) {
+                console.log("Соединение с сервером установлено");
+                return true;
+            }
+        } catch (error) {
+            console.warn("Ошибка соединения с сервером:", error);
+        }
+        return false;
+    }
+
+    async function initFirebase() {
+        try {
+            await checkServerConnection();
+            const app = initializeApp(firebaseConfig);
+            const auth = getAuth(app);
+            
+            onAuthStateChanged(auth, (user) => {
+                loadingSignals.auth = true;
+                window.reportLoadingSuccess('auth_ready');
+            });
+            
+            loadingSignals.firebase = true;
+            window.reportLoadingSuccess('firebase_ready');
+            return true;
+        } catch (error) {
+            console.error("Ошибка инициализации Firebase:", error);
+            return false;
+        }
+    }
 
     loaderVideo.addEventListener('timeupdate', function() {
         if(this.currentTime >= this.duration - 0.5) {
@@ -53,32 +92,61 @@ document.addEventListener('DOMContentLoaded', () => {
         nextIcon.style.opacity = '1';
     }
 
-    const requiredSignals = 3;
-    let receivedSignals = 0;
-    
     window.reportLoadingSuccess = function(signalName) {
-        if(loadingScreen.classList.contains('fade-out')) return;
+        console.log(`Сигнал загрузки: ${signalName}`);
         
-        receivedSignals++;
-        console.log(`Сигнал получен: ${signalName} (${receivedSignals}/${requiredSignals})`);
+        switch(signalName) {
+            case 'firebase_ready':
+                loadingSignals.firebase = true;
+                break;
+            case 'auth_ready':
+                loadingSignals.auth = true;
+                break;
+            case 'server_ready':
+                loadingSignals.server = true;
+                break;
+        }
         
-        if(receivedSignals >= requiredSignals) {
+        checkAllSignals();
+    };
+
+    function checkAllSignals() {
+        const allReady = Object.values(loadingSignals).every(Boolean);
+        if(allReady) {
             completeLoading();
         }
-    };
-    
+    }
+
     function completeLoading() {
-        const timeLeft = VIDEO_DURATION - (loaderVideo.currentTime * 1000);
+        const timeLeft = Math.max(0, VIDEO_DURATION - (loaderVideo.currentTime * 1000));
+        
         setTimeout(() => {
             loadingScreen.classList.add('fade-out');
             setTimeout(() => {
                 loadingScreen.style.display = 'none';
-                gameMenu.classList.add('visible');
+                
+                const auth = getAuth();
+                if(auth.currentUser) {
+                    gameMenu.classList.add('visible');
+                } else {
+                    authWindow.classList.remove('hidden');
+                }
             }, 1000);
         }, timeLeft);
     }
 
-    setTimeout(() => window.reportLoadingSuccess('assets'), 2000);
-    setTimeout(() => window.reportLoadingSuccess('audio'), 4500);
-    setTimeout(() => window.reportLoadingSuccess('config'), 7000);
+    async function startLoading() {
+        const serverConnected = await checkServerConnection();
+        if(serverConnected) {
+            loadingSignals.server = true;
+            window.reportLoadingSuccess('server_ready');
+        }
+        
+        await initFirebase();
+        
+        setTimeout(() => window.reportLoadingSuccess('assets_loaded'), 1500);
+        setTimeout(() => window.reportLoadingSuccess('audio_loaded'), 3000);
+    }
+
+    startLoading();
 });
