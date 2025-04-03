@@ -1,0 +1,104 @@
+#main-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 500;
+}
+
+.main-menu-container {
+    background-color: rgba(45, 52, 54, 0.9);
+    border: 3px solid #ff4757;
+    border-radius: 12px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 300px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+}
+
+.profile-container {
+    background-color: rgba(45, 52, 54, 0.9);
+    border: 3px solid #ff4757;
+    border-radius: 12px;
+    padding: 20px;
+    margin-right: -15px;
+    width: 250px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+    position: relative;
+}
+
+#main-menu button {
+    padding: 15px;
+    background-color: #ff4757;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+#main-menu button:hover {
+    background-color: #ff6b81;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+#main-menu button:disabled {
+    background-color: #636e72;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+#main-menu button:disabled:hover {
+    background-color: #636e72;
+}
+
+#player-profile {
+    text-align: center;
+    margin-top: 30px;
+}
+
+#player-nickname {
+    color: #ff4757;
+    margin-bottom: 20px;
+    word-break: break-all;
+}
+
+#settings-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+#settings-menu {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#delete-account-btn {
+    background-color: #ff0000;
+}
+
+#delete-account-btn:hover {
+    background-color: #ff4d4d;
+}
