@@ -22,12 +22,13 @@ body {
 
 .loader-container {
     position: relative;
-    width: 150px;
-    height: 150px;
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
     overflow: hidden;
     background: white;
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    border: 3px solid #4a6bff;
 }
 
 .loader-wheel {
@@ -48,8 +49,8 @@ body {
 
 .loader-images img {
     position: absolute;
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) rotate(0deg);
