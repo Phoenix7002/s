@@ -1,12 +1,14 @@
-const player = document.getElementById('player');
+const playerElement = document.getElementById('player');
 
-let posX = 100;
-let posY = 0;
-
-let velX = 0;
-let velY = 0;
-
-let isJumping = false;
+let playerState = {
+  x: 100,
+  y: 0,
+  velX: 0,
+  velY: 0,
+  isJumping: false,
+  width: playerElement.offsetWidth,
+  height: playerElement.offsetHeight
+};
 
 const gravity = 0.5;
 const jumpStrength = 12;
@@ -25,37 +27,31 @@ document.addEventListener('keyup', (e) => {
 });
 
 function updatePlayer() {
-  // Горизонтальное управление с инерцией
-  if (keys['a']) {
-    velX -= acceleration;
-  }
-  if (keys['d']) {
-    velX += acceleration;
-  }
+  // Управление
+  if (keys['a']) playerState.velX -= acceleration;
+  if (keys['d']) playerState.velX += acceleration;
 
-  velX *= friction;
+  playerState.velX *= friction;
+  playerState.velX = Math.max(-maxSpeed, Math.min(maxSpeed, playerState.velX));
 
-  // Ограничим максимальную скорость
-  velX = Math.max(-maxSpeed, Math.min(maxSpeed, velX));
-
-  if (keys[' '] && !isJumping) {
-    velY = jumpStrength;
-    isJumping = true;
+  if (keys[' '] && !playerState.isJumping) {
+    playerState.velY = jumpStrength;
+    playerState.isJumping = true;
   }
 
-  velY -= gravity;
+  // Гравитация
+  playerState.velY -= gravity;
 
-  posX += velX;
-  posY += velY;
+  // Обновляем позицию
+  playerState.x += playerState.velX;
+  playerState.y += playerState.velY;
 
-  if (posY < 0) {
-    posY = 0;
-    velY = 0;
-    isJumping = false;
-  }
+  // Коллизии от мира
+  playerState = world.checkCollisions(playerState);
 
-  player.style.left = `${posX}px`;
-  player.style.bottom = `${posY}px`;
+  // Отображение
+  playerElement.style.left = `${playerState.x}px`;
+  playerElement.style.bottom = `${playerState.y}px`;
 
   requestAnimationFrame(updatePlayer);
 }
