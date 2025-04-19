@@ -2,39 +2,53 @@ const player = document.getElementById('player');
 
 let posX = 100;
 let posY = 0;
+
+let velX = 0;
 let velY = 0;
+
 let isJumping = false;
+
 const gravity = 0.5;
 const jumpStrength = 12;
-const speed = 4;
+const acceleration = 0.5;
+const friction = 0.85;
+const maxSpeed = 5;
 
 let keys = {};
 
 document.addEventListener('keydown', (e) => {
-  keys[e.key] = true;
+  keys[e.key.toLowerCase()] = true;
 });
 
 document.addEventListener('keyup', (e) => {
-  keys[e.key] = false;
+  keys[e.key.toLowerCase()] = false;
 });
 
 function updatePlayer() {
-  // Горизонтальное движение
-  if (keys['a']) posX -= speed;
-  if (keys['d']) posX += speed;
+  // Горизонтальное управление с инерцией
+  if (keys['a']) {
+    velX -= acceleration;
+  }
+  if (keys['d']) {
+    velX += acceleration;
+  }
 
-  // Прыжок
+  velX *= friction;
+
+  // Ограничим максимальную скорость
+  velX = Math.max(-maxSpeed, Math.min(maxSpeed, velX));
+
   if (keys[' '] && !isJumping) {
-    velY = -jumpStrength;
+    velY = jumpStrength;
     isJumping = true;
   }
 
-  // Гравитация
-  velY += gravity;
+  velY -= gravity;
+
+  posX += velX;
   posY += velY;
 
-  // Столкновение с полом
-  if (posY > 0) {
+  if (posY < 0) {
     posY = 0;
     velY = 0;
     isJumping = false;
