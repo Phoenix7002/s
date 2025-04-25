@@ -66,24 +66,7 @@
         border: 2px solid var(--border-color);
         border-radius: 8px;
     }
-
-    button {
-        padding: 10px 20px;
-        background-color: var(--button-bg);
-        color: white;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 16px;
-        transition: all 0.3s ease;
-        margin-top: 10px;
-    }
-
-    button:hover {
-        background-color: var(--hover-button-bg);
-        transform: translateY(-2px);
-    }
-
+    
     .debug {
         margin-top: 20px;
     }
@@ -136,17 +119,17 @@
       <div class="chat-message ai-message">Привет! Загадать число от 0 до 9, чтобы я его угадал.</div>
     </div>
     <input type="number" id="target" min="0" max="9">
-    <button onclick="aiGuess()">ИИ угадывает 1 раз</button>
+    <button class="standard-button" onclick="aiGuess()">ИИ угадывает 1 раз</button>
     
     <div class="debug">
       <h3>Отладка</h3>
       <label>Цифра для отладки: <input type="number" id="debugDigit" min="0" max="9"></label>
-      <button onclick="increaseIndex()">+ Индекс</button>
-      <button onclick="decreaseIndex()">- Индекс</button>
-      <button onclick="setCurrentStep()">Перейти к шагу</button>
-      <button onclick="aiGuessLoop()">ИИ угадывает 100 раз</button>
-      <button onclick="setAllIndices(5)">Все индексы = 5</button>
-      <button onclick="setAllIndices(-5)">Все индексы = -5</button>
+      <button class="standard-button" onclick="increaseIndex()">+ Индекс</button>
+      <button class="standard-button" onclick="decreaseIndex()">- Индекс</button>
+      <button class="standard-button" onclick="setCurrentStep()">Перейти к шагу</button>
+      <button class="standard-button" onclick="aiGuessLoop()">ИИ угадывает 100 раз</button>
+      <button class="standard-button" onclick="setAllIndices(5)">Все индексы = 5</button>
+      <button class="standard-button" onclick="setAllIndices(-5)">Все индексы = -5</button>
     </div>
   </div>
 
