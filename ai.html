@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>ИИ угадывает число</title>
+  <link rel="stylesheet" href="css/mainStyles.css">
+  <link rel="icon" type="image/x-icon" href="images/icon.png">
+  <style>
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: var(--background-color);
+        color: var(--text-color);
+        margin: 0;
+        padding: 20px;
+    }
+    
+    .chat-container {
+        background: var(--container-bg);
+        border-radius: 12px;
+        box-shadow: 0 4px 20px var(--shadow-color);
+        padding: 20px;
+        max-width: 500px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        height: 500px;
+    }
+    
+    .chat {
+        flex-grow: 1;
+        overflow-y: auto;
+        margin-bottom: 20px;
+        padding: 10px;
+        background-color: var(--input-bg);
+        border-radius: 8px;
+        box-shadow: 0 2px 10px var(--shadow-color);
+        height: 400px;
+    }
+    
+    .chat-message {
+        padding: 10px;
+        background-color: var(--input-bg);
+        border-radius: 8px;
+        margin-bottom: 10px;
+        max-width: 80%;
+        word-wrap: break-word;
+    }
+    
+    .user-message {
+        background-color: var(--primary-color);
+        color: #fff;
+        margin-left: auto;
+    }
+
+    .ai-message {
+        background-color: var(--container-bg);
+        color: var(--text-color);
+    }
+
+    input[type="number"] {
+        width: 60px;
+        padding: 10px;
+        margin-right: 10px;
+        background-color: var(--input-bg);
+        color: var(--text-color);
+        border: 2px solid var(--border-color);
+        border-radius: 8px;
+    }
+
+    button {
+        padding: 10px 20px;
+        background-color: var(--button-bg);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        margin-top: 10px;
+    }
+
+    button:hover {
+        background-color: var(--hover-button-bg);
+        transform: translateY(-2px);
+    }
+
+    .debug {
+        margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+<button id="settings-button" class="settings-button">
+    <img src="images/settings_icon.png" alt="Настройки">
+</button>
+
+<div id="settings-window" class="settings-window">
+    <button class="close-button" onclick="closeSettingsWindow()">×</button>
+    <h2>Настройки</h2>
+    <div class="settings-option">
+        <label for="theme-select">Тема:</label>
+        <select id="theme-select">
+            <option value="dark">Тёмная</option>
+            <option value="light">Светлая</option>
+        </select>
+    </div>
+</div>    
+    <button id="navToggle" class="nav-toggle"></button>
+
+    <nav id="navPanel" class="nav-panel">
+        <ul>
+            <li>
+                <a href="/s">
+                    <img src="images/home_icon.png" alt="Главная">
+                    <span>Главная</span>
+                </a>
+            </li>
+            <li>
+                <a href="/s/survey">
+                    <img src="images/survey_icon.png" alt="Опрос">
+                    <span>Опрос</span>
+                </a>
+            </li>
+            <li>
+                <a href="/s/translator">
+                    <img src="images/translate_icon.png" alt="Переводчик">
+                    <span>Переводчик</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+  
+  <div class="chat-container">
+    <h2 style="text-align:center;">Чат с ИИ</h2>
+    <div class="chat" id="chat">
+      <div class="chat-message ai-message">Привет! Загадать число от 0 до 9, чтобы я его угадал.</div>
+    </div>
+    <input type="number" id="target" min="0" max="9">
+    <button onclick="aiGuess()">ИИ угадывает 1 раз</button>
+    
+    <div class="debug">
+      <h3>Отладка</h3>
+      <label>Цифра для отладки: <input type="number" id="debugDigit" min="0" max="9"></label>
+      <button onclick="increaseIndex()">+ Индекс</button>
+      <button onclick="decreaseIndex()">- Индекс</button>
+      <button onclick="setCurrentStep()">Перейти к шагу</button>
+      <button onclick="aiGuessLoop()">ИИ угадывает 100 раз</button>
+      <button onclick="setAllIndices(5)">Все индексы = 5</button>
+      <button onclick="setAllIndices(-5)">Все индексы = -5</button>
+    </div>
+  </div>
+
+  <script>
+    const indices = Array(10).fill(0);
+    const skipCounts = Array(10).fill(0);
+    const chatElement = document.getElementById('chat');
+    let currentStep = 0;
+
+    function log(message, fromAI = true) {
+      const messageElement = document.createElement('div');
+      messageElement.classList.add('chat-message');
+      if (fromAI) {
+        messageElement.classList.add('ai-message');
+      } else {
+        messageElement.classList.add('user-message');
+      }
+      messageElement.textContent = message;
+      chatElement.appendChild(messageElement);
+      chatElement.scrollTop = chatElement.scrollHeight;
+    }
+
+    function shouldAutoPick(index) {
+      if (index < 2) return false;
+      const chance = [0, 0, 0.5, 0.75, 0.9, 0.99][index];
+      return Math.random() < chance;
+    }
+
+    function shouldSkip(index, digit) {
+      if (index > -2) return false;
+      if (skipCounts[digit] >= 3) return false; // принудительный выбор после 3 пропусков
+      const chance = [0, 0, 0.5, 0.75, 0.9, 0.99][Math.abs(index)];
+      return Math.random() < chance;
+    }
+
+    function aiGuess() {
+      const target = parseInt(document.getElementById('target').value);
+      if (isNaN(target) || target < 0 || target > 9) {
+        log('Пожалуйста, введите число от 0 до 9.', false);
+        return;
+      }
+
+      for (let i = 0; i < 10; i++) {
+        if (shouldAutoPick(indices[i])) {
+          log(`Я выбрал ${i} (индекс: ${indices[i]})`, true);
+          updateIndex(i, i === target);
+          return;
+        }
+      }
+
+      const i = currentStep;
+      const index = indices[i];
+
+      if (index <= -2 && skipCounts[i] >= 3) {
+        log(`Я принудительно выбрал ${i} после 3 пропусков (индекс: ${index})`, true);
+        updateIndex(i, i === target);
+        skipCounts[i] = 0;
+      } else if (shouldSkip(index, i)) {
+        log(`Я пропустил ${i} (индекс: ${index})`, true);
+        skipCounts[i]++;
+      } else {
+        log(`Я выбрал ${i} (индекс: ${index})`, true);
+        updateIndex(i, i === target);
+        skipCounts[i] = 0;
+      }
+
+      currentStep = (currentStep + 1) % 10;
+    }
+
+    function updateIndex(i, correct) {
+      if (correct) {
+        log(`Правильно! Индекс ${i} увеличен.`, true);
+        indices[i] = Math.min(indices[i] + 1, 5);
+      } else {
+        log(`Неправильно. Индекс ${i} уменьшен.`, true);
+        indices[i] = Math.max(indices[i] - 1, -5);
+      }
+    }
+
+    function increaseIndex() {
+      const digit = getDebugDigit();
+      if (digit !== null) {
+        indices[digit] = Math.min(indices[digit] + 1, 5);
+        log(`Индекс ${digit} увеличен вручную до ${indices[digit]}`, true);
+      }
+    }
+
+    function decreaseIndex() {
+      const digit = getDebugDigit();
+      if (digit !== null) {
+        indices[digit] = Math.max(indices[digit] - 1, -5);
+        log(`Индекс ${digit} уменьшен вручную до ${indices[digit]}`, true);
+      }
+    }
+
+    function getDebugDigit() {
+      const digit = parseInt(document.getElementById('debugDigit').value);
+      if (isNaN(digit) || digit < 0 || digit > 9) {
+        log('Введите корректную цифру от 0 до 9 для отладки.', false);
+        return null;
+      }
+      return digit;
+    }
+
+    function setCurrentStep() {
+      const digit = getDebugDigit();
+      if (digit !== null) {
+        currentStep = digit;
+        log(`Теперь начну проверку с цифры ${digit}`, true);
+      }
+    }
+
+    function setAllIndices(value) {
+      for (let i = 0; i < 10; i++) {
+        indices[i] = value;
+        skipCounts[i] = 0;
+      }
+      log(`Все индексы установлены в ${value}`, true);
+    }
+  </script>
+  <script src="js/mainScript.js"></script>
+</body>
+</html>
