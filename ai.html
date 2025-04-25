@@ -128,8 +128,17 @@
     const chatElement = document.getElementById('chat');
     let currentStep = 0;
 
-    function log(message, fromAI = true) {
-        console.log(message);  // Выводим лог в консоль
+    function addChatMessage(message, fromAI = true) {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('chat-message');
+        if (fromAI) {
+            messageElement.classList.add('ai-message');
+        } else {
+            messageElement.classList.add('user-message');
+        }
+        messageElement.textContent = message;
+        chatElement.appendChild(messageElement);
+        chatElement.scrollTop = chatElement.scrollHeight;  // Прокручиваем вниз
     }
 
     function shouldAutoPick(index) {
@@ -148,14 +157,14 @@
     function aiGuess() {
         const target = parseInt(document.getElementById('target').value);
         if (isNaN(target) || target < 0 || target > 9) {
-            log('Пожалуйста, введите число от 0 до 9.', false);
+            addChatMessage('Пожалуйста, введите число от 0 до 9.', false);
             return;
         }
 
         for (let i = 0; i < 10; i++) {
             if (shouldAutoPick(indices[i])) {
                 const result = i === target ? 'верным' : 'неверным';
-                log(`Я выбрал ${i} — оно оказалось ${result}`, true);
+                addChatMessage(`Я выбрал ${i} — оно оказалось ${result}`, true);
                 updateIndex(i, i === target);
                 return;
             }
@@ -165,14 +174,14 @@
         const index = indices[i];
 
         if (index <= -2 && skipCounts[i] >= 3) {
-            log(`Я принудительно выбрал ${i} после 3 пропусков (индекс: ${index})`, true);
+            addChatMessage(`Я принудительно выбрал ${i} после 3 пропусков (индекс: ${index})`, true);
             updateIndex(i, i === target);
             skipCounts[i] = 0;
         } else if (shouldSkip(index, i)) {
-            log(`Я пропустил ${i} (индекс: ${index})`, true);
+            addChatMessage(`Я пропустил ${i} (индекс: ${index})`, true);
             skipCounts[i]++;
         } else {
-            log(`Я выбрал ${i} (индекс: ${index})`, true);
+            addChatMessage(`Я выбрал ${i} (индекс: ${index})`, true);
             updateIndex(i, i === target);
             skipCounts[i] = 0;
         }
@@ -182,16 +191,16 @@
 
     function updateIndex(i, correct) {
         if (correct) {
-            log(`Правильно! Индекс ${i} увеличен.`, true);
+            addChatMessage(`Правильно! Индекс ${i} увеличен.`, true);
             indices[i] = Math.min(indices[i] + 1, 5);
         } else {
-            log(`Неправильно. Индекс ${i} уменьшен.`, true);
+            addChatMessage(`Неправильно. Индекс ${i} уменьшен.`, true);
             indices[i] = Math.max(indices[i] - 1, -5);
         }
 
         // Если все индексы -5, сбрасываем их до 0
         if (indices.every(index => index === -5)) {
-            log("Все индексы равны -5. Сбрасываю их до 0.", true);
+            addChatMessage("Все индексы равны -5. Сбрасываю их до 0.", true);
             indices.fill(0);  // Сбрасываем все индексы до 0
         }
     }
@@ -206,7 +215,7 @@
         const digit = getDebugDigit();
         if (digit !== null) {
             indices[digit] = Math.min(indices[digit] + 1, 5);
-            log(`Индекс ${digit} увеличен вручную до ${indices[digit]}`, true);
+            addChatMessage(`Индекс ${digit} увеличен вручную до ${indices[digit]}`, true);
         }
     }
 
@@ -214,14 +223,14 @@
         const digit = getDebugDigit();
         if (digit !== null) {
             indices[digit] = Math.max(indices[digit] - 1, -5);
-            log(`Индекс ${digit} уменьшен вручную до ${indices[digit]}`, true);
+            addChatMessage(`Индекс ${digit} уменьшен вручную до ${indices[digit]}`, true);
         }
     }
 
     function getDebugDigit() {
         const digit = parseInt(document.getElementById('debugDigit').value);
         if (isNaN(digit) || digit < 0 || digit > 9) {
-            log('Введите корректную цифру от 0 до 9 для отладки.', false);
+            addChatMessage('Введите корректную цифру от 0 до 9 для отладки.', false);
             return null;
         }
         return digit;
@@ -231,7 +240,7 @@
         const digit = getDebugDigit();
         if (digit !== null) {
             currentStep = digit;
-            log(`Теперь начну проверку с цифры ${digit}`, true);
+            addChatMessage(`Теперь начну проверку с цифры ${digit}`, true);
         }
     }
 
@@ -240,7 +249,7 @@
             indices[i] = value;
             skipCounts[i] = 0;
         }
-        log(`Все индексы установлены в ${value}`, true);
+        addChatMessage(`Все индексы установлены в ${value}`, true);
     }
 </script>
 <script src="js/mainScript.js"></script>
