@@ -141,6 +141,10 @@
         chatElement.scrollTop = chatElement.scrollHeight;  // Прокручиваем вниз
     }
 
+    function log(message) {
+        console.log(message);  // Логирование только в консоль
+    }
+
     function shouldAutoPick(index) {
         if (index < 2) return false;
         const chance = [0, 0, 0.5, 0.75, 0.9, 0.99][index];
