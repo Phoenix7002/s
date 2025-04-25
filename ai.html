@@ -35,6 +35,7 @@
         border-radius: 8px;
         box-shadow: 0 2px 10px var(--shadow-color);
         height: 400px;
+        position: relative;
     }
     
     .chat-message {
@@ -57,6 +58,14 @@
         color: var(--text-color);
     }
 
+    .number-input-container {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        display: flex;
+        align-items: center;
+    }
+
     input[type="number"] {
         width: 60px;
         padding: 10px;
@@ -66,7 +75,7 @@
         border: 2px solid var(--border-color);
         border-radius: 8px;
     }
-    
+
     .debug {
         margin-top: 20px;
     }
@@ -88,168 +97,137 @@
         </select>
     </div>
 </div>    
-    <button id="navToggle" class="nav-toggle"></button>
 
-    <nav id="navPanel" class="nav-panel">
-        <ul>
-            <li>
-                <a href="/s">
-                    <img src="images/home_icon.png" alt="Главная">
-                    <span>Главная</span>
-                </a>
-            </li>
-            <li>
-                <a href="/s/survey">
-                    <img src="images/survey_icon.png" alt="Опрос">
-                    <span>Опрос</span>
-                </a>
-            </li>
-            <li>
-                <a href="/s/translator">
-                    <img src="images/translate_icon.png" alt="Переводчик">
-                    <span>Переводчик</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
-  
-  <div class="chat-container">
-    <h2 style="text-align:center;">Чат с ИИ</h2>
-    <div class="chat" id="chat">
-      <div class="chat-message ai-message">Привет! Загадать число от 0 до 9, чтобы я его угадал.</div>
+    <div class="chat-container">
+        <h2 style="text-align:center;">Чат с ИИ</h2>
+        <div class="chat" id="chat">
+            <div class="chat-message ai-message">Привет! Загадать число от 0 до 9, чтобы я его угадал.</div>
+            <div class="number-input-container">
+                <input type="number" id="target" min="0" max="9">
+                <button class="standard-button" onclick="aiGuess()">ИИ угадывает 1 раз</button>
+            </div>
+        </div>
+        
+        <div class="debug">
+            <h3>Отладка</h3>
+            <label>Цифра для отладки: <input type="number" id="debugDigit" min="0" max="9"></label>
+            <button class="standard-button" onclick="increaseIndex()">+ Индекс</button>
+            <button class="standard-button" onclick="decreaseIndex()">- Индекс</button>
+            <button class="standard-button" onclick="setCurrentStep()">Перейти к шагу</button>
+            <button class="standard-button" onclick="aiGuessLoop()">ИИ угадывает 100 раз</button>
+            <button class="standard-button" onclick="setAllIndices(5)">Все индексы = 5</button>
+            <button class="standard-button" onclick="setAllIndices(-5)">Все индексы = -5</button>
+        </div>
     </div>
-    <input type="number" id="target" min="0" max="9">
-    <button class="standard-button" onclick="aiGuess()">ИИ угадывает 1 раз</button>
-    
-    <div class="debug">
-      <h3>Отладка</h3>
-      <label>Цифра для отладки: <input type="number" id="debugDigit" min="0" max="9"></label>
-      <button class="standard-button" onclick="increaseIndex()">+ Индекс</button>
-      <button class="standard-button" onclick="decreaseIndex()">- Индекс</button>
-      <button class="standard-button" onclick="setCurrentStep()">Перейти к шагу</button>
-      <button class="standard-button" onclick="aiGuessLoop()">ИИ угадывает 100 раз</button>
-      <button class="standard-button" onclick="setAllIndices(5)">Все индексы = 5</button>
-      <button class="standard-button" onclick="setAllIndices(-5)">Все индексы = -5</button>
-    </div>
-  </div>
 
-  <script>
-    const indices = Array(10).fill(0);
-    const skipCounts = Array(10).fill(0);
-    const chatElement = document.getElementById('chat');
-    let currentStep = 0;
+    <script>
+        const indices = Array(10).fill(0);
+        const skipCounts = Array(10).fill(0);
+        const chatElement = document.getElementById('chat');
+        let currentStep = 0;
 
-    function log(message, fromAI = true) {
-      const messageElement = document.createElement('div');
-      messageElement.classList.add('chat-message');
-      if (fromAI) {
-        messageElement.classList.add('ai-message');
-      } else {
-        messageElement.classList.add('user-message');
-      }
-      messageElement.textContent = message;
-      chatElement.appendChild(messageElement);
-      chatElement.scrollTop = chatElement.scrollHeight;
-    }
-
-    function shouldAutoPick(index) {
-      if (index < 2) return false;
-      const chance = [0, 0, 0.5, 0.75, 0.9, 0.99][index];
-      return Math.random() < chance;
-    }
-
-    function shouldSkip(index, digit) {
-      if (index > -2) return false;
-      if (skipCounts[digit] >= 3) return false; // принудительный выбор после 3 пропусков
-      const chance = [0, 0, 0.5, 0.75, 0.9, 0.99][Math.abs(index)];
-      return Math.random() < chance;
-    }
-
-    function aiGuess() {
-      const target = parseInt(document.getElementById('target').value);
-      if (isNaN(target) || target < 0 || target > 9) {
-        log('Пожалуйста, введите число от 0 до 9.', false);
-        return;
-      }
-
-      for (let i = 0; i < 10; i++) {
-        if (shouldAutoPick(indices[i])) {
-          log(`Я выбрал ${i} (индекс: ${indices[i]})`, true);
-          updateIndex(i, i === target);
-          return;
+        function log(message, fromAI = true) {
+            console.log(message);  // Выводим лог в консоль
         }
-      }
 
-      const i = currentStep;
-      const index = indices[i];
+        function shouldAutoPick(index) {
+            if (index < 2) return false;
+            const chance = [0, 0, 0.5, 0.75, 0.9, 0.99][index];
+            return Math.random() < chance;
+        }
 
-      if (index <= -2 && skipCounts[i] >= 3) {
-        log(`Я принудительно выбрал ${i} после 3 пропусков (индекс: ${index})`, true);
-        updateIndex(i, i === target);
-        skipCounts[i] = 0;
-      } else if (shouldSkip(index, i)) {
-        log(`Я пропустил ${i} (индекс: ${index})`, true);
-        skipCounts[i]++;
-      } else {
-        log(`Я выбрал ${i} (индекс: ${index})`, true);
-        updateIndex(i, i === target);
-        skipCounts[i] = 0;
-      }
+        function shouldSkip(index, digit) {
+            if (index > -2) return false;
+            if (skipCounts[digit] >= 3) return false; // принудительный выбор после 3 пропусков
+            const chance = [0, 0, 0.5, 0.75, 0.9, 0.99][Math.abs(index)];
+            return Math.random() < chance;
+        }
 
-      currentStep = (currentStep + 1) % 10;
-    }
+        function aiGuess() {
+            const target = parseInt(document.getElementById('target').value);
+            if (isNaN(target) || target < 0 || target > 9) {
+                log('Пожалуйста, введите число от 0 до 9.', false);
+                return;
+            }
 
-    function updateIndex(i, correct) {
-      if (correct) {
-        log(`Правильно! Индекс ${i} увеличен.`, true);
-        indices[i] = Math.min(indices[i] + 1, 5);
-      } else {
-        log(`Неправильно. Индекс ${i} уменьшен.`, true);
-        indices[i] = Math.max(indices[i] - 1, -5);
-      }
-    }
+            for (let i = 0; i < 10; i++) {
+                if (shouldAutoPick(indices[i])) {
+                    log(`Я выбрал ${i} - оно оказалось ${i === target ? 'верным' : 'неверным'}`, true);
+                    updateIndex(i, i === target);
+                    return;
+                }
+            }
 
-    function increaseIndex() {
-      const digit = getDebugDigit();
-      if (digit !== null) {
-        indices[digit] = Math.min(indices[digit] + 1, 5);
-        log(`Индекс ${digit} увеличен вручную до ${indices[digit]}`, true);
-      }
-    }
+            const i = currentStep;
+            const index = indices[i];
 
-    function decreaseIndex() {
-      const digit = getDebugDigit();
-      if (digit !== null) {
-        indices[digit] = Math.max(indices[digit] - 1, -5);
-        log(`Индекс ${digit} уменьшен вручную до ${indices[digit]}`, true);
-      }
-    }
+            if (index <= -2 && skipCounts[i] >= 3) {
+                log(`Я принудительно выбрал ${i} после 3 пропусков (индекс: ${index})`, true);
+                updateIndex(i, i === target);
+                skipCounts[i] = 0;
+            } else if (shouldSkip(index, i)) {
+                log(`Я пропустил ${i} (индекс: ${index})`, true);
+                skipCounts[i]++;
+            } else {
+                log(`Я выбрал ${i} (индекс: ${index})`, true);
+                updateIndex(i, i === target);
+                skipCounts[i] = 0;
+            }
 
-    function getDebugDigit() {
-      const digit = parseInt(document.getElementById('debugDigit').value);
-      if (isNaN(digit) || digit < 0 || digit > 9) {
-        log('Введите корректную цифру от 0 до 9 для отладки.', false);
-        return null;
-      }
-      return digit;
-    }
+            currentStep = (currentStep + 1) % 10;
+        }
 
-    function setCurrentStep() {
-      const digit = getDebugDigit();
-      if (digit !== null) {
-        currentStep = digit;
-        log(`Теперь начну проверку с цифры ${digit}`, true);
-      }
-    }
+        function updateIndex(i, correct) {
+            if (correct) {
+                log(`Правильно! Индекс ${i} увеличен.`, true);
+                indices[i] = Math.min(indices[i] + 1, 5);
+            } else {
+                log(`Неправильно. Индекс ${i} уменьшен.`, true);
+                indices[i] = Math.max(indices[i] - 1, -5);
+            }
+        }
 
-    function setAllIndices(value) {
-      for (let i = 0; i < 10; i++) {
-        indices[i] = value;
-        skipCounts[i] = 0;
-      }
-      log(`Все индексы установлены в ${value}`, true);
-    }
-  </script>
-  <script src="js/mainScript.js"></script>
+        function increaseIndex() {
+            const digit = getDebugDigit();
+            if (digit !== null) {
+                indices[digit] = Math.min(indices[digit] + 1, 5);
+                log(`Индекс ${digit} увеличен вручную до ${indices[digit]}`, true);
+            }
+        }
+
+        function decreaseIndex() {
+            const digit = getDebugDigit();
+            if (digit !== null) {
+                indices[digit] = Math.max(indices[digit] - 1, -5);
+                log(`Индекс ${digit} уменьшен вручную до ${indices[digit]}`, true);
+            }
+        }
+
+        function getDebugDigit() {
+            const digit = parseInt(document.getElementById('debugDigit').value);
+            if (isNaN(digit) || digit < 0 || digit > 9) {
+                log('Введите корректную цифру от 0 до 9 для отладки.', false);
+                return null;
+            }
+            return digit;
+        }
+
+        function setCurrentStep() {
+            const digit = getDebugDigit();
+            if (digit !== null) {
+                currentStep = digit;
+                log(`Теперь начну проверку с цифры ${digit}`, true);
+            }
+        }
+
+        function setAllIndices(value) {
+            for (let i = 0; i < 10; i++) {
+                indices[i] = value;
+                skipCounts[i] = 0;
+            }
+            log(`Все индексы установлены в ${value}`, true);
+        }
+    </script>
+    <script src="js/mainScript.js"></script>
 </body>
 </html>
