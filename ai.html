@@ -79,6 +79,10 @@
     .debug {
         margin-top: 20px;
     }
+
+    .user-message-blue {
+        color: blue;  /* Синие цифры для сообщений пользователя */
+    }
   </style>
 </head>
 <body>
@@ -150,6 +154,21 @@
                 return;
             }
 
+            // Показываем цифру пользователя в чате (синим цветом)
+            const userMessage = document.createElement('div');
+            userMessage.classList.add('chat-message', 'user-message', 'user-message-blue');
+            userMessage.textContent = `Ты загадал число: ${target}`;
+            chatElement.appendChild(userMessage);
+
+            // Ответ ИИ
+            const aiMessage = document.createElement('div');
+            aiMessage.classList.add('chat-message', 'ai-message');
+            aiMessage.textContent = `Я выбрал 0 — оно оказалось неверным`;
+            chatElement.appendChild(aiMessage);
+
+            chatElement.scrollTop = chatElement.scrollHeight; // Прокручиваем чат вниз
+
+            // Логируем действия в консоли
             for (let i = 0; i < 10; i++) {
                 if (shouldAutoPick(indices[i])) {
                     log(`Я выбрал ${i} - оно оказалось ${i === target ? 'верным' : 'неверным'}`, true);
