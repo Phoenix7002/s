@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Симуляция бана</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2em; }
+    #status { margin-bottom: 1em; font-weight: bold; }
+    button { padding: 0.5em 1em; font-size: 1em; }
+  </style>
+</head>
+<body>
+  <div id="status">Проверка статуса...</div>
+  <button id="banBtn">Забанить</button>
+
+  <script>
+    (async () => {
+      // Маскированные ключи для хранения флага бана
+      const keys = {
+        localStorage: 'x9f7d2a1b',
+        sessionStorage: 'k2m8v4j5q',
+        cookie: 'zp0w6n3lu',
+        indexedDB: 'dbBanFlag',
+        cacheStorage: 'cacheBanFlag'
+      };
+
+      const banValue = '1';
+
+      const statusEl = document.getElementById('status');
+      const btn = document.getElementById('banBtn');
+
+      // Логирование
+      function log(action) {
+        console.log(`[BanSim] ${action}`);
+      }
+
+      // Cookies
+      function setCookie(name, value, days=365) {
+        const d = new Date();
+        d.setTime(d.getTime() + (days*24*60*60*1000));
+        document.cookie = `${name}=${value};path=/;expires=${d.toUTCString()}`;
+        log(`Cookie set: ${name}=${value}`);
+      }
+
+      function getCookie(name) {
+        const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+        return match ? match[2] : null;
+      }
+
+      function deleteCookie(name) {
+        document.cookie = `${name}=; Max-Age=0; path=/`;
+        log(`Cookie deleted: ${name}`);
+      }
+
+      // IndexedDB helpers
+      function openDB() {
+        return new Promise((resolve, reject) => {
+          const request = indexedDB.open('BanSimDB', 1);
+          request.onupgradeneeded = () => {
+            const db = request.result;
+            if (!db.objectStoreNames.contains('flags')) {
+              db.createObjectStore('flags');
+            }
+          };
+          request.onsuccess = () => resolve(request.result);
+          request.onerror = () => reject(request.error);
+        });
+      }
+
+      async function idbSet(key, value) {
+        const db = await openDB();
+        return new Promise((resolve, reject) => {
+          const tx = db.transaction('flags', 'readwrite');
+          const store = tx.objectStore('flags');
+          const req = store.put(value, key);
+          req.onsuccess = () => {
+            log(`IndexedDB set: ${key}=${value}`);
+            resolve();
+          };
+          req.onerror = () => reject(req.error);
+        });
+      }
+
+      async function idbGet(key) {
+        const db = await openDB();
+        return new Promise((resolve, reject) => {
+          const tx = db.transaction('flags', 'readonly');
+          const store = tx.objectStore('flags');
+          const req = store.get(key);
+          req.onsuccess = () => resolve(req.result);
+          req.onerror = () => reject(req.error);
+        });
+      }
+
+      async function idbDelete(key) {
+        const db = await openDB();
+        return new Promise((resolve, reject) => {
+          const tx = db.transaction('flags', 'readwrite');
+          const store = tx.objectStore('flags');
+          const req = store.delete(key);
+          req.onsuccess = () => {
+            log(`IndexedDB deleted: ${key}`);
+            resolve();
+          };
+          req.onerror = () => reject(req.error);
+        });
+      }
+
+      // CacheStorage helpers
+      async function cacheSet() {
+        if (!('caches' in window)) return;
+        const cache = await caches.open('bansim-cache');
+        const response = new Response(new Blob([banValue], {type: 'text/plain'}));
+        await cache.put(keys.cacheStorage, response);
+        log(`CacheStorage set: ${keys.cacheStorage}=${banValue}`);
+      }
+
+      async function cacheGet() {
+        if (!('caches' in window)) return null;
+        const cache = await caches.open('bansim-cache');
+        const res = await cache.match(keys.cacheStorage);
+        if (res) {
+          const text = await res.text();
+          return text;
+        }
+        return null;
+      }
+
+      async function cacheDelete() {
+        if (!('caches' in window)) return;
+        const cache = await caches.open('bansim-cache');
+        await cache.delete(keys.cacheStorage);
+        log(`CacheStorage deleted: ${keys.cacheStorage}`);
+      }
+
+      // Проверка наличия флага бана в любом хранилище
+      async function checkBan() {
+        let banned = false;
+
+        // LocalStorage
+        const lsVal = localStorage.getItem(keys.localStorage);
+        if (lsVal === banValue) {
+          banned = true;
+          log('Ban detected in localStorage');
+        }
+
+        // SessionStorage
+        const ssVal = sessionStorage.getItem(keys.sessionStorage);
+        if (ssVal === banValue) {
+          banned = true;
+          log('Ban detected in sessionStorage');
+        }
+
+        // Cookies
+        const cVal = getCookie(keys.cookie);
+        if (cVal === banValue) {
+          banned = true;
+          log('Ban detected in cookies');
+        }
+
+        // IndexedDB
+        const idbVal = await idbGet(keys.indexedDB);
+        if (idbVal === banValue) {
+          banned = true;
+          log('Ban detected in IndexedDB');
+        }
+
+        // CacheStorage
+        const cacheVal = await cacheGet();
+        if (cacheVal === banValue) {
+          banned = true;
+          log('Ban detected in CacheStorage');
+        }
+
+        return banned;
+      }
+
+      // Установка флага бана во все хранилища
+      async function setBan() {
+        localStorage.setItem(keys.localStorage, banValue);
+        log('Set ban in localStorage');
+
+        sessionStorage.setItem(keys.sessionStorage, banValue);
+        log('Set ban in sessionStorage');
+
+        setCookie(keys.cookie, banValue);
+
+        await idbSet(keys.indexedDB, banValue);
+
+        await cacheSet();
+
+        log('Ban установлен во все хранилища');
+      }
+
+      // Удаление флага бана из всех хранилищ
+      async function removeBan() {
+        localStorage.removeItem(keys.localStorage);
+        log('Removed ban from localStorage');
+
+        sessionStorage.removeItem(keys.sessionStorage);
+        log('Removed ban from sessionStorage');
+
+        deleteCookie(keys.cookie);
+
+        await idbDelete(keys.indexedDB);
+
+        await cacheDelete();
+
+        log('Ban удалён из всех хранилищ');
+      }
+
+      // Обновление UI
+      function updateUI(banned) {
+        if (banned) {
+          statusEl.textContent = 'Игрок забанен';
+          btn.textContent = 'Разбанить';
+          btn.style.backgroundColor = '#d33';
+          btn.style.color = 'white';
+        } else {
+          statusEl.textContent = 'Игрок не забанен';
+          btn.textContent = 'Забанить';
+          btn.style.backgroundColor = '';
+          btn.style.color = '';
+        }
+      }
+
+      // При загрузке проверяем
+      let banned = await checkBan();
+      if (banned) {
+        // Если нашли хоть один флаг, ставим остальные (на случай, если не все выставлены)
+        await setBan();
+      }
+      updateUI(banned);
+
+      // Клик по кнопке меняет статус
+      btn.addEventListener('click', async () => {
+        banned = await checkBan();
+        if (banned) {
+          await removeBan();
+          banned = false;
+        } else {
+          await setBan();
+          banned = true;
+        }
+        updateUI(banned);
+      });
+
+    })();
+  </script>
+</body>
+</html>
